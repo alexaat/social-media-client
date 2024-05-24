@@ -1,15 +1,30 @@
 import { Paper, Stack, Typography, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { ProvideUser } from "../../../context/UserContext";
+import EditBioDialog from "../../../dialogs/EditBioDialog";
+import { useState } from "react";
 
 const ProfileBio = () => {
     const [user] = ProvideUser();
+
+    const [openEditDetailsDialog, setOpenEditDetailsDialog] = useState(false);
+    const onCloseDialog = () => setOpenEditDetailsDialog(false);    
+
+    const editBioClickHandler = () => setOpenEditDetailsDialog(true);    
+
+
+
+
     return (
+        <>       
+      
         <Paper elevation={2} sx={{ p: 1 }}>
             {user && <Stack spacing={2} >
                 <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #ddd' }}>
                     <Typography variant='h5'>Bio</Typography>
-                    <IconButton>
+                    <IconButton
+                        onClick={editBioClickHandler}
+                    >
                         <EditIcon />
                     </IconButton>
                 </Stack>
@@ -73,7 +88,11 @@ const ProfileBio = () => {
                     disabled />
             </Stack>}
 
-        </Paper>
+        </Paper>        
+
+        <EditBioDialog open={openEditDetailsDialog} onClose={onCloseDialog}/>
+        
+        </>
 
 
     );

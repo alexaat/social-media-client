@@ -78,7 +78,8 @@ const SignIn = () => {
         const image = new Image();
         image.onload = () => setImageLoaded(true);
         image.src = "https://source.unsplash.com/random";
-        setImg(image);
+        setImg(image);  
+
     }, []);
 
 

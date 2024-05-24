@@ -162,7 +162,7 @@ const ProfilePage = () => {
                                         person_id
                                             ?
                                             <UserProvider person_id={person_id}>
-                                                <ProfileBio />
+                                                <ProfileBio/>
                                             </UserProvider>
                                             :
                                             <ProfileBio />

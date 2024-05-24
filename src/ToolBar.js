@@ -291,7 +291,7 @@ const ToolBar = () => {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" sx={{ width: "100%" }}>
-              Social Network
+              Social Media
             </Typography>
             <IconButton
               aria-label="go home button"
