@@ -2,7 +2,7 @@ import { Paper, Stack, Typography, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { ProvideUser } from "../../../context/UserContext";
 import EditBioDialog from "../../../dialogs/EditBioDialog";
-import { useState } from "react";
+import {  useState } from "react";
 
 const ProfileBio = ({ownProfile}) => {
     const [user, reloadUser] = ProvideUser();
@@ -10,11 +10,10 @@ const ProfileBio = ({ownProfile}) => {
     const [openEditDetailsDialog, setOpenEditDetailsDialog] = useState(false);
     const onCloseDialog = () => setOpenEditDetailsDialog(false);    
 
-    const editBioClickHandler = () => setOpenEditDetailsDialog(true);    
+    const editBioClickHandler = () => setOpenEditDetailsDialog(true);   
 
     return (
-        <>   
-      
+        <>       
         <Paper elevation={2} sx={{ p: 1 }}>
             {user && <Stack spacing={2} >
                 <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #ddd' }}>
@@ -32,7 +31,7 @@ const ProfileBio = ({ownProfile}) => {
                 </Stack>
                 <TextField
                     label='nick name'
-                    defaultValue={user.nick_name}
+                    value={user.nick_name}
                     InputProps={{
                         readOnly: true,
                         style: { color: '#A1A1A1' }
@@ -45,7 +44,7 @@ const ProfileBio = ({ownProfile}) => {
 
                 <TextField
                     label='first name'
-                    defaultValue={user.first_name}
+                    value={user.first_name}
                     InputProps={{
                         readOnly: true,
                     }}
@@ -56,7 +55,7 @@ const ProfileBio = ({ownProfile}) => {
 
                 <TextField
                     label='last name'
-                    defaultValue={user.last_name}
+                    value={user.last_name}
                     InputProps={{
                         readOnly: true,
                     }}
@@ -67,7 +66,7 @@ const ProfileBio = ({ownProfile}) => {
 
                 <TextField
                     label='email'
-                    defaultValue={user.email}
+                    value={user.email}
                     InputProps={{
                         readOnly: true,
                     }}
@@ -78,7 +77,7 @@ const ProfileBio = ({ownProfile}) => {
 
                 <TextField
                     label='about me'
-                    defaultValue={user.about_me}
+                    value={user.about_me}
                     InputProps={{
                         readOnly: true,
                     }}

@@ -41,9 +41,7 @@ const EditBioDialog = ({open, onClose, reloadUser}) => {
     }
 
     const submitHandler = () => { 
-        clearErrors();   
-       
-       
+        clearErrors();     
        
 
         if(userDetails) {
@@ -96,10 +94,8 @@ const EditBioDialog = ({open, onClose, reloadUser}) => {
                 
                 if(data.payload){
                     onClose(); 
-                    console.log('reload user ...')    
-                    reloadUser();
-                }
-                
+                    reloadUser();                                   
+                }               
 
             })
             .catch(err => {

@@ -15,7 +15,7 @@ export const UserProvider = ({ children, person_id }) => {
 
     const [user, setUser] = useState();
     const [refreshUserTrigger, setRefreshUserTrigger] = useState(1);
-    const reloadUser = () => {
+    const reloadUser = () => {       
         setRefreshUserTrigger(Math.random());
     }
 
