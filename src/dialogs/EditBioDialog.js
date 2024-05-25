@@ -4,10 +4,16 @@ import { ProvideUser }  from '../context/UserContext';
 import {  useState } from "react";
 import { getCookie, SESSION_ID } from '../cookies';
 import { useNavigate } from "react-router-dom";
-import { serverHost } from '../constants';
+import {
+     serverHost,
+     INVALID_NICK_NAME_FORMAT,
+     INVALID_FIRST_NAME_FORMAT,
+     INVALID_LAST_NAME_FORMAT,
+     INVALID_EMAIL,
+     INVALID_ABOUT_ME } from '../constants';
 
 
-const EditBioDialog = ({open, onClose}) => {
+const EditBioDialog = ({open, onClose, reloadUser}) => {
 
     const navigate = useNavigate();
 
@@ -15,19 +21,37 @@ const EditBioDialog = ({open, onClose}) => {
 
     const [userDetails, setUserDetails] = useState();
 
+    const [nickNameError, setNickNameError] = useState('');
+    const [firstNameError, setFirstNameError] = useState('');
+    const [lastNameError, setLastNameError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [aboutMeError, setAboutMeError] = useState('');
+
+    const clearErrors = () => {
+        setNickNameError('');
+        setFirstNameError('');
+        setLastNameError('');
+        setEmailError('');
+        setAboutMeError('');
+    }
+
     const closeHandler = () => {
+        clearErrors();
         onClose();
     }
 
-    const submitHandler = () => {
-        console.log('save...', userDetails);      
-        onClose();
+    const submitHandler = () => { 
+        clearErrors();   
+       
+       
+       
+
         if(userDetails) {
             const session_id = getCookie(SESSION_ID);
             if(!session_id){
                 navigate('/signin')
             }
-            
+                        
             fetch(serverHost + '/user?' + new URLSearchParams({ session_id }),
             {
                 method: 'PATCH',
@@ -35,16 +59,48 @@ const EditBioDialog = ({open, onClose}) => {
                     'Accept': 'application/json'
                 },
                 body: new URLSearchParams({
-                    user: JSON.stringify(userDetails)
+                  ...userDetails
                 })
 
             })
             .then(resp => resp.json())
             .then(data => {             
                 if (data.error) {
-                    throw new Error(data.error.message);
+                    switch (data.error.type){
+                        case INVALID_NICK_NAME_FORMAT:
+                            setNickNameError(data.error.type);
+                        break;
+
+                        case INVALID_FIRST_NAME_FORMAT:
+                            setFirstNameError(data.error.type);
+                        break;
+
+                        case INVALID_LAST_NAME_FORMAT:
+                            setLastNameError(data.error.type);
+                        break;
+
+                        case INVALID_EMAIL:
+                            setEmailError(data.error.type);
+                        break;
+
+                        case INVALID_ABOUT_ME:
+                            setAboutMeError(data.error.type);
+                        break;
+
+                        default:
+                            throw new Error(data.error.message);
+                    }                   
                 }
+
                 setUserDetails(undefined);
+                
+                if(data.payload){
+                    onClose(); 
+                    console.log('reload user ...')    
+                    reloadUser();
+                }
+                
+
             })
             .catch(err => {
                 alert(err);
@@ -87,7 +143,9 @@ const EditBioDialog = ({open, onClose}) => {
                     defaultValue={user.nick_name}
                     InputLabelProps={{ shrink: true }}
                     variant="outlined"
-                    onChange={e => setUserDetails({...user, nick_name: e.target.value})}                  
+                    onChange={e => setUserDetails({...userDetails, nick_name: e.target.value})}
+                    error = {Boolean(nickNameError)}  
+                    helperText = {nickNameError}                
                 />
 
                 <TextField
@@ -95,7 +153,9 @@ const EditBioDialog = ({open, onClose}) => {
                     defaultValue={user.first_name}
                     InputLabelProps={{ shrink: true }}
                     variant="outlined"
-                    onChange={e => setUserDetails({...user, first_name: e.target.value})}     
+                    onChange={e => setUserDetails({...userDetails, first_name: e.target.value})} 
+                    error = {Boolean(firstNameError)}  
+                    helperText = {firstNameError}      
                     />
 
                 <TextField
@@ -103,7 +163,9 @@ const EditBioDialog = ({open, onClose}) => {
                     defaultValue={user.last_name}
                     InputLabelProps={{ shrink: true }}
                     variant="outlined"
-                    onChange={e => setUserDetails({...user, last_name: e.target.value})}     
+                    onChange={e => setUserDetails({...userDetails, last_name: e.target.value})}
+                    error = {Boolean(lastNameError)}  
+                    helperText = {lastNameError}          
                     />
 
                 <TextField
@@ -111,7 +173,9 @@ const EditBioDialog = ({open, onClose}) => {
                     defaultValue={user.email}
                     InputLabelProps={{ shrink: true }}
                     variant="outlined"
-                    onChange={e => setUserDetails({...user, email: e.target.value})}       
+                    onChange={e => setUserDetails({...userDetails, email: e.target.value})}    
+                    error = {Boolean(emailError)}  
+                    helperText = {emailError}        
                     />
 
                 <TextField
@@ -121,7 +185,9 @@ const EditBioDialog = ({open, onClose}) => {
                     multiline
                     rows={3}
                     variant="outlined"
-                    onChange={e => setUserDetails({...user, about_me: e.target.value})}     
+                    onChange={e => setUserDetails({...userDetails, about_me: e.target.value})}   
+                    error = {Boolean(aboutMeError)}  
+                    helperText = {aboutMeError}       
                     />
             </Stack>}
 

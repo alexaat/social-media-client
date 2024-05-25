@@ -42,8 +42,7 @@ const ProfilePage = () => {
                     })
                 })
                 .then(resp => resp.json())
-                .then(data => {
-                    console.log(`Profile Page Response: ${JSON.stringify(data)}`)
+                .then(data => {                  
                     if (!data) {
                         throw new Error("Couldn't fetch data: No data prop");
                     }
@@ -165,7 +164,7 @@ const ProfilePage = () => {
                                                 <ProfileBio/>
                                             </UserProvider>
                                             :
-                                            <ProfileBio />
+                                            <ProfileBio ownProfile/>
                                     }
 
                                 </Grid>

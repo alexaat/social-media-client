@@ -4,29 +4,31 @@ import { ProvideUser } from "../../../context/UserContext";
 import EditBioDialog from "../../../dialogs/EditBioDialog";
 import { useState } from "react";
 
-const ProfileBio = () => {
-    const [user] = ProvideUser();
+const ProfileBio = ({ownProfile}) => {
+    const [user, reloadUser] = ProvideUser();
 
     const [openEditDetailsDialog, setOpenEditDetailsDialog] = useState(false);
     const onCloseDialog = () => setOpenEditDetailsDialog(false);    
 
     const editBioClickHandler = () => setOpenEditDetailsDialog(true);    
 
-
-
-
     return (
-        <>       
+        <>   
       
         <Paper elevation={2} sx={{ p: 1 }}>
             {user && <Stack spacing={2} >
                 <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ borderBottom: '1px solid #ddd' }}>
                     <Typography variant='h5'>Bio</Typography>
-                    <IconButton
+                    
+                    {
+                        ownProfile && 
+                        <IconButton
                         onClick={editBioClickHandler}
-                    >
+                        >
                         <EditIcon />
-                    </IconButton>
+                        </IconButton>
+                    }
+
                 </Stack>
                 <TextField
                     label='nick name'
@@ -90,7 +92,7 @@ const ProfileBio = () => {
 
         </Paper>        
 
-        <EditBioDialog open={openEditDetailsDialog} onClose={onCloseDialog}/>
+        <EditBioDialog open={openEditDetailsDialog} onClose={onCloseDialog} reloadUser={reloadUser}/>
         
         </>
 
