@@ -66,23 +66,23 @@ const EditBioDialog = ({open, onClose, reloadUser}) => {
                 if (data.error) {
                     switch (data.error.type){
                         case INVALID_NICK_NAME_FORMAT:
-                            setNickNameError(data.error.type);
+                            setNickNameError(data.error.message);
                         break;
 
                         case INVALID_FIRST_NAME_FORMAT:
-                            setFirstNameError(data.error.type);
+                            setFirstNameError(data.error.message);
                         break;
 
                         case INVALID_LAST_NAME_FORMAT:
-                            setLastNameError(data.error.type);
+                            setLastNameError(data.error.message);
                         break;
 
                         case INVALID_EMAIL:
-                            setEmailError(data.error.type);
+                            setEmailError(data.error.message);
                         break;
 
                         case INVALID_ABOUT_ME:
-                            setAboutMeError(data.error.type);
+                            setAboutMeError(data.error.message);
                         break;
 
                         default:

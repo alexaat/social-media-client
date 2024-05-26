@@ -33,7 +33,7 @@ const ProfilePage = () => {
 
             fetch(serverHost + '/user?' + new URLSearchParams({ session_id }),
                 {
-                    method: 'PUT',
+                    method: 'PATCH',
                     headers: {
                         'Accept': 'application/json'
                     },
