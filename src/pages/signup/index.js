@@ -17,12 +17,13 @@ import { Card, CardContent, TextField, Stack, Button, Divider, Box, IconButton, 
 import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import { ProvideUser } from "../../context/UserContext";
 import { handleError } from "../../errors";
+import defaultBackground from '../../assets/default_background.jpg';
+import { imageURL } from "../../constants";
 
 const SignUp = () => {
 
-
     const [user, reloadUser] = ProvideUser();
-
+    
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [nickName, setNickName] = useState('');
@@ -38,6 +39,7 @@ const SignUp = () => {
 
     const [imageLoaded, setImageLoaded] = useState(false);
     const [img, setImg] = useState({});
+    const [src, setSrc] = useState(imageURL);
 
     //Validation
     const [firstNameError, setFirstNameError] = useState('');
@@ -124,12 +126,8 @@ const SignUp = () => {
                     if (session_id) {
                         //Set cookie
                         setCookie(SESSION_ID, session_id, 1);
-
                         reloadUser();
-
-                        //Navigate to home page
                         navigate("/");
-
                     } else {
                         throw new Error('Could not obtain session id');
                     }
@@ -159,6 +157,13 @@ const SignUp = () => {
         image.onload = () => setImageLoaded(true);
         image.src = "https://source.unsplash.com/random";
         setImg(image);
+
+        image.onerror = () =>{
+            setSrc(defaultBackground);
+            setImageLoaded(true);
+        } 
+
+
     }, []);
 
 
@@ -172,7 +177,7 @@ const SignUp = () => {
                         <CardMedia
                             height="140px"
                             component="img"
-                            src='https://source.unsplash.com/random'
+                            src={src}
                             alt="sign in image"
                         />
                         :

@@ -87,8 +87,6 @@ const ToolBar = () => {
   //WS
   const onMessageReceived = (message) => {
     const m = JSON.parse(message.data);
-    console.log(`Message received in ToolBar`);
-    console.log(`Message: ${JSON.stringify(m)}`);
     switch (m.type) {
       case NEW_NOTIFICATION:
         reloadNotifications();

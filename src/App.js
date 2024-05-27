@@ -20,13 +20,11 @@ function App() {
 
   return (
     <div className="App">
-
       <Router>
         <UserProvider>
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-
             {['profile/', "profile/:person_id"].map(path => {
               return <Route
                 key={path}
@@ -119,7 +117,6 @@ function App() {
           </Routes>
         </UserProvider>
       </Router>
-
     </div>
   );
 }

@@ -19,13 +19,16 @@ import { ProvideJoinRequests } from "../../../context/JoinRequestsProvider";
 import GroupEvents from "../../../components/GroupEvents";
 import { ProvideNotifications } from "../../../context/NotificationsContext";
 import { ProvideEvents } from "../../../context/EventsContext";
+import { imageURL } from "../../../constants";
+import defaultBackground from '../../../assets/long_background_image.jpg'
 
 const Page = ({ group_id }) => {
 
     const [tab, setTab] = useState(0);
     const [notifications, reloadNotifications] = ProvideNotifications();
     const [events, reloadEvents] = ProvideEvents();
-   // const [reloadEventsTrigger, setReloadEventsTrigger] = useState(1);
+
+    const [src, setSrc] = useState(imageURL);
 
     //Comments
     const submitCommentHandler = (postId, content) => {
@@ -61,13 +64,6 @@ const Page = ({ group_id }) => {
     const [groupInvites, reloadInvites] = ProvideGroupInvites();
     const [joinRequests, reloadJoinRequests, joinRequestError] = ProvideJoinRequests();
 
-    //console.log('groupInvites in component ',groupInvites   )
-
-    // console.log('groups ', groups)
-    // console.log('groupInvites ', groupInvites)
-    // console.log('joinRequests ', joinRequests)
-
-
     if (joinRequestError) {
         handleError(joinRequestError);
     }
@@ -75,8 +71,7 @@ const Page = ({ group_id }) => {
     const [socket, wsError] = ProvideWebSocket();
     if (socket) {
         socket.onmessage = message => {
-            const m = JSON.parse(message.data);
-            console.log('m: ', m)
+            const m = JSON.parse(message.data);           
             if (m.type === ACCEPT_JOIN_GROUP_INVITE ||
                 m.type === LEAVE_GROUP ||
                 m.type === REQUEST_TO_JOIN_GROUP_DECLINED ||
@@ -84,8 +79,7 @@ const Page = ({ group_id }) => {
                 m.type === DECLINE_JOIN_GROUP_INVITE) {
                 reloadGroups();
                 reloadEvents();
-                setReload(Math.random());
-               // setReloadEventsTrigger(Math.random());
+                setReload(Math.random());            
             }
             if (m.type === INVITATION_TO_JOIN_GROUP) {
                 reloadNotifications();
@@ -414,7 +408,6 @@ const Page = ({ group_id }) => {
         })
             .then(resp => resp.json())
             .then(data => {
-                console.log('approve group data ', data)
                 if (data.error) {
                     throw new Error(data.error.message)
                 }
@@ -463,8 +456,19 @@ const Page = ({ group_id }) => {
 
     useEffect(() => {
         const image = new Image();
-        image.src = groups.image ? groups.image : "https://source.unsplash.com/random";
-        image.onload = () => setImage(image);
+       
+
+        if(groups.image){
+            image.src = groups.image
+        } else {
+            image.src =  "https://source.unsplash.com/random";
+            image.onload = () => setImage(image);
+            image.onerror = () =>{
+                setSrc(defaultBackground);
+                setImage(true);
+            }
+        }       
+        
         reloadGroups();
 
 
@@ -481,7 +485,7 @@ const Page = ({ group_id }) => {
                             height="140px"
                             width='100%'
                             component="img"
-                            src={image.src}
+                            src={src}
                             alt="image on profile page"
                             sx={{ objectFit: 'cover' }}
                         />

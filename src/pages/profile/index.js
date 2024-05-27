@@ -14,6 +14,8 @@ import { PostsProvider } from "../../context/PostsContext";
 import Posts from "./components/Posts";
 import { FollowersProvider } from "../../context/FollowersContext";
 import { FollowingsProvider } from "../../context/FollowingsContext";
+import defaultBackground from '../../assets/long_background_image.jpg';
+import { imageURL } from "../../constants";
 
 const ProfilePage = () => {
 
@@ -22,6 +24,8 @@ const ProfilePage = () => {
     const [user, reloadUser] = ProvideUser();
 
     const [privacy, setPrivacy] = useState(null);
+
+    const [src, setSrc] = useState(imageURL);
 
     const privacyChangeHandler = (event, value) => {
 
@@ -67,8 +71,12 @@ const ProfilePage = () => {
 
         }
         const image = new Image();
-        image.src = "https://source.unsplash.com/random";
+        image.src = imageURL;
         image.onload = () => setImage(image);
+        image.onerror = () =>{
+            setSrc(defaultBackground);
+            setImage(true);
+        }
 
 
     }, [user, person_id]);
@@ -108,7 +116,7 @@ const ProfilePage = () => {
                                     height="140px"
                                     width='100%'
                                     component="img"
-                                    src={image.src}
+                                    src={src}
                                     alt="image on profile page"
                                     sx={{ objectFit: 'cover' }}
                                 />

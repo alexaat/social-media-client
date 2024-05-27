@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Box, Divider, Stack, TextField, Card, CardContent, CardMedia, Skeleton } from '@mui/material';
 import { handleError } from "../../errors";
 import { ProvideUser } from "../../context/UserContext";
+import defaultBackground from '../../assets/default_background.jpg';
+import {imageURL} from '../../constants';
 
 const SignIn = () => {
 
@@ -14,6 +16,8 @@ const SignIn = () => {
     const [signInError, setSignInError] = useState('');
     const [imageLoaded, setImageLoaded] = useState(false);
     const [img, setImg] = useState({});
+    const [src, setSrc] = useState(imageURL);
+
 
     //Navigation
     const navigate = useNavigate();
@@ -78,7 +82,11 @@ const SignIn = () => {
         const image = new Image();
         image.onload = () => setImageLoaded(true);
         image.src = "https://source.unsplash.com/random";
-        setImg(image);  
+        setImg(image);
+        image.onerror = () =>{
+            setSrc(defaultBackground);
+            setImageLoaded(true);
+        }
 
     }, []);
 
@@ -88,15 +96,15 @@ const SignIn = () => {
             <Card sx={{ width: 350, backgroundColor: 'white', position: 'absolute', top: '10%', right: '15%' }}>
 
                 {
-                    imageLoaded ?
+                    imageLoaded ? 
                         <CardMedia
                             height="140px"
                             component="img"
-                            src='https://source.unsplash.com/random'
+                            src={src}
                             alt="sign in image"
                         />
                         :
-                        <Skeleton variant="rectangular" height={140} />
+                        <Skeleton variant="rectangular" height={140} />                   
                 }
 
                 <CardContent sx={{ p: 2 }}>

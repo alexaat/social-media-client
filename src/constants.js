@@ -26,12 +26,6 @@ export const NOTIFICATION_FOLLOW_INFO = "notification follow info";
 export const NOTIFICATION_FOLLOW_ACTION_REQUEST =
   "notification follow action request";
 
-// export const NOTIFICATION_FOLLOW_REQUEST = "notification follow request";
-// export const NOTIFICATION_INFO_FOLLOW_REQUEST_RESULT = "notification info follow request result";
-
-// export const NOTIFICATION_INFO = "notification info";
-// export const NOTIFICATION_ACTION_FOLLOW_REQUEST = "notification action follow request";
-
 export const NEW_NOTIFICATION = "new notification";
 
 export const FOLLOW_REQUEST_NOT_FOUND = "follow request not found";
@@ -59,3 +53,4 @@ export const INVALID_EVENT_DESCRIPTION_FORMAT =
 export const NEW_EVENT_NOTIFICATION = "new event notification";
 export const INVALID_ROOM_CHAT_TITLE_FORMAT = "invalid room chat title format";
 export const INVALID_CHAT_ROOM = "invalid chat room";
+export const imageURL = 'https://source.unsplash.com/random';

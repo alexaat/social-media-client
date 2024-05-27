@@ -41,7 +41,6 @@ const NotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
       };
 
     const iconClickHandler = (id) => {
-        console.log('icon id ',id)
         navigate(`/profile/${id}`);
         onClose();
     }  
