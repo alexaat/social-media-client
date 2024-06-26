@@ -4,42 +4,33 @@ import { Typography, Menu, MenuItem, Stack, Divider } from "@mui/material";
 // import { handleError } from "../errors";
 import {ProvideGuestData} from '../components/GuestDataContext';
 import GuestNotificationItem from '../components/GuestNotificationItem';
+import { useNavigate } from 'react-router-dom';
 
 const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
 
 
-    const [user, notifications] = ProvideGuestData();
+    const [user, notifications, setNotifications] = ProvideGuestData();
+    const navigate = useNavigate();
    
    // const [notifications, reloadNotifications] = ProvideNotifications();
-/*
+
     const setRead = (notification) => {
-
-        const notification_id = notification.id;
-        const url =
-          serverHost + "/notifications?" + new URLSearchParams({ session_id });
-        const headers = {
-          Accept: "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-        };
-        const body = new URLSearchParams({ notification_id });
-        fetch(url, {
-          method: "Post",
-          headers,
-          body,
+        setNotifications(prev => {
+            return prev.map(item => {
+                if(item.id === notification.id){
+                    return {...item, is_read: true} 
+                } else {
+                  return item;
+                }
+            })
         })
-          .then((resp) => resp.json())
-          .then((data) => {
-            if (data.error) throw new Error(data.error);
-            reloadNotifications();
-          })
-          .catch((err) => handleError(err));
       };
-      */
+          
 
-    // const iconClickHandler = (id) => {
-    //     navigate(`/profile/${id}`);
-    //     onClose();
-    // }  
+    const iconClickHandler = (id) => {
+        navigate(`profile/${id}`);
+        onClose();
+    }  
     
     // const handleNotificationsItemClick = (id) => {
     //     //Get selected notification
@@ -83,9 +74,9 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
               >
                 <GuestNotificationItem
                   notification={notification}
-                  //iconClickHandler={iconClickHandler}
+                  iconClickHandler={iconClickHandler}
                   //itemClickHandler={(id) => handleNotificationsItemClick(id)}
-                  //readClickHandler={setRead}
+                  readClickHandler={setRead}
                 />
               </MenuItem>
             );

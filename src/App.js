@@ -18,6 +18,7 @@ import { JoinRequestsProvider } from "./context/JoinRequestsProvider.js";
 import HomeGuest from "./pages/guest/Home/index.js";
 import GuestToolBar from "./pages/guest/components/GuestToolBar.js";
 import { GuestDataProvider } from "./pages/guest/components/GuestDataContext.js";
+import ProfileGuest from "./pages/guest/Profile/index.js";
 
 function App() {
 
@@ -40,6 +41,13 @@ function App() {
              <GuestDataProvider>
               <GuestToolBar />
               <HomeGuest />
+            </GuestDataProvider>          
+            } />
+
+            <Route path="/guest/profile/:person_id" element={
+             <GuestDataProvider>
+              <GuestToolBar />
+              <ProfileGuest/>
             </GuestDataProvider>          
             } />
             

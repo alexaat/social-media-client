@@ -1,19 +1,47 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { ProvideGuestData } from '../components/GuestDataContext';
+import { Stack, Card, CardContent, Typography } from '@mui/material';
+import GuestNewPostButton from '../components/GuestNewPostButton';
+import { useState } from 'react';
 
 const HomeGuest = () => {
     
-    //Navigation
-    const navigate = useNavigate();
+    // const [posts] = ProvidePosts();
+    // const [user] = ProvideUser();
 
-
+    const [user, notifications, setNotifications, posts] = ProvideGuestData();
+    const [newPostDialogOpen, setNewPostDialogOpen] = useState(false);
+    //const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
+    const newPostButtonClickHandler = () => setNewPostDialogOpen(true);
     
+
     return (
-        <div>
-            Home
-            <Button variant="contained" size="medium" color="success" onClick={() => navigate('/guest/profile')}>Profile</Button>
-        </div>
-      );
+        <>
+             {user &&
+                <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                    <GuestNewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />
+                    {/* <NewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> */}
+                    {
+                        // posts && posts.map(post => {
+                        //     return (
+                        //         <Post post={post} key={post.id} />
+                        //     )
+                        // })
+                    }
+                    {
+                        !posts || posts.length === 0 &&
+                        <Card sx={{ width: '500px', minHeight: '200px', mb: 2 }}>
+                        <CardContent>
+                            <Stack alignItems='center' sx={{pt: 3}}>
+                                <Typography variant='h5'>No Posts</Typography>
+                           </Stack>
+                        </CardContent>
+                        </Card>
+                    }
+                </Stack>
+            } 
+        </>
+    )
 }
  
 export default HomeGuest;
