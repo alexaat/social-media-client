@@ -53,4 +53,5 @@ export const INVALID_EVENT_DESCRIPTION_FORMAT =
 export const NEW_EVENT_NOTIFICATION = "new event notification";
 export const INVALID_ROOM_CHAT_TITLE_FORMAT = "invalid room chat title format";
 export const INVALID_CHAT_ROOM = "invalid chat room";
-export const imageURL = 'https://source.unsplash.com/random';
+//export const imageURL = 'https://source.unsplash.com/random';
+export const imageURL = 'https://picsum.photos/800/600';

@@ -81,9 +81,9 @@ const SignIn = () => {
     useEffect(() => {
         const image = new Image();
         image.onload = () => setImageLoaded(true);
-        image.src = "https://source.unsplash.com/random";
+        image.src = imageURL;
         setImg(image);
-        image.onerror = () =>{
+        image.onerror = () =>{           
             setSrc(defaultBackground);
             setImageLoaded(true);
         }
@@ -93,8 +93,8 @@ const SignIn = () => {
 
     return (
         <>
-            <Card sx={{ width: 350, backgroundColor: 'white', position: 'absolute', top: '10%', right: '15%' }}>
-
+            <Card sx={{ width: 350, backgroundColor: 'white', ml: 'calc(100% - 350px - 15%)', mb: 2, mt: '10%'}}>
+          
                 {
                     imageLoaded ? 
                         <CardMedia
@@ -114,7 +114,10 @@ const SignIn = () => {
                         <Button variant="contained" onClick={signInHandler} size="large">Sign In</Button>
                         <Divider />
                         <Box sx={{ display: "flex", justifyContent: "center" }} >
+                            <Stack spacing={1}>
                             <Button variant="contained" size="medium" color="success" onClick={() => navigate('/signup')}>Create New Account</Button>
+                            <Button  style={{backgroundColor: "#b54e96"}} variant="contained" size="medium" onClick={() => navigate('/guest')}>Enter as guest</Button>
+                            </Stack>
                         </Box>
                     </Stack>
                 </CardContent>

@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: url('https://source.unsplash.com/random'), url('./assets/default_background.jpg'); 
+  background: url('https://picsum.photos/800/1200'); 
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

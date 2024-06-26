@@ -15,6 +15,9 @@ import Group from "./pages/group/index.js";
 import { GroupInvitesProvider } from "./context/GroupInvitesContext.js";
 import { WebSocketProvider } from "./context/WebSocketContext.js";
 import { JoinRequestsProvider } from "./context/JoinRequestsProvider.js";
+import HomeGuest from "./pages/guest/Home/index.js";
+import GuestToolBar from "./pages/guest/components/GuestToolBar.js";
+import { GuestDataProvider } from "./pages/guest/components/GuestDataContext.js";
 
 function App() {
 
@@ -25,6 +28,21 @@ function App() {
           <Routes>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            
+            <Route path="/guest" element={            
+              <GuestDataProvider>
+                <GuestToolBar />
+                <HomeGuest />
+              </GuestDataProvider>                        
+            } />
+            
+            <Route path="/guest/profile" element={
+             <GuestDataProvider>
+              <GuestToolBar />
+              <HomeGuest />
+            </GuestDataProvider>          
+            } />
+            
             {['profile/', "profile/:person_id"].map(path => {
               return <Route
                 key={path}

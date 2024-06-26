@@ -155,7 +155,8 @@ const SignUp = () => {
     useEffect(() => {
         const image = new Image();
         image.onload = () => setImageLoaded(true);
-        image.src = "https://source.unsplash.com/random";
+        //image.src = "https://source.unsplash.com/random";
+        image.src = src;
         setImg(image);
 
         image.onerror = () =>{
@@ -169,8 +170,8 @@ const SignUp = () => {
 
     return (
 
-        <>
-            <Card sx={{ width: 350, backgroundColor: 'white', position: 'absolute', top: '10%', right: '15%' }}>
+        <>         
+            <Card sx={{ width: 350, backgroundColor: 'white', ml: 'calc(100% - 350px - 15%)', mb: 2, mt: '10%'}}>
 
                 {
                     imageLoaded ?
@@ -223,7 +224,7 @@ const SignUp = () => {
                             <Button variant="contained" size="medium" color="success" onClick={() => navigate('/signin')}>Already Have Account</Button>
                         </Box>
                     </Stack>
-                </CardContent>
+                </CardContent>               
             </Card>
             <CropEasy {...{ photoURL, setOpenCrop, setPhotoURL, setCroppedImage }} open={openCrop} setOpen={setOpenCrop} imageType={imageType} />
         </>
