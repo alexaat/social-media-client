@@ -3,6 +3,8 @@ import { ProvideGuestData } from '../components/GuestDataContext';
 import { Stack, Card, CardContent, Typography } from '@mui/material';
 import GuestNewPostButton from '../components/GuestNewPostButton';
 import { useState } from 'react';
+import GuestPost from '../components/GuestPost';
+import GuestNewPostDialog from '../components/GuestNewPostDialog';
 
 const HomeGuest = () => {
     
@@ -11,7 +13,7 @@ const HomeGuest = () => {
 
     const [user, notifications, setNotifications, posts] = ProvideGuestData();
     const [newPostDialogOpen, setNewPostDialogOpen] = useState(false);
-    //const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
+    const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
     const newPostButtonClickHandler = () => setNewPostDialogOpen(true);
     
 
@@ -21,12 +23,13 @@ const HomeGuest = () => {
                 <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
                     <GuestNewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />
                     {/* <NewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> */}
+                    <GuestNewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> 
                     {
-                        // posts && posts.map(post => {
-                        //     return (
-                        //         <Post post={post} key={post.id} />
-                        //     )
-                        // })
+                        posts && posts.map(post => {
+                            return (
+                                <GuestPost post={post}  key={post.id} />
+                            )
+                        })
                     }
                     {
                         !posts || posts.length === 0 &&
