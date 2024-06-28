@@ -69,8 +69,9 @@ const data = {
     posts: [
         {
             id: 1,
-            content: 'Post1',
+            content: 'Performing on The Ed Sullivan Show, February 1964',
             date: Date.now()-1000*60*60*24*4,
+            image: 'http://alexaat.com/socialmedia/images/post1.jpg',
             sender: {
                 id: 2,
                 first_name: 'John',
@@ -81,8 +82,9 @@ const data = {
         },
         {
             id: 2,
-            content: 'Post2',
+            content: 'McCartney, Harrison and Lennon performing on Dutch TV in 1964',
             date: Date.now()-1000*60*60*24*2,
+            image: 'http://alexaat.com/socialmedia/images/post2.png',
             sender: {
                 id: 5,
                 first_name: 'Ringo',
@@ -93,8 +95,9 @@ const data = {
         },
         {
             id: 3,
-            content: 'Post3',
+            content: 'Press conference in Minnesota in August 1965, shortly after playing at Shea Stadium in New York',
             date: Date.now() - 1000*60*60*10,
+            image: 'http://alexaat.com/socialmedia/images/post3.jpg',
             sender: {
                 id: 3,
                 first_name: 'Paul',
@@ -105,7 +108,8 @@ const data = {
         },
         {
             id: 4,
-            content: 'Post4',
+            content: 'Abbey Road crossing in London',
+            image: 'http://alexaat.com/socialmedia/images/post4.jpg',
             date: Date.now() - 1000*60*60,
             sender: {
                 id: 4,

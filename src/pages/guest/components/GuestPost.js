@@ -188,9 +188,10 @@ import {
 
 
 
-{/* 
-                   {post.image && <Box component='img' src={post.image && buildImageUrl(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>} 
-                   <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
+
+                   {post.image && <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>} 
+                   {/* {post.image && <Box component='img' src={post.image && buildImageUrl(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
+    {/*                <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
                    {
                       post.comments.length > 0 && 
                       <Accordion
