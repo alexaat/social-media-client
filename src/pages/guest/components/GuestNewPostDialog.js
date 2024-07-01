@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, Button, Box, Stack, Typography, IconButton, Divider, TextField, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
 import { PRIVACY_PUBLIC, PRIVACY_SPECIFIC_FRIENDS, PRIVACY_PRIVATE } from "../../../constants";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import SpecificFriendsDialog from './SpecificFriendsDialog';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-// import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
+import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 // import Icon from '../components/Icon';
 // import { ProvideUser } from '../context/UserContext';
 // import { handleError } from '../errors';
@@ -12,28 +12,29 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 // import { useNavigate } from 'react-router-dom';
 // import EventDateTimePicker from '../components/EventDateTimePicker.js';
 // import { ProvideEvents } from '../context/EventsContext'
-// import EmojiPicker from "emoji-picker-react";
-// import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
-// import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+import EmojiPicker from "emoji-picker-react";
+import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
+import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
 import GuestIcon from '../components/GuestIcon';
 import { ProvideGuestData } from './GuestDataContext';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, submitHandler }) => {
-   
-    const [user] = ProvideGuestData();
-    
-    //Emoji
-    // const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
-    // const selectEmojiHandler = (event) => {
-    //    setContent(prev => prev +event.emoji)
 
-    // }
-    // const imageClickListener = () => {
-    //     let input = document.getElementById('new-post-input-image')
-    //     input.value = '';
-    //     input.click();
-    // }
+
+    const [user, notifications, setNotifications, posts, setPosts] = ProvideGuestData();
+        
+    //Emoji
+    const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
+    const selectEmojiHandler = event => setContent(prev => prev +event.emoji)
+
+    
+    const imageClickListener = () => {
+        let input = document.getElementById('new-post-input-image')
+        input.value = '';
+        input.click();
+    }
    
     // const navigate = useNavigate();
 
@@ -53,20 +54,20 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     // //User     
     // const [user] = ProvideUser();
     // const [posts, reloadPosts] = ProvidePosts();
-    // const [content, setContent] = useState('');
+    const [content, setContent] = useState('');
     const [privacy, setPrivacy] = useState(PRIVACY_PUBLIC);
-    // const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null);
     const [showSpecificFriendsDialog, setShowSpecificFriendsDialog] = useState(false);
-    // const [specificFriendIds, setSpecificFriendIds] = useState([]);
+    const [specificFriendIds, setSpecificFriendIds] = useState([]);
 
     // const nick = user ? (user.nick_name ? user.nick_name : `${user.first_name} ${user.last_name}`) : '';
 
     const setPrivacyHandler = (e) => {
-    //     const privacy = e.target.value
-    //     setPrivacy(privacy);
-    //     if (privacy === PRIVACY_SPECIFIC_FRIENDS) {
-    //         setShowSpecificFriendsDialog(true);
-    //     }
+        const privacy = e.target.value
+        setPrivacy(privacy);
+        if (privacy === PRIVACY_SPECIFIC_FRIENDS) {
+            //setShowSpecificFriendsDialog(true);
+        }
     }
 
     const clickSpecificFriends = () => {
@@ -76,6 +77,51 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     }
 
     const submitPostHandler = () => {
+
+        if (selection === SELECTION.POST) {
+            //image
+            //content
+
+            //Save image to local strorage
+            
+            //1. Generate key for image
+            const uuid = uuidv4();
+            
+            const reader = new FileReader();
+            reader.addEventListener("load", function () {
+               localStorage.setItem(uuid, reader.result);
+            }, false);
+            if (image) {
+                reader.readAsDataURL(image);
+            }
+
+            //2. Save to data
+            const id = posts.sort((a, b) => {
+                if(a>b){
+                    return 1;
+                }
+                return -1;
+            })[0].id + 1;
+
+            const post = {
+                id,
+                content,
+                image: uuid,
+                date: Date.now(),
+                sender: user
+            }
+
+            setPosts(prev => ([...prev, post]));
+
+
+
+        } else if(selection === SELECTION.EVENT){
+
+
+
+
+        }
+
 
     //     let headers = new Headers();
     //     headers.append('Accept', 'application/json');
@@ -149,33 +195,33 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     //                 }
     //             })
     //             .catch(err => handleError(err));
-         }
-
-    //     //Reset State
-    //     setContent('');        
-    //     setPrivacy(PRIVACY_PUBLIC)
-    //     setImage(null);
-    //     setSpecificFriendIds([]);
-    //     closeDialogHandler();
-    // }
-
-    // const selelectedImageHandler = (e) => {
-    //     let file = e.target.files[0];
-    //     let fileType = file.type;
-    //     if (fileType.startsWith('image/')) {
-    //         setImage(file);
-    //     } else {
-    //         alert('error: Wrong image format')
     //     }
-    // }
+
+        //Reset State
+        setContent('');        
+        setPrivacy(PRIVACY_PUBLIC)
+        setImage(null);
+        setSpecificFriendIds([]);
+        closeDialogHandler();
+     }
+
+    const selelectedImageHandler = (e) => {
+        let file = e.target.files[0];
+        let fileType = file.type;
+        if (fileType.startsWith('image/')) {
+            setImage(file);
+        } else {
+            alert('error: Wrong image format')
+        }
+    }
 
     const closeDialogHandlerLocal = () => {
         // setEventTitle('');
         // setEventDescription('');
-        // setImage(null);
-        // setContent('');
+        setPrivacy(PRIVACY_PUBLIC);
+        setContent('');
         closeDialogHandler();
-        // setSelection(SELECTION.POST);
+        setSelection(SELECTION.POST);
     }
 
     // const clearAllHandler = () => {
@@ -267,13 +313,13 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                     input.click();
                                 }}
                             >
-                                {/* <input type="file" id='new-post-input-image' onChange={selelectedImageHandler} accept="image/*"/>   */}
+                                 <input type="file" id='new-post-input-image' onChange={selelectedImageHandler} accept="image/*"/> 
 
                                 {
-                                    // (image && <Box component='img' sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} src={URL.createObjectURL(image)}></Box>) ||
-                                    // <IconButton aria-label="post image" disableRipple>
-                                    //     <ImageRoundedIcon sx={{ width: '56px', height: '56px' }} />
-                                    // </IconButton>
+                                    (image && <Box component='img' sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} src={URL.createObjectURL(image)}></Box>) ||
+                                    <IconButton aria-label="post image" disableRipple>
+                                        <ImageRoundedIcon sx={{ width: '56px', height: '56px' }} />
+                                    </IconButton>
 
                                 }
 
@@ -283,7 +329,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                 selection === SELECTION.POST ?
                                    
                                 <Stack>
-                                    {/* <TextField
+                                    <TextField
                                         sx={{ width: '100%', mt: 2 }}
                                         placeholder={`What't on your mind, ${user ? user.first_name : ''}?`}
                                         multiline
@@ -291,16 +337,16 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                         onChange={(e) => { setContent(e.target.value) }}
                                         value={content}
                                         InputProps={{ sx: { borderRadius: '4px' } }}
-                                    /> */}
+                                    />
                                     <Stack direction='row'>
-                                        {/* <IconButton onClick={imageClickListener}>
+                                        <IconButton onClick={imageClickListener}>
                                             <InsertPhotoRoundedIcon />
-                                        </IconButton> */}
-                                        {/* <IconButton onClick={()=>setEmojiDialogOpen(!emojiDialogOpen)}>
+                                        </IconButton>
+                                        <IconButton onClick={()=>setEmojiDialogOpen(!emojiDialogOpen)}>
                                             <EmojiEmotionsRoundedIcon />
-                                        </IconButton> */}
+                                        </IconButton>
                                     </Stack>                                
-                                    {/* <EmojiPicker onEmojiClick={selectEmojiHandler} open={emojiDialogOpen}/> */}
+                                    <EmojiPicker onEmojiClick={selectEmojiHandler} open={emojiDialogOpen}/>
 
                                 </Stack>
                                     : selection === SELECTION.EVENT ?

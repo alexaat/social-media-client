@@ -139,7 +139,7 @@ export const GuestDataProvider = ( {children} ) => {
     }));
    
     return (
-        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts]}>
+        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts]}>
             {children}
         </GuestDataContext.Provider>
     );

@@ -24,7 +24,7 @@ import {
 //  import { ProvideUser } from "../context/UserContext.js";
 //  import { UserProvider } from "../context/UserContext.js";
  import SendRoundedIcon from '@mui/icons-material/SendRounded';
- import { useState } from "react";
+ import { useEffect, useState } from "react";
 //  import CommentItem from "./CommentItem.js";
  import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
  import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -34,10 +34,45 @@ import {
 //  import { handleError } from "../errors.js";
 //  import { ProvidePosts } from "../context/PostsContext.js";
  import { useRef } from "react";
- import GuestIcon from './GuestIcon.js'
+ import GuestIcon from './GuestIcon.js';
+ import {isValidUrl} from '../../../util.js';
  
  const GuestPost = ({ post, sx }) => {
  
+    const [image, setImage] = useState();
+    
+
+    const [src, setSrc] = useState(localStorage.getItem(post.image))
+
+    //console.log('post ', post)
+
+    useEffect(() => {
+          //console.log('useEffect')
+          //console.log('post ', post)
+         if(post.image){
+            // console.log('post.image ',post.image)
+            if(isValidUrl(post.image)){
+               // console.log('isValidUrl: true')
+               setImage(post.image)
+            } else {
+               //console.log('isValidUrl: false')
+               //const im = new Image();
+               const src = localStorage.getItem(post.image);
+               //console.log('src ',src)
+               //im.src = src;
+               //im.onload = function(){
+               //   console.log('image loaded: ',src)
+                  setImage(src);
+               //}
+               setTimeout(() => {
+                  setSrc(localStorage.getItem(post.image))
+               }, 1000);               
+            }
+
+
+         }
+    }, [src]);    
+
 
     /*
     const [posts, reloadPosts] = ProvidePosts()
@@ -187,9 +222,35 @@ import {
                    <Typography variant="body1" gutterBottom> {post.content}</Typography>
 
 
+                     {
+                        image && <Box component='img' src={image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
+                     }
+
+                     {/* {
+
+                        post.image && 
+                        
+                        (isValidUrl(post.image)
+                           ?
+                           <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
+                           :
+                           <Box component='img' src={localStorage.getItem(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
+                        )
+                     }  */}
+
+                   {/* {post.image && <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
+                   {/* {post.image && <Box component='img' src={localStorage.getItem(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
 
 
-                   {post.image && <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>} 
+
+
+
+
+
+
+
+
+
                    {/* {post.image && <Box component='img' src={post.image && buildImageUrl(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
     {/*                <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
                    {

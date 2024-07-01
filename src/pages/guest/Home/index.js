@@ -15,6 +15,13 @@ const HomeGuest = () => {
     const [newPostDialogOpen, setNewPostDialogOpen] = useState(false);
     const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
     const newPostButtonClickHandler = () => setNewPostDialogOpen(true);
+
+    const sorted = posts.sort((a, b) => {
+        if(a.id<b.id){
+            return 1
+        }
+        return -1;
+    })
     
 
     return (
@@ -25,7 +32,7 @@ const HomeGuest = () => {
                     {/* <NewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> */}
                     <GuestNewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> 
                     {
-                        posts && posts.map(post => {
+                        sorted && sorted.map(post => {
                             return (
                                 <GuestPost post={post}  key={post.id} />
                             )

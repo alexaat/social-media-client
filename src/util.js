@@ -178,3 +178,14 @@ export const isNoRead = (m, userId) => {
   }
   return false;
 };
+
+export const isValidUrl = urlString=> {
+  try { 
+    return Boolean(new URL(urlString)); 
+  }
+  catch(e){ 
+    return false; 
+  }
+}
+
+
