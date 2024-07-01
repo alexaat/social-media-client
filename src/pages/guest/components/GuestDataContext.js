@@ -78,7 +78,21 @@ const data = {
                 last_name: 'Lennon',
                 display_name: 'John',
                 avatar: 'http://alexaat.com/socialmedia/images/John.jpg'          
-            }
+            },
+            comments: [
+                {
+                    id: 1,
+                    user:  {
+                        id: 3,
+                        first_name: 'Paul',
+                        last_name: 'McCartney',
+                        display_name: 'Paul',
+                        avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
+                    },
+                    date: Date.now(),
+                    content: 'Comment 1'
+                }
+            ]
         },
         {
             id: 2,
@@ -91,7 +105,8 @@ const data = {
                 last_name: 'Starr',
                 display_name: 'Ringo',
                 avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg'  
-            }
+            },
+            comments: []
         },
         {
             id: 3,
@@ -104,7 +119,8 @@ const data = {
                 last_name: 'McCartney',
                 display_name: 'Paul',
                 avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
-            }
+            },
+            comments: [],
         },
         {
             id: 4,
@@ -117,7 +133,8 @@ const data = {
                 last_name: 'Harrison',
                 display_name: 'George',
                 avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
-            }
+            },
+            comments: []
         }
     ]    
 }

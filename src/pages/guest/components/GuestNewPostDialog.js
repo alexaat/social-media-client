@@ -24,6 +24,9 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
 
 
     const [user, notifications, setNotifications, posts, setPosts] = ProvideGuestData();
+
+    const [error, setError] = useState('');
+   
         
     //Emoji
     const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
@@ -79,39 +82,53 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     const submitPostHandler = () => {
 
         if (selection === SELECTION.POST) {
-            //image
-            //content
 
-            //Save image to local strorage
-            
-            //1. Generate key for image
-            const uuid = uuidv4();
-            
-            const reader = new FileReader();
-            reader.addEventListener("load", function () {
-               localStorage.setItem(uuid, reader.result);
-            }, false);
-            if (image) {
-                reader.readAsDataURL(image);
-            }
 
-            //2. Save to data
-            const id = posts.sort((a, b) => {
-                if(a>b){
-                    return 1;
+            if(content.length<2){
+                setError('post content is too short')
+            } else {
+                //Save image to local strorage            
+                //1. Generate key for image
+                const uuid = uuidv4();
+                
+                const reader = new FileReader();
+                reader.addEventListener("load", function () {
+                localStorage.setItem(uuid, reader.result);
+                }, false);
+                if (image) {
+                    reader.readAsDataURL(image);
                 }
-                return -1;
-            })[0].id + 1;
 
-            const post = {
-                id,
-                content,
-                image: uuid,
-                date: Date.now(),
-                sender: user
+                //2. Save to data
+                const id = posts.sort((a, b) => {
+                    if(a>b){
+                        return 1;
+                    }
+                    return -1;
+                })[0].id + 1;
+
+                const post = {
+                    id,
+                    content,
+                    image: uuid,
+                    date: Date.now(),
+                    sender: user,
+                    comments: []
+                }
+
+                setPosts(prev => ([...prev, post]));
+
+                //Reset State
+                setContent('');        
+                setPrivacy(PRIVACY_PUBLIC)
+                setImage(null);
+                setSpecificFriendIds([]);
+                closeDialogHandler();
+                setError('');
+
             }
 
-            setPosts(prev => ([...prev, post]));
+
 
 
 
@@ -197,12 +214,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     //             .catch(err => handleError(err));
     //     }
 
-        //Reset State
-        setContent('');        
-        setPrivacy(PRIVACY_PUBLIC)
-        setImage(null);
-        setSpecificFriendIds([]);
-        closeDialogHandler();
+
      }
 
     const selelectedImageHandler = (e) => {
@@ -330,6 +342,8 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                    
                                 <Stack>
                                     <TextField
+                                        error={Boolean(error)}
+                                        helperText={error}
                                         sx={{ width: '100%', mt: 2 }}
                                         placeholder={`What't on your mind, ${user ? user.first_name : ''}?`}
                                         multiline

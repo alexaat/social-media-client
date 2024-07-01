@@ -36,24 +36,27 @@ import {
  import { useRef } from "react";
  import GuestIcon from './GuestIcon.js';
  import {isValidUrl} from '../../../util.js';
+ import GuestCommentItem from "./GuestCommentItem.js";
+import { ProvideGuestData } from "./GuestDataContext.js";
+import { v4 as uuidv4 } from 'uuid';
  
  const GuestPost = ({ post, sx }) => {
  
-    const [image, setImage] = useState();
+    const [postImage, setPostImage] = useState();
+
+    const [commentImage, setCommentImage] = useState();
+
+    const [user, notifications, setNotifications, posts, setPosts] = ProvideGuestData();
     
 
-    const [src, setSrc] = useState(localStorage.getItem(post.image))
+    //const [src, setSrc] = useState(localStorage.getItem(post.image))
 
     //console.log('post ', post)
 
     useEffect(() => {
-          //console.log('useEffect')
-          //console.log('post ', post)
          if(post.image){
-            // console.log('post.image ',post.image)
             if(isValidUrl(post.image)){
-               // console.log('isValidUrl: true')
-               setImage(post.image)
+               setPostImage(post.image)
             } else {
                //console.log('isValidUrl: false')
                //const im = new Image();
@@ -62,107 +65,167 @@ import {
                //im.src = src;
                //im.onload = function(){
                //   console.log('image loaded: ',src)
-                  setImage(src);
+                  //setImage(src);
+                  //setSrc(src);
                //}
-               setTimeout(() => {
-                  setSrc(localStorage.getItem(post.image))
-               }, 1000);               
+               if(src){
+                  setPostImage(src)
+               } else {
+                  setTimeout(() => {
+                     setPostImage(localStorage.getItem(post.image))
+                  }, 1000);  
+               }             
             }
-
-
          }
-    }, [src]);    
+    }, []);    
 
 
     /*
     const [posts, reloadPosts] = ProvidePosts()
- 
+   */
     const imageInputId = `new-comment-image-${post.id}`
+    /*
  
     //const postRef = useRef(post.id)
- 
+ */
     //Submit comment handler
     const [submitCommentError, setSubmitCommentError] = useState(null);
-    const submitCommentHandler = (postId, content, image) => {
+    
+    const submitCommentHandler = (postId, content, commentImage) => {
+
+
+      setSubmitCommentError(null);   
+
+      if(content.length<2){
+         setSubmitCommentError({postId, message: 'Comment is too short'})
+
+      } else {
+         setPosts(posts => {
+            const post = posts.filter(p => p.id === postId)[0];
+                       
+            const id = post.comments.length === 0 ? 1 : ((post.comments).sort((a, b) => (a.id < b.id ? 1 : -1)))[0].id + 1;
+   
+            //Save image
+            let image = '';
+            if(commentImage){
+               const uuid = uuidv4();            
+               const reader = new FileReader();
+               reader.addEventListener("load", function () {
+                  localStorage.setItem(uuid, reader.result);
+               }, false);
+               reader.readAsDataURL(commentImage);           
+               image = uuid;            
+            }
+   
+            const comment = {
+               id,
+               date: Date.now(),
+               content,
+               image,
+               user
+            }
+   
+            post.comments.push(comment);
+   
+            const newPosts = [...posts.filter(p => p.id !== post.id), post]
+            
+            return newPosts
+         })
+      }
  
-       setSubmitCommentError(null)
+
+
+
+
+
+
+
+      //  const session_id = getCookie(SESSION_ID);
+      //  if (!session_id) {
+      //     navigate('/signin');
+      //     return;
+      //  }
  
-       const session_id = getCookie(SESSION_ID);
-       if (!session_id) {
-          navigate('/signin');
-          return;
-       }
+      //  const formData = new FormData();
+      //  if (image) {
+      //     formData.append('image', image);
+      //  }
+      //  formData.append('post_id', postId)
+      //  formData.append('content', content)
  
-       const formData = new FormData();
-       if (image) {
-          formData.append('image', image);
-       }
-       formData.append('post_id', postId)
-       formData.append('content', content)
+      //  const url = `${serverHost}/comments?` + new URLSearchParams({ session_id });
+      //  fetch(url, {
+      //     method: "POST",
+      //     body: formData,
+      //     headers: { 'Accept': 'application/json' }
+      //  })
+      //     .then(resp => resp.json())
+      //     .then(data => {
+      //        //console.log('comment data ', data)
+      //        if (data.error) {
+      //           if (data.error.type === INVALID_COMMENT_FORMAT) {
+      //              setSubmitCommentError({ postId, message: data.error.message })
+      //           } else {
+      //              throw new Error(data.error)
+      //           }
+      //        }
+      //        if (data.payload) {
+      //           if (reloadPosts) {
+      //              reloadPosts();
+      //           }
  
-       const url = `${serverHost}/comments?` + new URLSearchParams({ session_id });
-       fetch(url, {
-          method: "POST",
-          body: formData,
-          headers: { 'Accept': 'application/json' }
-       })
-          .then(resp => resp.json())
-          .then(data => {
-             //console.log('comment data ', data)
-             if (data.error) {
-                if (data.error.type === INVALID_COMMENT_FORMAT) {
-                   setSubmitCommentError({ postId, message: data.error.message })
-                } else {
-                   throw new Error(data.error)
-                }
-             }
-             if (data.payload) {
-                if (reloadPosts) {
-                   reloadPosts();
-                }
- 
-             }
-          })
-          .catch(err => {
-             handleError(err)
-          });
+      //        }
+      //     })
+      //     .catch(err => {
+      //        handleError(err)
+      //     });
  
     }
- 
+    /*
+ */
     //Emoji
     const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
     const selectEmojiHandler = (event) => {
        setComment(prev => prev + event.emoji)
     }
- 
+ /*
     const [image, setImage] = useState(null);
- 
+ */
     const imageClickListener = () => {
        let input = document.getElementById(imageInputId)
        input.value = '';
        input.click();
     }
+    
  
+    //const error = submitCommentError && post.id === submitCommentError.postId
+    //const helperText = submitCommentError && submitCommentError.postId === post.id ? submitCommentError.message : ''
     const error = submitCommentError && post.id === submitCommentError.postId
     const helperText = submitCommentError && submitCommentError.postId === post.id ? submitCommentError.message : ''
- 
+
+   
     const selelectedImageHandler = (e) => {
        let file = e.target.files[0];
        let fileType = file.type;
        if (fileType.startsWith('image/')) {
-          setImage(file);
+          setCommentImage(file);
        } else {
           alert('error: Wrong image format')
        }
     }
+
+    
  
     const submit = (id, val) => {
-       submitCommentHandler(id, val, image)
-       setImage(null)
+       submitCommentHandler(id, val, commentImage)
+       setCommentImage(null)
        setComment('');
        setEmojiDialogOpen(false);
     }
+
+    
     const [comment, setComment] = useState('');
+    /*
  
     //User
     const [user] = ProvideUser();
@@ -223,36 +286,14 @@ import {
 
 
                      {
-                        image && <Box component='img' src={image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
+                        postImage && <Box component='img' src={postImage} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
                      }
 
-                     {/* {
-
-                        post.image && 
-                        
-                        (isValidUrl(post.image)
-                           ?
-                           <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
-                           :
-                           <Box component='img' src={localStorage.getItem(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
-                        )
-                     }  */}
-
-                   {/* {post.image && <Box component='img' src={post.image} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
-                   {/* {post.image && <Box component='img' src={localStorage.getItem(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
-
-
-
-
-
-
-
-
-
-
-
                    {/* {post.image && <Box component='img' src={post.image && buildImageUrl(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
-    {/*                <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
+                   <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
+                   
+                   
+                   
                    {
                       post.comments.length > 0 && 
                       <Accordion
@@ -274,17 +315,15 @@ import {
                             {
                                post.comments &&
                                <Stack sx={{ pt: 4, pb: 1 }} spacing={1}>
-                                  {post.comments.map(comment => <CommentItem key={comment.id} comment={comment} />)}
+                                  {post.comments.map(comment => <GuestCommentItem key={comment.id} comment={comment} />)}
                                </Stack>
                             }
- 
- 
  
                          </AccordionDetails>
                       </Accordion>
                    }
                    {
-                      image && <Box component='img' sx={{ height: 'auto', width: '150px', pl: 2, pt: 1 }} src={URL.createObjectURL(image)}></Box>
+                     commentImage && <Box component='img' sx={{ height: 'auto', width: '150px', pl: 2, pt: 1 }} src={URL.createObjectURL(commentImage)}></Box>
                    } 
                    <TextField
                       error={error}
@@ -312,7 +351,7 @@ import {
                          <EmojiEmotionsRoundedIcon />
                       </IconButton>
                    </Stack>
-                   <EmojiPicker onEmojiClick={selectEmojiHandler} open={emojiDialogOpen} /> */}
+                   <EmojiPicker onEmojiClick={selectEmojiHandler} open={emojiDialogOpen} />
  
                 </Stack>
              </CardContent>

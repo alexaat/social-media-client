@@ -23,7 +23,7 @@ const HomeGuest = () => {
         return -1;
     })
     
-
+    
     return (
         <>
              {user &&
