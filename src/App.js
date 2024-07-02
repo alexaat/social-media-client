@@ -40,7 +40,7 @@ function App() {
             <Route path="/guest/profile" element={
              <GuestDataProvider>
               <GuestToolBar />
-              <HomeGuest />
+              <ProfileGuest/>
             </GuestDataProvider>          
             } />
 

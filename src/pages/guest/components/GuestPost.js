@@ -41,6 +41,9 @@ import { ProvideGuestData } from "./GuestDataContext.js";
 import { v4 as uuidv4 } from 'uuid';
  
  const GuestPost = ({ post, sx }) => {
+
+       //Navigation
+   const navigate = useNavigate();
  
     const [postImage, setPostImage] = useState();
 
@@ -230,8 +233,7 @@ import { v4 as uuidv4 } from 'uuid';
     //User
     const [user] = ProvideUser();
  
-    //Navigation
-    const navigate = useNavigate();
+
  
     let publicity
  
@@ -245,15 +247,15 @@ import { v4 as uuidv4 } from 'uuid';
           publicity = <Tooltip title="Specific Friends"><PeopleOutlineRoundedIcon /></Tooltip>
        }
     }
- 
+ */
     const clickHandler = () => {
-       if (post.user.id === user.id) {
-          navigate('/profile');
+       if (post.sender.id === user.id) {
+          navigate('/guest/profile');
        } else {
-          navigate(`/profile/${post.user.id}`);
+          navigate(`profile/${post.sender.id}`);
        }
     }
- 
+ /*
     let userName = post.user.nick_name ? post.user.nick_name : post.user.first_name + " " + post.user.last_name;
     if(post.group) {
        userName += ` /  ${post.group.title}`;
@@ -268,7 +270,11 @@ import { v4 as uuidv4 } from 'uuid';
              <CardContent>
                 <Stack direction="column">
                    <Stack direction="row">
-                      <IconButton aria-label="user icon" sx={{ width: '48px', height: '48px', mr: 2 }}>
+                      <IconButton
+                        aria-label="user icon"
+                        sx={{ width: '48px', height: '48px', mr: 2 }}
+                        onClick={clickHandler}
+                        >
                         <GuestIcon user={post.sender}/>
                        </IconButton>
  

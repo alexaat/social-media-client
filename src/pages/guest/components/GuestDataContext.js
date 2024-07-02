@@ -6,7 +6,8 @@ const data = {
         first_name: 'Guest',
         last_name: 'Special',
         display_name: 'Guest',
-        avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg'
+        avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
+        privacy: 'public'
     },
     users: [
         {
@@ -154,9 +155,11 @@ export const GuestDataProvider = ( {children} ) => {
         }
         return 1
     }));
+
+    const [users, setUsers] = useState(data.users);
    
     return (
-        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts]}>
+        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser]}>
             {children}
         </GuestDataContext.Provider>
     );
