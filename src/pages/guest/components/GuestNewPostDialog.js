@@ -101,7 +101,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
 
                 //2. Save to data
                 const id = posts.sort((a, b) => {
-                    if(a>b){
+                    if(a.id<b.id){
                         return 1;
                     }
                     return -1;

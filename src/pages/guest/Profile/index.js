@@ -33,8 +33,12 @@ import GuestIcon from '../components/GuestIcon';
 import GuestPrivacyToggle from '../components/GuestPrivacyToggle';
 import GuestFollowToggle from '../components/GuestFollowToggle';
 import GuestProfileBio from "../components/GuestProfileBio";
+import GuestPosts from "../components/GuestPosts";
+import GuestFollowersSummary from '../components/GuestFollowersSummary';
 
 const ProfileGuest = () => {
+
+   
 
     const { person_id } = useParams();
 
@@ -105,7 +109,10 @@ const ProfileGuest = () => {
         }
     }, []);
 
-    // let posts = <></>;
+
+
+
+    //let personPosts = <></>;
 
     // if (person_id && user) {
     //     if (person_id === user.id) {
@@ -193,6 +200,8 @@ const ProfileGuest = () => {
                                     <GuestProfileBio person_id={person_id}/>
                                 </Grid>
                                 <Grid item sx={{ mt: 1 }} mx={{ xs: 1, md: 0 }}>
+
+                                    <GuestFollowersSummary person_id={person_id}/>
                                     {/* {
                                         person_id
                                             ?
@@ -219,9 +228,9 @@ const ProfileGuest = () => {
                             mr={{ xs: 1, md: 0 }}
                         >
                             {/* Follow request */}
-                            {/* {!person_id && <FollowRequestDialog />}
+                            {/* {!person_id && <FollowRequestDialog />}*/}
 
-                            {posts} */}
+                            <GuestPosts person_id={person_id}/>
 
 
                         </Grid>

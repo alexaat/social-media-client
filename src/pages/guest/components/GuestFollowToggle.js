@@ -27,6 +27,7 @@ const GuestFollowToggle = ({ person_id }) => {
     let variant = 'contained';
 
     const followee = followers.filter(f => f.followerId === user.id && f.followeeId === person_id);
+    console.log('followers ',followers)
     if(followee && followee.length > 0){
         if(followee[0].status === 'approved'){
             isFollowing = true;
@@ -70,8 +71,11 @@ const GuestFollowToggle = ({ person_id }) => {
                     '';
                 
                 if(content){
-                    setSnackBarOpen(true);
-                    setSnackBarMessage('Approve message sent');
+                    if(person.privacy === 'private'){
+                        setSnackBarOpen(true);
+                        setSnackBarMessage('Approve message sent');
+                    }
+
                     setNotifications(prev => {
 
                         const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
@@ -87,6 +91,7 @@ const GuestFollowToggle = ({ person_id }) => {
                         return [...prev, notification];
                     });
 
+                    //Ringo Decline
                     if(person_id == 5){
                         setTimeout(() => {
                         
@@ -107,18 +112,46 @@ const GuestFollowToggle = ({ person_id }) => {
 
                         }, 5000);
                     }
+
+                    //Paul approve
+                    if(person_id == 3){
+                        setTimeout(() => {
+                        
+                        //setFollowers(prev => prev.filter(f => !(f.followerId === user.id && f.followeeId === person_id)))
+                        setFollowers(prev => prev.map(f => {
+                            if(f.followerId == user.id && f.followeeId == person_id){
+                                return {...f, status: 'approved', date: Date.now()}
+                            } else {
+                                return f
+                            }
+                        }))
+
+                        setNotifications(prev => {
+                            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
+            
+                            const notification = {
+                                id,
+                                content: 'You are following ' + person.display_name,
+                                date:  Date.now(),
+                                sender: person,
+                                is_read: false
+                            }        
+                            return [...prev, notification];
+                        });
+
+                        }, 7000);
+                    }
+
                 }               
                 
-                const followItem = {followerId: user.id, followeeId: person_id, status}
+                const followItem = {date: Date.now(), followerId: user.id, followeeId: parseInt(person_id), status}
                 return [...prev, followItem]
             });
         } else if(followee && followee.length > 0 && followee[0].status === 'approved'){
             setFollowers(prev => {  
 
                 setNotifications(prev => {
-
-                    const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
-                      
+                    const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
                     const notification = {
                         id,
                         content: 'You stopped to follow ' + person.display_name,
