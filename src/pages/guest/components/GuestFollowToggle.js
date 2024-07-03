@@ -85,7 +85,28 @@ const GuestFollowToggle = ({ person_id }) => {
                         }
 
                         return [...prev, notification];
-                    })
+                    });
+
+                    if(person_id == 5){
+                        setTimeout(() => {
+                        
+                        setFollowers(prev => prev.filter(f => !(f.followerId === user.id && f.followeeId === person_id)))
+
+                        setNotifications(prev => {
+                            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
+            
+                            const notification = {
+                                id,
+                                content: 'Follow request declined by ' + person.display_name,
+                                date:  Date.now(),
+                                sender: person,
+                                is_read: false
+                            }        
+                            return [...prev, notification];
+                        });
+
+                        }, 5000);
+                    }
                 }               
                 
                 const followItem = {followerId: user.id, followeeId: person_id, status}
@@ -105,11 +126,8 @@ const GuestFollowToggle = ({ person_id }) => {
                         sender: person,
                         is_read: false
                     }
-
                         return [...prev, notification];
                     })
-                
-
 
                 return prev.filter(f => !(f.followerId === user.id && f.followeeId === person_id)) 
             });

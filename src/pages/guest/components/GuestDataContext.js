@@ -7,7 +7,9 @@ const data = {
         last_name: 'Special',
         display_name: 'Guest',
         avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
-        privacy: 'public'
+        privacy: 'public',
+        email: 'guest@special.com',
+        about_me: 'Thank you for using social media'
     },
     users: [
         {
@@ -16,7 +18,9 @@ const data = {
             last_name: 'Lennon',
             display_name: 'John',
             avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-            privacy: 'public'
+            privacy: 'public',
+            email: 'john@thebeatles.uk',
+            about_me: 'Life is what happens while you are busy making other plans.'
         },
         {
             id: 3,
@@ -24,7 +28,9 @@ const data = {
             last_name: 'McCartney',
             display_name: 'Paul',
             avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
-            privacy: 'private'
+            privacy: 'private',
+            email: 'paul@thebeatles.uk',
+            about_me: ''
         },
         {
             id: 4,
@@ -32,7 +38,9 @@ const data = {
             last_name: 'Harrison',
             display_name: 'George',
             avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
-            privacy: 'public'
+            privacy: 'public',
+            email: 'george@thebeatles.uk',
+            about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
         },
         {
             id: 5,
@@ -40,7 +48,9 @@ const data = {
             last_name: 'Starr',
             display_name: 'Ringo',
             avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
-            privacy: 'private'
+            privacy: 'private',
+            email: 'ringo@thebeatles.uk',
+            about_me: ''
         }
     ],
     notifications:[

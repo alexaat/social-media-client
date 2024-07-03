@@ -14,6 +14,8 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
    
    // const [notifications, reloadNotifications] = ProvideNotifications();
 
+    const notificationsSorted = notifications.sort((a, b) => (a.id < b.id ? 1 : -1))
+
     const setRead = (notification) => {
         setNotifications(prev => {
             return prev.map(item => {
@@ -64,8 +66,8 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
         <Divider />
 
 
-        {notifications && notifications.length > 0 ? (
-          notifications.map((notification) => {
+        {notificationsSorted && notificationsSorted.length > 0 ? (
+          notificationsSorted.map((notification) => {
             return (
               <MenuItem
                 key={notification.id}

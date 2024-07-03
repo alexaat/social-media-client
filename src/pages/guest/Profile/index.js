@@ -32,6 +32,7 @@ import { ProvideGuestData } from '../components/GuestDataContext';
 import GuestIcon from '../components/GuestIcon';
 import GuestPrivacyToggle from '../components/GuestPrivacyToggle';
 import GuestFollowToggle from '../components/GuestFollowToggle';
+import GuestProfileBio from "../components/GuestProfileBio";
 
 const ProfileGuest = () => {
 
@@ -188,17 +189,8 @@ const ProfileGuest = () => {
                         {/*left side: bio and followers */}
                         <Grid item xs={12} md={4}>
                             <Grid container direction='column' sx={{ mt: 1 }}>
-                                <Grid item mx={{ xs: 1, md: 0 }}>
-                                    {/* {
-                                        person_id
-                                            ?
-                                            <UserProvider person_id={person_id}>
-                                                <ProfileBio/>
-                                            </UserProvider>
-                                            :
-                                            <ProfileBio ownProfile/>
-                                    } */}
-
+                                <Grid item mx={{ xs: 1, md: 0 }}>                                                                       
+                                    <GuestProfileBio person_id={person_id}/>
                                 </Grid>
                                 <Grid item sx={{ mt: 1 }} mx={{ xs: 1, md: 0 }}>
                                     {/* {
