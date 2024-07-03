@@ -35,6 +35,7 @@ import GuestFollowToggle from '../components/GuestFollowToggle';
 import GuestProfileBio from "../components/GuestProfileBio";
 import GuestPosts from "../components/GuestPosts";
 import GuestFollowersSummary from '../components/GuestFollowersSummary';
+import GuestFollowRequestDialog from "../components/GuestFollowRequestDialog";
 
 const ProfileGuest = () => {
 
@@ -228,7 +229,7 @@ const ProfileGuest = () => {
                             mr={{ xs: 1, md: 0 }}
                         >
                             {/* Follow request */}
-                            {/* {!person_id && <FollowRequestDialog />}*/}
+                            {!person_id && <GuestFollowRequestDialog />}
 
                             <GuestPosts person_id={person_id}/>
 

@@ -78,6 +78,11 @@ const SignIn = () => {
             .catch(err => handleError(err));
     }
 
+    const guestClickHandler = () => {
+        navigate('/guest')
+
+    }
+
     useEffect(() => {
         const image = new Image();
         image.onload = () => setImageLoaded(true);
@@ -115,7 +120,7 @@ const SignIn = () => {
                         <Box sx={{ display: "flex", justifyContent: "center" }} >
                             <Stack spacing={1}>
                             <Button variant="contained" size="medium" color="success" onClick={() => navigate('/signup')}>Create New Account</Button>
-                            <Button  style={{backgroundColor: "#b54e96"}} variant="contained" size="medium" onClick={() => navigate('/guest')}>Enter as guest</Button>
+                            <Button  style={{backgroundColor: "#b54e96"}} variant="contained" size="medium" onClick={guestClickHandler}>Enter as guest</Button>
                             </Stack>
                         </Box>
                     </Stack>

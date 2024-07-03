@@ -1,5 +1,6 @@
 import { serverHost } from "./constants.js";
 
+
 export const buildImageUrl = (fileName) => {
   return `${serverHost}/image?id=${fileName}`;
 };
@@ -192,5 +193,7 @@ export const validateEmail = input => {
   var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   return input.match(validRegex);
 }
+
+
 
 

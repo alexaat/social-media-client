@@ -139,7 +139,8 @@ const data = {
             comments: []
         }
     ],
-    followers: []    
+    followers: []
+
 }
 
 const GuestDataContext = createContext();
@@ -160,6 +161,7 @@ export const GuestDataProvider = ( {children} ) => {
 
     const [users, setUsers] = useState(data.users);
     const [followers, setFollowers] = useState(data.followers);
+    
    
     return (
         <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers]}>
