@@ -26,8 +26,9 @@ const GuestFollowToggle = ({ person_id }) => {
     let text = 'Follow';
     let variant = 'contained';
 
-    const followee = followers.filter(f => f.followerId === user.id && f.followeeId === person_id);
-    console.log('followers ',followers)
+    const followee = followers.filter(f => f.followerId === user.id && f.followeeId == person_id);
+    // console.log('followers ',followers);
+    // console.log('followee ',followee);
     if(followee && followee.length > 0){
         if(followee[0].status === 'approved'){
             isFollowing = true;
@@ -162,7 +163,7 @@ const GuestFollowToggle = ({ person_id }) => {
                         return [...prev, notification];
                     })
 
-                return prev.filter(f => !(f.followerId === user.id && f.followeeId === person_id)) 
+                return prev.filter(f => !(f.followerId === user.id && f.followeeId == person_id)) 
             });
         }
 

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { ProvideGuestData } from '../components/GuestDataContext';
-import { Stack, Card, CardContent, Typography } from '@mui/material';
+import { Stack, Card, CardContent, Typography, imageListClasses } from '@mui/material';
 import GuestNewPostButton from '../components/GuestNewPostButton';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import GuestPost from '../components/GuestPost';
 import GuestNewPostDialog from '../components/GuestNewPostDialog';
 
@@ -11,7 +11,19 @@ const HomeGuest = () => {
     // const [posts] = ProvidePosts();
     // const [user] = ProvideUser();
 
-    const [user, notifications, setNotifications, posts] = ProvideGuestData();
+    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
+
+    // const wasCalled = useRef(false);
+    // useEffect(() =>{
+    //     //const followRequestWasSent = followers.filter(f => f.followerId === 2 && f.followeeId === user.id && f.status === 'pending')
+    //     if(!wasCalled.current){
+    //         wasCalled.current = true;
+    //         console.log('home')
+    //     }
+
+    // },[]);
+
+  
     const [newPostDialogOpen, setNewPostDialogOpen] = useState(false);
     const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
     const newPostButtonClickHandler = () => setNewPostDialogOpen(true);

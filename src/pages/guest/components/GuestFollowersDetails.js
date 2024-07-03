@@ -3,13 +3,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import FollowerCard from "./FollowerCard";
 import GuestFollowerCard from '../components/GuestFollowerCard';
 import { ProvideGuestData } from "./GuestDataContext";
+import { v4 as uuidv4 } from 'uuid';
 
 const GuestFollowersDetails = ({ arr, title }) => {
 
 
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
-   // console.log('arr ',arr)
+    //console.log('arr ',arr)
 
     // let key = '';
     // if (arr && Array.isArray(arr) && arr.length > 0) {
@@ -40,7 +41,7 @@ const GuestFollowersDetails = ({ arr, title }) => {
                 <AccordionDetails sx={{ pb: 0 }} >
                     {arr && arr.map(item => {
                         if(item){
-                            return <GuestFollowerCard key={Date.now()} user={item.user} date={item.date} />
+                            return <GuestFollowerCard key={uuidv4()} user={item.user} date={item.date} />
                         }     
 
                         // return <GuestFollowerCard key={item[key].id} user={item[key]} date={item.date} />

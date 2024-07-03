@@ -10,12 +10,9 @@ import { ProvideGuestData } from "./GuestDataContext";
 import GuestFollowersDetails from '../components/GuestFollowersDetails';
 
 
-
 const GuestFollowersSummary = ({person_id}) => {
 
-
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
-
 
     //console.log('followers ',followers)
 
@@ -40,22 +37,23 @@ const GuestFollowersSummary = ({person_id}) => {
             }
         })
        
-    } else {
+    } else {      
 
-        followersFiltered = followers.map(f => {
+        followers.forEach(f => {
             if(f.followeeId === user.id && f.status === 'approved'){
-                const _user = users.filter(u => u.id == person_id)[0];
-                return {user: _user, date: f.date}
+                const _user = users.filter(u => u.id === f.followerId)[0];
+                const result = {user: _user, date: f.date}
+                followersFiltered.push(result);
             }
         });
 
-        followingsFiltered = followers.map(f => {
+        followers.forEach(f => {
             if(f.followerId === user.id && f.status === 'approved'){
-                const user = users.filter(u => u.id == person_id)[0];
-                return {user, date: f.date}
+                const _user = users.filter(u => u.id === f.followeeId)[0];
+                const result = {user: _user, date: f.date}
+                followingsFiltered.push(result);
             }
-        });
-      
+        });      
     }
 
 
@@ -97,8 +95,6 @@ const GuestFollowersSummary = ({person_id}) => {
     // // Filter followers that were not approved yet
     // const followersFiltered = followers.filter(follower => follower.approved);
     // const followingsFiltered = followings.filter(follower => follower.approved)
-
-
 
 
     return (

@@ -10,7 +10,7 @@ const GuestFollowerCard = ({ user, date }) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/profile/${user.id}`)       
+        navigate(`/guest/profile/${user.id}`)       
     }
 
    // console.log('user: ', user)
