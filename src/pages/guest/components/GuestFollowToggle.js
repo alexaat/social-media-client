@@ -5,10 +5,13 @@ import { getCookie, SESSION_ID } from "../../../cookies";
 import { useNavigate } from 'react-router-dom';
 import { handleError } from "../../../errors";
 import { useState } from "react";
+import { ProvideGuestData } from "./GuestDataContext";
 
 const GuestFollowToggle = ({ person_id }) => {
 
-    const [followings, reloadFollowings] = ProvideFollowings();
+    //const [followings, reloadFollowings] = ProvideFollowings();
+
+    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
     let isFollowing = undefined;
 
@@ -23,23 +26,98 @@ const GuestFollowToggle = ({ person_id }) => {
     let text = 'Follow';
     let variant = 'contained';
 
-    if (person_id && followings && followings.length > 0) {
-
-        const following = followings.filter(item => item.following.id == person_id)
-        if (following.length > 0) {
-            variant = 'outlined';
-            if (following[0].approved) {
-                isFollowing = true;
-                text = 'Unfollow';
-            } else {
-                isFollowing = false;
-                text = 'Pending';
-            }
+    const followee = followers.filter(f => f.followerId === user.id && f.followeeId === person_id);
+    if(followee && followee.length > 0){
+        if(followee[0].status === 'approved'){
+            isFollowing = true;
+            text = 'Unfollow';
+        } else if(followee[0].status === 'pending'){
+            isFollowing = false;
+            text = 'Pending';
         }
     }
 
-    const setFollow = () => {
 
+    // if (person_id && followings && followings.length > 0) {
+
+    //     const following = followings.filter(item => item.following.id == person_id)
+    //     if (following.length > 0) {
+    //         variant = 'outlined';
+    //         if (following[0].approved) {
+    //             isFollowing = true;
+    //             text = 'Unfollow';
+    //         } else {
+    //             isFollowing = false;
+    //             text = 'Pending';
+    //         }
+    //     }
+    // }
+
+    const setFollow = () => {
+        const person = users.filter(u => u.id == person_id)[0];
+        if(isFollowing === undefined){
+            setFollowers(prev => {              
+                const status = person.privacy === 'public' ? 'approved' : 'pending';
+                const content =
+                    status === 'pending'
+                    ?
+                    'Approve message sent to ' + person.display_name
+                    :
+                    status === 'approved'
+                    ?
+                    'You are following ' + person.display_name
+                    :
+                    '';
+                
+                if(content){
+                    setSnackBarOpen(true);
+                    setSnackBarMessage('Approve message sent');
+                    setNotifications(prev => {
+
+                        const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
+                       
+                        const notification = {
+                            id,
+                            content,
+                            date:  Date.now(),
+                            sender: person,
+                            is_read: false
+                        }
+
+                        return [...prev, notification];
+                    })
+                }               
+                
+                const followItem = {followerId: user.id, followeeId: person_id, status}
+                return [...prev, followItem]
+            });
+        } else if(followee && followee.length > 0 && followee[0].status === 'approved'){
+            setFollowers(prev => {  
+
+                setNotifications(prev => {
+
+                    const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;
+                      
+                    const notification = {
+                        id,
+                        content: 'You stopped to follow ' + person.display_name,
+                        date:  Date.now(),
+                        sender: person,
+                        is_read: false
+                    }
+
+                        return [...prev, notification];
+                    })
+                
+
+
+                return prev.filter(f => !(f.followerId === user.id && f.followeeId === person_id)) 
+            });
+        }
+
+
+
+        /*
         const session_id = getCookie(SESSION_ID);
         if (!session_id) {
             navigate("/signin");
@@ -92,7 +170,9 @@ const GuestFollowToggle = ({ person_id }) => {
                     }
                 })
                 .catch(err => handleError(`Here ${err}`));
+                
         }
+        */
     }
 
     return (

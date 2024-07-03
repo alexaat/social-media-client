@@ -15,56 +15,47 @@ const data = {
             first_name: 'John',
             last_name: 'Lennon',
             display_name: 'John',
-            avatar: 'http://alexaat.com/socialmedia/images/John.jpg'
+            avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+            privacy: 'public'
         },
         {
             id: 3,
             first_name: 'Paul',
             last_name: 'McCartney',
             display_name: 'Paul',
-            avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
+            avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+            privacy: 'private'
         },
         {
             id: 4,
             first_name: 'George',
             last_name: 'Harrison',
             display_name: 'George',
-            avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+            avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+            privacy: 'public'
         },
         {
             id: 5,
             first_name: 'Ringo',
             last_name: 'Starr',
             display_name: 'Ringo',
-            avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg'
+            avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+            privacy: 'private'
         }
     ],
     notifications:[
         {
             id: 1,
-            content: 'note 1',
+            content: 'Welcome to social media!',
             date: Date.now(),
             sender: {
-                id: 2,
-                first_name: 'John',
-                last_name: 'Lennon',
-                display_name: 'John',
-                avatar: 'http://alexaat.com/socialmedia/images/John.jpg'
+                id: 1,
+                first_name: 'Guest',
+                last_name: 'Special',
+                display_name: 'Guest',
+                avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
             },
             is_read: false
-        },
-        {
-            id: 2,
-            content: 'note 2',
-            date:  Date.now(),
-            sender: {
-                id: 3,
-                first_name: 'Paul',
-                last_name: 'McCartney',
-                display_name: 'Paul',
-                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
-            },
-            is_read: true
         }
     ],
     posts: [
@@ -137,7 +128,8 @@ const data = {
             },
             comments: []
         }
-    ]    
+    ],
+    followers: []    
 }
 
 const GuestDataContext = createContext();
@@ -157,9 +149,10 @@ export const GuestDataProvider = ( {children} ) => {
     }));
 
     const [users, setUsers] = useState(data.users);
+    const [followers, setFollowers] = useState(data.followers);
    
     return (
-        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser]}>
+        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers]}>
             {children}
         </GuestDataContext.Provider>
     );
