@@ -27,22 +27,18 @@ const GuestToolBar = () => {
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
     const isFollowingRef = useRef(false);
 
-    //const [userStr, setUserStr] = useState(JSON.stringify(user));
-
-    //let userStr = JSON.stringify(user);
-    //let userStr = '{"id":1,"first_name":"Guest","last_name":"Special","display_name":"Guest","avatar":"http://alexaat.com/socialmedia/images/Guest.jpg",//"privacy":"private","email":"guest@special.com","about_me":"Thank you for using social media"}'
+    const userRef = useRef(user);
 
     const createFollowRequest = () => {
-     
-        // const _user = JSON.parse(userStr);
-        console.log('user in function', user)
    
+        const u = userRef.current;
+
         //1. Add Notification
         setNotifications(prev => {
           const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
           const sender = users.find(u=> u.id === 2);
           const content = 
-            user.privacy === 'private'
+            u.privacy === 'private'
               ?
               'You have a follower request from ' + sender.display_name
               :
@@ -59,7 +55,7 @@ const GuestToolBar = () => {
         })
 
         //2. Add follower
-        const status = user.privacy === 'private' ? 'pending' : 'approved'; 
+        const status = u.privacy === 'private' ? 'pending' : 'approved'; 
         const follower = {
           followerId: 2,
           followeeId: 1,
@@ -73,28 +69,13 @@ const GuestToolBar = () => {
         })       
     }
 
-
-    
     useEffect(() => { 
-
-     console.log('USER ', user) 
-    // setUserStr(JSON.stringify(user));
-     // userStr = JSON.stringify(user)
-
+      userRef.current = user;      
       const isFollowing = followers.find(f => f.followeeId === 1 && f.followerId === 2)
       if(!isFollowing && !isFollowingRef.current){
         isFollowingRef.current = true;
-        setTimeout(createFollowRequest, 10000);
-        console.log('set timeout')
+        setTimeout(createFollowRequest, 10000);      
       }
-
-
-      // var a = 10;
-      // function foo(){
-      //   console.log(a)
-      // }
-      // setTimeout(foo, 2000);
-      // a=20;
       
     },[user]);    
 

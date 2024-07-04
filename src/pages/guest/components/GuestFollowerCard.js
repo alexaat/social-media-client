@@ -28,7 +28,7 @@ const GuestFollowerCard = ({ user, date }) => {
                     </IconButton>
                     <Stack>
                         <Typography>{user.display_name}</Typography>
-                        <Typography>Following for: {dateConverter(date)}</Typography>
+                        <Typography>Following for: {dateConverter(date).slice(0, -4)}</Typography>
                     </Stack>
                 </Stack>
             </CardContent>

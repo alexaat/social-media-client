@@ -26,11 +26,10 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
                 }
             })
         })
-      };
-          
+      };          
 
     const iconClickHandler = (id) => {
-        navigate(`profile/${id}`);
+        navigate(`/guest/profile/${id}`);
         onClose();
     }  
     

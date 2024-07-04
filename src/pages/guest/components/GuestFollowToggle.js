@@ -10,9 +10,8 @@ import { ProvideGuestData } from "./GuestDataContext";
 const GuestFollowToggle = ({ person_id }) => {
 
     //const [followings, reloadFollowings] = ProvideFollowings();
-
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
-
+    
     let isFollowing = undefined;
 
     //Navigation
