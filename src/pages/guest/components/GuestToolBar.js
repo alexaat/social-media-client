@@ -21,6 +21,7 @@ import {
   import GuestIcon from './GuestIcon';
   import GuestProfileMenu from '../components/GuestProfileMenu';
   import GuestNotificationsMenu from './GuestNotificationsMenu';
+  import GuestChatsMenu from './GuestChatsMenu';
 
 const GuestToolBar = () => {
 
@@ -81,7 +82,6 @@ const GuestToolBar = () => {
 
     const navigate = useNavigate();
 
-
     //Profile Menu
     const [profileAncorEl, setProfileAncorEl] = useState(null);
     const profileCloseHandler = () => setProfileAncorEl(null);
@@ -96,6 +96,22 @@ const GuestToolBar = () => {
       : 0;
     const notificationsCloseHandler = () => setNotificationsAncorEl(null);
     const notificationsClickHandler = (e) => setNotificationsAncorEl(e.currentTarget);
+
+    //Chats
+    const [chatsAncorEl, setChatsAncorEl] = useState(null);
+    const chatsCloseHandler = () => setChatsAncorEl(null);
+    const chatsClickHandler = (e) => setChatsAncorEl(e.currentTarget);
+    const [newChatDialogOpen, setNewChatDialogOpen] = useState(false);
+    const newChatMessageClickHandler = () => {
+      chatsCloseHandler();
+      setNewChatDialogOpen(true);
+    };
+    const chatSelectedHandler = (message) => {
+      chatsCloseHandler();
+      setNewChatDialogOpen(true);
+    };
+
+
 
     return (
         <>
@@ -128,7 +144,7 @@ const GuestToolBar = () => {
                 <IconButton
                   sx={{ background: "#eeeeee" }}
                   aria-label="chat-message"
-                 // onClick={chatsClickHandler}
+                  onClick={chatsClickHandler}
                 >
                   <MessageRoundedIcon />
                 </IconButton>
@@ -172,7 +188,7 @@ const GuestToolBar = () => {
         <GuestNotificationsMenu ancor={notificationsAncorEl} onClose={notificationsCloseHandler} setClickedNotification={setClickedNotification}/>
   
         {/* Chats Menu */}
-        {/* <ChatsMenu ancor={chatsAncorEl} onClose={chatsCloseHandler} newChatMessageClickHandler={newChatMessageClickHandler} chatSelectedHandler={chatSelectedHandler}/> */}
+        <GuestChatsMenu ancor={chatsAncorEl} onClose={chatsCloseHandler} newChatMessageClickHandler={newChatMessageClickHandler} chatSelectedHandler={chatSelectedHandler}/>
   
 
 
