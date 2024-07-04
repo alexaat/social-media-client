@@ -6,22 +6,27 @@ import {  useState } from "react";
 import { ProvideGuestData } from "./GuestDataContext";
 import GuestEditBioDialog from "./GuestEditBioDialog";
 
-// const GuestProfileBio = ({ownProfile}) => {
 const GuestProfileBio = ({person_id}) => {
-    //const [user, reloadUser] = ProvideUser();
+
 
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
-
-   // const person = person_id ? users.find(u => u.id == person_id) : user
-
     let person = user;
     if(person_id) {
-        const p =  users.find(u => u.id == person_id);
+        const p = JSON.parse(JSON.stringify(users.find(u => u.id == person_id)));      
         if(p.privacy === 'private'){
-            p.email = '';
-            p.first_name = '';
-            p.last_name = '';
+
+            //Check if friends
+            const areFriends = followers.filter(item => {
+                return (item.followerId == person_id && item.followeeId === user.id && item.status === 'approved') ||
+                       (item.followeeId == person_id && item.followerId === user.id && item.status === 'approved')
+            }).length > 0;
+
+            if(!areFriends){
+                p.email = '';
+                p.first_name = '';
+                p.last_name = '';
+            }
         }
         person = p;
     }
@@ -30,9 +35,6 @@ const GuestProfileBio = ({person_id}) => {
     const [openEditDetailsDialog, setOpenEditDetailsDialog] = useState(false);
     const onCloseDialog = () => setOpenEditDetailsDialog(false);
     const editBioClickHandler = () => setOpenEditDetailsDialog(true);   
-
-
-
 
 
     return (
