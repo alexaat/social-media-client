@@ -1,7 +1,5 @@
 import { Paper, Stack, Typography, TextField, IconButton } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import { ProvideUser } from "../../../context/UserContext";
-//import EditBioDialog from "../../../dialogs/EditBioDialog";
 import {  useState } from "react";
 import { ProvideGuestData } from "./GuestDataContext";
 import GuestEditBioDialog from "./GuestEditBioDialog";

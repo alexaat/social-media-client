@@ -233,21 +233,21 @@ import { v4 as uuidv4 } from 'uuid';
     //User
     const [user] = ProvideUser();
  
-
+*/
  
     let publicity
  
     if (post.privacy) {
        publicity = <Tooltip title="Pubic"><PublicRoundedIcon /></Tooltip>
  
-       if (post.privacy === "friends") {
+      if (post.privacy === "friends") {
           publicity = <Tooltip title="Friends"><PeopleRoundedIcon /></Tooltip>
-       }
-       if (post.specific_friends !== "") {
-          publicity = <Tooltip title="Specific Friends"><PeopleOutlineRoundedIcon /></Tooltip>
-       }
+      }
+      //  if (post.specific_friends !== "") {
+      //     publicity = <Tooltip title="Specific Friends"><PeopleOutlineRoundedIcon /></Tooltip>
+      //  }
     }
- */
+ 
     const clickHandler = () => {
        if (post.sender.id === user.id) {
           navigate('/guest/profile');
@@ -282,7 +282,7 @@ import { v4 as uuidv4 } from 'uuid';
                          <Typography variant="subtitle1">{post.sender.display_name}</Typography>
                          <Stack direction="row">
                             <Typography variant="subtitle1" sx={{ mr: 1 }}>{dateConverter(post.date)}</Typography>
-                            publicity
+                            {publicity}
                          </Stack>
                       </Stack>
                    </Stack>

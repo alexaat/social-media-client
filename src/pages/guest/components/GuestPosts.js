@@ -33,7 +33,22 @@ const GuestPosts = ({person_id}) => {
       components = <GuestInfoCard title='No Posts' message={message} color='#16c980' />
     } else {
       const sorted = filtered.sort((a,b) => (a.id<b.id ? 1 : -1))
-      components = sorted.map(post => <GuestPost key={post.id} post={post}/>)
+      components = sorted.map(post => {
+
+        if(post.privacy === 'public') {
+          return <GuestPost key={post.id} post={post}/>
+        } else if (post.privacy === 'friends'){
+          //Check that friends
+          const areFriends = followers.filter(item => {
+            return (item.followerId == post.sender.id && item.followeeId === user.id && item.status === 'approved') ||
+            (item.followeeId == post.sender.id && item.followerId === user.id && item.status === 'approved')
+          }).length > 0;
+
+          if(areFriends){
+            return <GuestPost key={post.id} post={post}/>
+          }
+        }
+    })
     }
   }  
 

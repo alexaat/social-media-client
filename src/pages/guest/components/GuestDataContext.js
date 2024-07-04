@@ -74,6 +74,7 @@ const data = {
             content: 'Performing on The Ed Sullivan Show, February 1964',
             date: Date.now()-1000*60*60*24*4,
             image: 'http://alexaat.com/socialmedia/images/post1.jpg',
+            privacy: 'public',
             sender: {
                 id: 2,
                 first_name: 'John',
@@ -91,8 +92,9 @@ const data = {
                         display_name: 'Paul',
                         avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
                     },
-                    date: Date.now(),
-                    content: 'Comment 1'
+                    image: 'http://alexaat.com/socialmedia/images/comment1.jpg',
+                    date: Date.now() - 1000*60*60*24,
+                    content: 'Another image from this event'
                 }
             ]
         },
@@ -101,6 +103,7 @@ const data = {
             content: 'McCartney, Harrison and Lennon performing on Dutch TV in 1964',
             date: Date.now()-1000*60*60*24*2,
             image: 'http://alexaat.com/socialmedia/images/post2.png',
+            privacy: 'public',
             sender: {
                 id: 5,
                 first_name: 'Ringo',
@@ -115,6 +118,7 @@ const data = {
             content: 'Press conference in Minnesota in August 1965, shortly after playing at Shea Stadium in New York',
             date: Date.now() - 1000*60*60*10,
             image: 'http://alexaat.com/socialmedia/images/post3.jpg',
+            privacy: 'public',
             sender: {
                 id: 3,
                 first_name: 'Paul',
@@ -129,6 +133,22 @@ const data = {
             content: 'Abbey Road crossing in London',
             image: 'http://alexaat.com/socialmedia/images/post4.jpg',
             date: Date.now() - 1000*60*60,
+            privacy: 'public',
+            sender: {
+                id: 4,
+                first_name: 'George',
+                last_name: 'Harrison',
+                display_name: 'George',
+                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+            },
+            comments: []
+        },
+        {
+            id: 5,
+            content: 'Ths post is only available for my friends',
+            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
+            date: Date.now() - 1000*60*30,
+            privacy: 'friends',
             sender: {
                 id: 4,
                 first_name: 'George',

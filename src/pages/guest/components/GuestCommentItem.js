@@ -11,7 +11,7 @@ const GuestCommentItem = ({ comment }) => {
 
        if(comment.image){
           if(isValidUrl(comment.image)){
-             setSrc(buildImageUrl(comment.image))
+             setSrc(comment.image)
           } else {
              const src = localStorage.getItem(comment.image);
              if(src){

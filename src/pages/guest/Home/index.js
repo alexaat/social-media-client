@@ -54,9 +54,23 @@ const HomeGuest = () => {
                     <GuestNewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> 
                     {
                         sorted && sorted.map(post => {
-                            return (
-                                <GuestPost post={post}  key={post.id} />
-                            )
+
+                            if(post.privacy === 'public'){
+                                return (
+                                    <GuestPost post={post}  key={post.id} />
+                                )
+                            } else if(post.privacy === 'friends'){
+                                //Check that friends
+                                const areFriends = followers.filter(item => {
+                                    return (item.followerId == post.sender.id && item.followeeId === user.id && item.status === 'approved') ||
+                                           (item.followeeId == post.sender.id && item.followerId === user.id && item.status === 'approved')
+                                 }).length > 0;
+                                 
+                                 if(areFriends){
+                                    return <GuestPost post={post}  key={post.id} />
+                                 }
+                            }
+
                         })
                     }
                     {
