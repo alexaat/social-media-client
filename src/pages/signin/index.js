@@ -7,6 +7,7 @@ import { handleError } from "../../errors";
 import { ProvideUser } from "../../context/UserContext";
 import defaultBackground from '../../assets/default_background.jpg';
 import {imageURL} from '../../constants';
+import { ProvideGuestData } from "../guest/components/GuestDataContext";
 
 const SignIn = () => {
 
@@ -79,7 +80,8 @@ const SignIn = () => {
     }
 
     const guestClickHandler = () => {
-        navigate('/guest')
+   
+       navigate('/guest');
 
     }
 

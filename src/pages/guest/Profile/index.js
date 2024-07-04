@@ -38,12 +38,11 @@ import GuestFollowersSummary from '../components/GuestFollowersSummary';
 import GuestFollowRequestDialog from "../components/GuestFollowRequestDialog";
 
 const ProfileGuest = () => {
-
-   
+ 
 
     const { person_id } = useParams();
 
-    const [user, notifications, setNotifications, posts, setPosts, users, setUser] = ProvideGuestData();
+    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
     const person = person_id === undefined ? user : users.filter(u => u.id == person_id)[0]
 
@@ -56,51 +55,17 @@ const ProfileGuest = () => {
     const privacyChangeHandler = (event, value) => {
 
         if (value) {
-
             setPrivacy(value);
-
             setUser(prev => {
                 return {...prev, privacy: value}
             })
-            
-
-            // const session_id = getCookie(SESSION_ID);
-
-            // fetch(serverHost + '/user?' + new URLSearchParams({ session_id }),
-            //     {
-            //         method: 'PATCH',
-            //         headers: {
-            //             'Accept': 'application/json'
-            //         },
-            //         body: new URLSearchParams({
-            //             privacy: value
-            //         })
-            //     })
-            //     .then(resp => resp.json())
-            //     .then(data => {                  
-            //         if (!data) {
-            //             throw new Error("Couldn't fetch data: No data prop");
-            //         }
-            //         if (data.error) {
-            //             throw new Error(data.error.message);
-            //         }
-            //         if (!data.payload) {
-            //             throw new Error("Couldn't fetch data: No payload prop");
-            //         }
-            //         reloadUser();
-            //     })
-            //     .catch(err => alert(err));
         }
     }
-    // const navigate = useNavigate();
+
 
     const [image, setImage] = useState();
 
     useEffect(() => {
-        // if (person_id && user && person_id === user.id.toString()) {
-        //     navigate('/profile');
-
-        // }
         const image = new Image();
         image.src = imageURL;
         image.onload = () => setImage(image);

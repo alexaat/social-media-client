@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
     AppBar,
     Toolbar,
@@ -24,8 +24,82 @@ import {
 
 const GuestToolBar = () => {
 
+    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
+    const isFollowingRef = useRef(false);
+
+    //const [userStr, setUserStr] = useState(JSON.stringify(user));
+
+    //let userStr = JSON.stringify(user);
+    //let userStr = '{"id":1,"first_name":"Guest","last_name":"Special","display_name":"Guest","avatar":"http://alexaat.com/socialmedia/images/Guest.jpg",//"privacy":"private","email":"guest@special.com","about_me":"Thank you for using social media"}'
+
+    const createFollowRequest = () => {
+     
+        // const _user = JSON.parse(userStr);
+        console.log('user in function', user)
+   
+        //1. Add Notification
+        setNotifications(prev => {
+          const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+          const sender = users.find(u=> u.id === 2);
+          const content = 
+            user.privacy === 'private'
+              ?
+              'You have a follower request from ' + sender.display_name
+              :
+              'You have a new follower: ' + sender.display_name;
+
+          const notification = {
+              id,
+              content,
+              date:  Date.now(),
+              sender,
+              is_read: false
+          }
+              return [...prev, notification];
+        })
+
+        //2. Add follower
+        const status = user.privacy === 'private' ? 'pending' : 'approved'; 
+        const follower = {
+          followerId: 2,
+          followeeId: 1,
+          date: Date.now(),
+          status
+        } 
+
+        setFollowers(prev => {
+           const filtered = prev.filter(f => !(f.followeeId === 1 && f.followerId === 2));
+           return [...filtered, follower];
+        })       
+    }
+
+
+    
+    useEffect(() => { 
+
+     console.log('USER ', user) 
+    // setUserStr(JSON.stringify(user));
+     // userStr = JSON.stringify(user)
+
+      const isFollowing = followers.find(f => f.followeeId === 1 && f.followerId === 2)
+      if(!isFollowing && !isFollowingRef.current){
+        isFollowingRef.current = true;
+        setTimeout(createFollowRequest, 10000);
+        console.log('set timeout')
+      }
+
+
+      // var a = 10;
+      // function foo(){
+      //   console.log(a)
+      // }
+      // setTimeout(foo, 2000);
+      // a=20;
+      
+    },[user]);    
+
     const navigate = useNavigate();
-    const [user, notifications] = ProvideGuestData();
+
 
     //Profile Menu
     const [profileAncorEl, setProfileAncorEl] = useState(null);

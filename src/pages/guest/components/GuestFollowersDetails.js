@@ -3,7 +3,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import FollowerCard from "./FollowerCard";
 import GuestFollowerCard from '../components/GuestFollowerCard';
 import { ProvideGuestData } from "./GuestDataContext";
-import { v4 as uuidv4 } from 'uuid';
 
 const GuestFollowersDetails = ({ arr, title }) => {
 
@@ -39,9 +38,9 @@ const GuestFollowersDetails = ({ arr, title }) => {
                     <Typography variant="subtitle1">{title}</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ pb: 0 }} >
-                    {arr && arr.map(item => {
+                    {arr && arr.map((item, index) => {
                         if(item){
-                            return <GuestFollowerCard key={uuidv4()} user={item.user} date={item.date} />
+                            return <GuestFollowerCard key={index} user={item.user} date={item.date} />
                         }     
 
                         // return <GuestFollowerCard key={item[key].id} user={item[key]} date={item.date} />
