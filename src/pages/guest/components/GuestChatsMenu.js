@@ -2,11 +2,12 @@ import { Typography, IconButton, Menu, Stack,  Divider } from "@mui/material";
 //import ChatItemsOutlet from "../components/ChatItemsOutlet";
 // import { ProvideChatMessages } from "../context/ChatMessagesContext";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
+import GuestChatItemsOutlet from "./GuestChatItemsOutlet";
 
 
 const GuestChatsMenu = ({ancor, onClose, newChatMessageClickHandler, chatSelectedHandler}) => {
 
-    //const [chatMessages] = ProvideChatMessages();
+    const chatMessages = [];
     
     return ( 
         <Menu
@@ -48,18 +49,18 @@ const GuestChatsMenu = ({ancor, onClose, newChatMessageClickHandler, chatSelecte
         </Stack>
 
         <Divider />
-        {/* {!chatMessages || chatMessages.length === 0 ? (
+        {!chatMessages || chatMessages.length === 0 ? (
           <Stack sx={{ px: 2 }}>
             <Typography variant="body1" sx={{ py: 1 }}>
               No Chats
             </Typography>
           </Stack>
         ) : (
-          <ChatItemsOutlet
+          <GuestChatItemsOutlet
             chats={chatMessages}
             chatSelectedHandler={chatSelectedHandler}
           />
-        )} */}
+        )}
       </Menu>
     );
 }

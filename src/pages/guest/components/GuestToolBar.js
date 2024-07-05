@@ -22,6 +22,7 @@ import {
   import GuestProfileMenu from '../components/GuestProfileMenu';
   import GuestNotificationsMenu from './GuestNotificationsMenu';
   import GuestChatsMenu from './GuestChatsMenu';
+  import GuestNewChatMessageDialog from "./GuestNewChatMessageDialog";
 
 const GuestToolBar = () => {
 
@@ -110,6 +111,11 @@ const GuestToolBar = () => {
       chatsCloseHandler();
       setNewChatDialogOpen(true);
     };
+    //Refresh chat messages in components
+    const [newPrivateChatMessage, setNewPrivateChatMessage] = useState();
+    const [newChatGroupChatMessage, setNewChatGroupChatMessage] = useState();
+    const [newChatMessage, setNewChatMessage] = useState();
+    const reloadChatMessages = () => console.log('reload...');
 
 
 
@@ -244,14 +250,14 @@ const GuestToolBar = () => {
           </Alert>
         </Snackbar> */}
   
-        {/* <NewChatMessageDialog
+        <GuestNewChatMessageDialog
           newPrivateChatMessage={newPrivateChatMessage}
           newChatGroupChatMessage={newChatGroupChatMessage}
           newChatMessage={newChatMessage}
           open={newChatDialogOpen}
           onClose={() => setNewChatDialogOpen(false)}
           reloadChatMessagesInToolBar={reloadChatMessages}
-        /> */}
+        />
   
         {/* <NewGroupDialog
           open={newGroupDialogOpen}

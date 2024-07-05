@@ -159,9 +159,70 @@ const data = {
             comments: []
         }
     ],
-    followers: []
+    followers: [],
+    chatMessages: [
+        {
+            id: 1,
+            sender: {
+                id: 2,
+                first_name: 'John',
+                last_name: 'Lennon',
+                display_name: 'John',
+                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                privacy: 'public',
+                email: 'john@thebeatles.uk',
+                about_me: 'Life is what happens while you are busy making other plans.'
+            },
+            recipient: {                
+                id: 1,
+                first_name: 'Guest',
+                last_name: 'Special',
+                display_name: 'Guest',
+                avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
+                privacy: 'public',
+                email: 'guest@special.com',
+                about_me: 'Thank you for using social media'
+            },
+            content: 'text',
+            date: Date.now()
+        },
+        {
+            id: 2,
+            sender: {
+                id: 4,
+                first_name: 'George',
+                last_name: 'Harrison',
+                display_name: 'George',
+                avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+                privacy: 'public',
+                email: 'george@thebeatles.uk',
+                about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
+            },
+            recipient: {                
+                id: 5,
+                first_name: 'Ringo',
+                last_name: 'Starr',
+                display_name: 'Ringo',
+                avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                privacy: 'private',
+                email: 'ringo@thebeatles.uk',
+                about_me: ''
+            },
+            content: 'private message',
+            date: Date.now()
+        }
+    ]
 
 }
+/*
+            key={message.id}
+            sender_id={message.sender.id}
+            title={message.sender.display_name}
+            text={message.content}
+            date={message.date}
+*/
+
+
 
 const GuestDataContext = createContext();
 
@@ -181,10 +242,11 @@ export const GuestDataProvider = ( {children} ) => {
 
     const [users, setUsers] = useState(data.users);
     const [followers, setFollowers] = useState(data.followers);
+    const [chatMessages, setChatMessages] = useState(data.chatMessages);
     
    
     return (
-        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers]}>
+        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers, chatMessages, setChatMessages]}>
             {children}
         </GuestDataContext.Provider>
     );
