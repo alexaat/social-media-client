@@ -1,8 +1,21 @@
 import { IconButton, Stack, Typography, Badge } from "@mui/material";
 import GuestIcon from "./GuestIcon";
+import { isValidUrl } from "../../../util";
+import { useEffect, useState } from "react";
 
 const GuestChatRoomItem = ({ room, clickHandler, unread }) => {
 
+  const [src, setSrc] = useState(room.image);
+
+  useEffect(() => {
+    if(!isValidUrl(room.image)){
+      setTimeout(() => {
+        setSrc(localStorage.getItem(room.image));
+      },500);     
+    }
+  },[src]);
+
+  
   return (
     <Stack
       direction="row"
@@ -28,7 +41,7 @@ const GuestChatRoomItem = ({ room, clickHandler, unread }) => {
           overlap="circular"
           badgeContent={unread}
         >
-          <GuestIcon user={{ display_name: room.title, avatar: room.image }} />
+          <GuestIcon user={{ display_name: room.title, avatar: src }} />
         </Badge>        
       </IconButton>
       <Typography>{room.title}</Typography>

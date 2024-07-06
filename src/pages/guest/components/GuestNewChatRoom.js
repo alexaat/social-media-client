@@ -14,6 +14,8 @@ import {
   import { handleError } from "../../../errors";
   import CropEasy from "../../../crop/CropEasy";
   import { ProvideGuestData } from "./GuestDataContext";
+  import { v4 as uuidv4 } from 'uuid';
+
   
   const GuestNewChatRoom = () => {
 
@@ -76,11 +78,24 @@ import {
       }
 
       //Save
+      let image = '';
+      if(croppedImage){
+        const uuid = uuidv4();
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+        localStorage.setItem(uuid, reader.result);
+        }, false);
+        if (croppedImage) {
+            reader.readAsDataURL(croppedImage);
+        } 
+        image = uuid;  
+      }
+
       const id = chatRooms.length === 0 ? 1 : chatRooms.sort((a,b) => a.id<b.id ? 1 : -1)[0].id + 1;
       const chatRoom = {
         id,
         title: chatRoomTitle.trim(),
-        image: croppedImage
+        image
       }
 
       setChatRooms(prev => [...prev, chatRoom]);

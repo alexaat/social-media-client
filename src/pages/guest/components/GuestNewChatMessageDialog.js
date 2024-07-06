@@ -63,7 +63,7 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
     // const [reloadChatRooms, setReloadChatRooms] = useState(1);
   
     const chatGroupClickHandler = (id, title) => {
-        // setChatMate({ id, name: title, type: "group" });
+        setChatMate({ id, name: title, type: "group" });
         // reloadChatMessages();
         console.log('id ',id)
         console.log('title ',title)
@@ -289,9 +289,7 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
                     content,
                     date: Date.now()}
 
-                return [...prev, message];        
-
-
+                return [...prev, message];
             });
 
 

@@ -14,15 +14,36 @@ const GuestChatMessagesOutlet = ({
 
 const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers, chatMessages, setChatMessages] = ProvideGuestData();
 
-const filtered = chatMessages ? chatMessages.filter(item => {
-    if(item.sender.id === user.id && item.recipient.id === chatMate.id){
-        return true;
-    }
-    if(item.recipient.id === user.id && item.sender.id === chatMate.id){
-        return true
-    }
-    return false;
-}) : undefined;
+const [filtered, setFiltered] = useState();
+
+useEffect(() => {
+  if (chatMate && chatMate.type === "user") {
+        setFiltered(prev => {
+          const fl = chatMessages.filter(item => {
+            if(item.sender.id === user.id && item.recipient.id === chatMate.id){
+                return true;
+            }
+            if(item.recipient.id === user.id && item.sender.id === chatMate.id){
+                return true
+            }
+            return false;
+          });
+          return fl;
+        })
+
+  }
+
+  if (chatMate && chatMate.type === "group") {
+    console.log('group')
+  }
+
+
+
+},[]);
+
+
+
+
 
 const sorted = filtered ? filtered.sort((a,b) => a.id < b.id ? 1 : -1) : undefined;
 
