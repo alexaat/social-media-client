@@ -65,9 +65,6 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
     const chatGroupClickHandler = (id, title) => {
         setChatMate({ id, name: title, type: "group" });
         // reloadChatMessages();
-        console.log('id ',id)
-        console.log('title ',title)
-
     };
   
     const [newChatRoomError, setNewChatRoomError] = useState();
@@ -270,7 +267,7 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
     //       handleError(err);
     //     });
     // }, [open, followers, followings, reloadChatRooms, followersError, followingsError]);
-    }, [open]);
+    }, [open, followers]);
   
     const closeHandler = () => {
       onClose();
@@ -282,17 +279,21 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
             setChatMessages(prev => {
                 const id = prev.length === 0 ? 1 : prev.sort((a,b) => a.id < b.id ? 1: -1)[0].id + 1;
                 
+                const recipient = chatMate.type === 'group'
+                      ?
+                      chatRooms.find(r => r.id === chatMate.id)
+                      :
+                      users.find(u => u.id === chatMate.id)
+
                 const message = {
                     id,
                     sender: user,
-                    recipient: users.find(u => u.id === chatMate.id),
+                    recipient,
                     content,
                     date: Date.now()}
 
                 return [...prev, message];
             });
-
-
         }
 
 

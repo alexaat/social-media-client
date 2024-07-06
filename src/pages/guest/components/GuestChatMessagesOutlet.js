@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import GuestChatMessage from "./GuestChatMessage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProvideGuestData } from "./GuestDataContext";
 import { useDefaultReduceAnimations } from "@mui/x-date-pickers/internals";
@@ -16,10 +16,20 @@ const [user, notifications, setNotifications, posts, setPosts, users, setUser, f
 
 const [filtered, setFiltered] = useState();
 
+
+
+
 useEffect(() => {
+
+
+
   if (chatMate && chatMate.type === "user") {
         setFiltered(prev => {
+
           const fl = chatMessages.filter(item => {
+            if(item.recipient.title){
+              return false;
+            }            
             if(item.sender.id === user.id && item.recipient.id === chatMate.id){
                 return true;
             }
@@ -34,16 +44,15 @@ useEffect(() => {
   }
 
   if (chatMate && chatMate.type === "group") {
-    console.log('group')
+    setFiltered(prev => {
+       const fl = chatMessages.filter(item => item.recipient.title && item.recipient.id === chatMate.id);
+       return fl;
+    });
   }
 
 
 
-},[]);
-
-
-
-
+},[chatMessages]);
 
 const sorted = filtered ? filtered.sort((a,b) => a.id < b.id ? 1 : -1) : undefined;
 
