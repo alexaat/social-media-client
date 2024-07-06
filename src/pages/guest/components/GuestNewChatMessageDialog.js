@@ -27,12 +27,12 @@ import {
 //   } from "../constants";
 //   import { getCookie, SESSION_ID } from "../cookies";
 //   import { handleError } from "../errors";
-//   import NewChatRoom from "../components/NewChatRoom";
+import GuestNewChatRoom from "./GuestNewChatRoom";
 //   import { useNavigate } from "react-router-dom";
    import GuestContactsOutlet from "./GuestContactsOutlet";
 import { ProvideGuestData } from "./GuestDataContext";
 import { CurtainsOutlined } from "@mui/icons-material";
-//   import ChatGroupsOutlet from "../components/ChatGroupsOutlet";
+import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
   
   const GuestNewChatMessageDialog = ({
     newChatMessage,
@@ -41,7 +41,14 @@ import { CurtainsOutlined } from "@mui/icons-material";
     reloadChatMessagesInToolBar,
     newPrivateChatMessage, newChatGroupChatMessage
   }) => {
-    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers, chatMessages, setChatMessages] = ProvideGuestData();
+    const [
+      user,
+      notifications, setNotifications,
+      posts, setPosts,
+      users, setUser,
+      followers, setFollowers,
+      chatMessages, setChatMessages,
+      chatRooms, setChatRooms] = ProvideGuestData();
 
     // const navigate = useNavigate();
     const [tab, setTab] = useState(0);
@@ -55,57 +62,65 @@ import { CurtainsOutlined } from "@mui/icons-material";
     // const [chatRooms, setChatRooms] = useState(null);
     // const [reloadChatRooms, setReloadChatRooms] = useState(1);
   
-    // const chatGroupClickHandler = (id, title) => {
-    //     setChatMate({ id, name: title, type: "group" });
-    //     reloadChatMessages();
-    // };
+    const chatGroupClickHandler = (id, title) => {
+        // setChatMate({ id, name: title, type: "group" });
+        // reloadChatMessages();
+        console.log('id ',id)
+        console.log('title ',title)
+
+    };
   
-    // const [newChatRoomError, setNewChatRoomError] = useState();
+    const [newChatRoomError, setNewChatRoomError] = useState();
   
-    // const saveChatGroup = (title, image) => {
-    //   setNewChatRoomError(null);
+    const saveChatGroup = (title, image) => {
+      //setNewChatRoomError(null);
+
+
+ 
+      // const session_id = getCookie(SESSION_ID);
+      // if (!session_id) {
+      //   navigate("/signin");
+      //   return;
+      // }
+      // const url =
+      //   serverHost + "/chatgroups?" + new URLSearchParams({ session_id });
+      // let headers = new Headers();
+      // headers.append("Accept", "application/json");
+      // const formData = new FormData();
+      // if (image) {
+      //   console.log('image ', image)
+      //   formData.append("image", image);
+      // }
+      // formData.append("title", title);
   
-    //   const session_id = getCookie(SESSION_ID);
-    //   if (!session_id) {
-    //     navigate("/signin");
-    //     return;
-    //   }
-    //   const url =
-    //     serverHost + "/chatgroups?" + new URLSearchParams({ session_id });
-    //   let headers = new Headers();
-    //   headers.append("Accept", "application/json");
-    //   const formData = new FormData();
-    //   if (image) {
-    //     console.log('image ', image)
-    //     formData.append("image", image);
-    //   }
-    //   formData.append("title", title);
+      // fetch(url, {
+      //   method: "POST",
+      //   headers: headers,
+      //   body: formData,
+      // })
+      //   .then((resp) => resp.json())
+      //   .then((data) => {
+      //     if (data.error) {
+      //       if (
+      //         data.error.type === INVALID_ROOM_CHAT_TITLE_FORMAT ||
+      //         data.error.type === INVALID_CHAT_ROOM
+      //       ) {
+      //         setNewChatRoomError(data.error.message);
+      //         return;
+      //       }
+      //       throw new Error(data.error);
+      //     }
+      //     if (data.payload) {
+      //       setReloadChatRooms(Math.random());
+      //     }
+      //   })
+      //   .catch((err) => handleError(err));
+    };
+
   
-    //   fetch(url, {
-    //     method: "POST",
-    //     headers: headers,
-    //     body: formData,
-    //   })
-    //     .then((resp) => resp.json())
-    //     .then((data) => {
-    //       if (data.error) {
-    //         if (
-    //           data.error.type === INVALID_ROOM_CHAT_TITLE_FORMAT ||
-    //           data.error.type === INVALID_CHAT_ROOM
-    //         ) {
-    //           setNewChatRoomError(data.error.message);
-    //           return;
-    //         }
-    //         throw new Error(data.error);
-    //       }
-    //       if (data.payload) {
-    //         setReloadChatRooms(Math.random());
-    //       }
-    //     })
-    //     .catch((err) => handleError(err));
-    // };
   
     useEffect(() => {
+      setNewChatRoomError(null);
     //   if(followersError) {
     //     if(followersError.type === NO_USER_FOUND) {
     //         navigate('/signin');            
@@ -385,13 +400,13 @@ import { CurtainsOutlined } from "@mui/icons-material";
   
               {tab === 1 && (
                 <>
-                  {/* <NewChatRoom save={saveChatGroup} error={newChatRoomError} />
-                  <ChatGroupsOutlet
+                  <GuestNewChatRoom />
+                  <GuestChatGroupsOutlet
                     newChatGroupChatMessage={newChatGroupChatMessage}
                     chatGroups={chatRooms}
                     chatGroupClickHandler={chatGroupClickHandler}  
-                  /> */}
-                  Chat Room
+                  />
+                  
                 </>
               )}
             </>

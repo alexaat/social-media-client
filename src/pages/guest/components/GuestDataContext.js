@@ -211,6 +211,13 @@ const data = {
             content: 'private message',
             date: Date.now()
         }
+    ],
+    chatRooms: [
+        {
+            id: 1,
+            title: 'old friends',
+            image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+        }
     ]
 
 }
@@ -243,10 +250,19 @@ export const GuestDataProvider = ( {children} ) => {
     const [users, setUsers] = useState(data.users);
     const [followers, setFollowers] = useState(data.followers);
     const [chatMessages, setChatMessages] = useState(data.chatMessages);
+    const [chatRooms, setChatRooms] = useState(data.chatRooms);
     
    
     return (
-        <GuestDataContext.Provider value={[user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers, chatMessages, setChatMessages]}>
+        <GuestDataContext.Provider
+            value={[
+                user,
+                notifications, setNotifications,
+                posts, setPosts,
+                users, setUser,
+                followers, setFollowers,
+                chatMessages, setChatMessages,
+                chatRooms, setChatRooms]}>
             {children}
         </GuestDataContext.Provider>
     );
