@@ -24,6 +24,9 @@ import {
   import GuestChatsMenu from './GuestChatsMenu';
   import GuestNewChatMessageDialog from "./GuestNewChatMessageDialog";
   import {calculateNonReadPrivateMessages, calculateNonReadChatGroupMessages} from '../../../util';
+  import GuestGroupsMenu from './GuestGroupsMenu';
+  import GuestNewGroupDialog from './GuestNewGroupDialog';
+
 
 const GuestToolBar = () => {
 
@@ -34,7 +37,8 @@ const GuestToolBar = () => {
     users, setUser,
     followers, setFollowers,
     chatMessages, setChatMessages,
-    chatRooms, setChatRooms] = ProvideGuestData();
+    chatRooms, setChatRooms,
+    groups, setGroups] = ProvideGuestData();
 
     const isFollowingRef = useRef(false);
 
@@ -221,6 +225,45 @@ const GuestToolBar = () => {
     const [unreadPrivateMessages, setUnreadPrivateMessages] = useState(0);
     const [unreadChatGroupMessages, setUnreadChatGroupMessages] = useState(0);
   
+    //Groups
+     //Groups
+  const [groupsAncorEl, setGroupsAncorEl] = useState(null);
+  const groupsClickHandler = (e) => setGroupsAncorEl(e.currentTarget);
+  const groupsCloseHandler = () => setGroupsAncorEl(null);
+  //const [groups, reloadGroups] = ProvideGroups();
+  const menuItemClickHandler = (group) => {
+    groupsCloseHandler();
+    navigate("/groups/" + group.id.toString());
+  };
+
+  //New Group
+  const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
+  const newGroupDialogCloseHandler = () => {
+    setNewGroupTitleError();
+    setNewGroupDescriptionError();
+    setNewGroupDialogOpen(false);
+  };
+  const createGroupHandler = () => {
+    groupsCloseHandler();
+    setNewGroupDialogOpen(true);
+  };
+  const [newGroupTitleError, setNewGroupTitleError] = useState();
+  const [newGroupDescriptionError, setNewGroupDescriptionError] = useState();
+  const createNewGroupHandler = (title, description) => {
+    console.log('title ',title);    
+    console.log('description ',description);
+    
+    //Check repeat
+    
+
+    setNewGroupTitleError();
+    setNewGroupDescriptionError();
+    newGroupDialogCloseHandler();
+   
+    //navigate(`groups/${data.payload.group_id}`);
+  };
+
+
 
     return (
         <>
@@ -240,7 +283,7 @@ const GuestToolBar = () => {
               <IconButton
                 aria-label="notifications"
                 sx={{ background: "#eeeeee", mr: 2 }}
-               // onClick={groupsClickHandler}
+                onClick={groupsClickHandler}
               >
                 <GroupsRoundedIcon />
               </IconButton>
@@ -362,21 +405,21 @@ const GuestToolBar = () => {
           reloadChatMessagesInToolBar={reloadChatMessages}
         />
   
-        {/* <NewGroupDialog
+        <GuestNewGroupDialog
           open={newGroupDialogOpen}
           onClose={newGroupDialogCloseHandler}
           onSubmit={createNewGroupHandler}
           newGroupTitleError={newGroupTitleError}
           newGroupDescriptionError={newGroupDescriptionError}
-        /> */}
+        />
   
-        {/* <GroupsMenu
+        <GuestGroupsMenu
           groupsAncorEl={groupsAncorEl}
           groupsCloseHandler={groupsCloseHandler}
           createGroupHandler={createGroupHandler}
           groups={groups}
           menuItemClickHandler={menuItemClickHandler}
-        /> */}
+        />
       </>   
       
 

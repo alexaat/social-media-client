@@ -263,6 +263,18 @@ const data = {
             title: 'old friends',
             image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
         }
+    ],
+    groups: [
+        {
+            id: 1,
+            title: 'Group 1',
+            description: 'Group One'
+        },
+        {
+            id: 2,
+            title: 'Group 2',
+            description: 'Group Two'
+        }
     ]
 
 }
@@ -287,6 +299,7 @@ export const GuestDataProvider = ( {children} ) => {
     const [followers, setFollowers] = useState(data.followers);
     const [chatMessages, setChatMessages] = useState(data.chatMessages);
     const [chatRooms, setChatRooms] = useState(data.chatRooms);
+    const [groups, setGroups] = useState(data.groups);
     
    
     return (
@@ -298,7 +311,8 @@ export const GuestDataProvider = ( {children} ) => {
                 users, setUser,
                 followers, setFollowers,
                 chatMessages, setChatMessages,
-                chatRooms, setChatRooms]}>
+                chatRooms, setChatRooms,
+                groups, setGroups]}>
             {children}
         </GuestDataContext.Provider>
     );
