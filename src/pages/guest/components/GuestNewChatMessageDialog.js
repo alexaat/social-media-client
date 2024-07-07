@@ -290,7 +290,14 @@ import GuestChatGroupsOutlet from "./GuestChatGroupsOutlet";
                     sender: user,
                     recipient,
                     content,
-                    date: Date.now()}
+                    date: Date.now()};
+
+                if(recipient.title){
+                  message['read_by'] = '[1]';
+                  message['chat_group'] = recipient.id;
+                } else {
+                  message['is_read'] = true;
+                }
 
                 return [...prev, message];
             });

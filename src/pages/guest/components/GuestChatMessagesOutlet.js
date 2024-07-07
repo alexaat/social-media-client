@@ -18,7 +18,7 @@ const [filtered, setFiltered] = useState();
 
 useEffect(() => {
 
-  console.log('outlet')
+  //console.log('chatMessages ',chatMessages)
 
   if (chatMate && chatMate.type === "user") {
         setFiltered(prev => {
@@ -56,19 +56,38 @@ const sorted = filtered ? filtered.sort((a,b) => a.id < b.id ? 1 : -1) : undefin
 
 const setRead = () => {
   if(chatMate.type === 'group'){
-    setChatMessages(prev => {
-      return prev.map(item => {
-        if(item.read_by){
-          const read_by = item.read_by;
-          const arr = JSON.parse(read_by);
-          if(!arr.includes(user.id)){
-            arr.push(user.id);
-            item.read_by = JSON.stringify(arr);
-          }
+    
+    const updated = [];
+    let needUpdate = false;
+    for(let i = 0; i < chatMessages.length; i++){
+      const chatMessage = chatMessages[i];
+      if(chatMessage.read_by){
+        const arr = JSON.parse(chatMessage.read_by);
+        if(!arr.includes(user.id)){
+          arr.push(user.id);
+          needUpdate = true;
+          chatMessage.read_by = JSON.stringify(arr);
         }
-        return item;
-      });
-    })
+      }
+      updated.push(chatMessage);
+    }
+    if(needUpdate){    
+      setChatMessages(updated);
+    }
+  } else {
+    const updated = [];
+    let needUpdate = false;
+    for(let i = 0; i < chatMessages.length; i++){
+      const chatMessage = chatMessages[i];
+      if(chatMessage.is_read === false){
+        chatMessage.is_read = true;
+        needUpdate = true;
+      }
+      updated.push(chatMessage);
+    }
+    if(needUpdate){    
+      setChatMessages(updated);
+    }
   } 
 
 }

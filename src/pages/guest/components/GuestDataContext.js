@@ -161,32 +161,32 @@ const data = {
     ],
     followers: [],
     chatMessages: [
-        {
-            id: 1,
-            sender: {
-                id: 2,
-                first_name: 'John',
-                last_name: 'Lennon',
-                display_name: 'John',
-                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-                privacy: 'public',
-                email: 'john@thebeatles.uk',
-                about_me: 'Life is what happens while you are busy making other plans.'
-            },
-            recipient: {                
-                id: 1,
-                first_name: 'Guest',
-                last_name: 'Special',
-                display_name: 'Guest',
-                avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
-                privacy: 'public',
-                email: 'guest@special.com',
-                about_me: 'Thank you for using social media'
-            },
-            content: 'text',
-            date: Date.now(),
-            is_read: true
-        },
+        // {
+        //     id: 1,
+        //     sender: {
+        //         id: 2,
+        //         first_name: 'John',
+        //         last_name: 'Lennon',
+        //         display_name: 'John',
+        //         avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+        //         privacy: 'public',
+        //         email: 'john@thebeatles.uk',
+        //         about_me: 'Life is what happens while you are busy making other plans.'
+        //     },
+        //     recipient: {                
+        //         id: 1,
+        //         first_name: 'Guest',
+        //         last_name: 'Special',
+        //         display_name: 'Guest',
+        //         avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
+        //         privacy: 'public',
+        //         email: 'guest@special.com',
+        //         about_me: 'Thank you for using social media'
+        //     },
+        //     content: 'text',
+        //     date: Date.now(),
+        //     is_read: false
+        // },
         // {
         //     id: 2,
         //     sender: {
@@ -266,15 +266,6 @@ const data = {
     ]
 
 }
-/*
-            key={message.id}
-            sender_id={message.sender.id}
-            title={message.sender.display_name}
-            text={message.content}
-            date={message.date}
-*/
-
-
 
 const GuestDataContext = createContext();
 
