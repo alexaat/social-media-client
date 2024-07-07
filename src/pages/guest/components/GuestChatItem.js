@@ -1,11 +1,11 @@
 import { Stack, Typography, Badge } from "@mui/material";
 import GuestIcon from "./GuestIcon";
-//import { dateConverter } from "../util";
+import { dateConverter } from "../../../util";
 
 const GuestChatItem = ({ chat, handleClick }) => {
-//   const display_name = chat.chat_group
-//     ? chat.sender.display_name + " / " + chat.chat_group.title
-//     : chat.sender.display_name;
+  const display_name = chat.chat_group
+    ? chat.sender.display_name + " / " + chat.chat_group.title
+    : chat.sender.display_name;
 
   return (
     <Stack
@@ -32,7 +32,7 @@ const GuestChatItem = ({ chat, handleClick }) => {
         }}
         overlap="circular"
       >
-        {/* <GuestIcon user={chat.sender} /> */}
+        <GuestIcon user={chat.sender} />
       </Badge>
 
       <Stack sx={{ width: "100%", overflow: "hidden", pr: 2 }}>
@@ -41,11 +41,11 @@ const GuestChatItem = ({ chat, handleClick }) => {
             variant="body1"
             sx={{ fontSize: "12px", lineHeight: "8px", pt: "4px", pr: 1 }}
           >
-            {/* {dateConverter(chat.date)} ago */}
+            {dateConverter(chat.date)} ago
           </Typography>
         </Stack>
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-          {/* {display_name} */}
+          {display_name}
         </Typography>
         <Stack>
           <Typography
@@ -55,7 +55,7 @@ const GuestChatItem = ({ chat, handleClick }) => {
               color: "#aaaaaa",
             }}
           >
-            {/* {chat.content} */}
+            {chat.content}
           </Typography>
         </Stack>
       </Stack>

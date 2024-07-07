@@ -128,7 +128,6 @@ export const transformMessages = (chats, userId) => {
 };
 
 export const calculateNonReadPrivateMessages = (arr, userId) => {
- // console.log("arr ", arr);
 
   if (arr) {
     let noRead = 0;
@@ -154,7 +153,7 @@ export const calculateNonReadChatGroupMessages = (arr, userId) => {
         if (!m.read_by) {
           noRead++;
         }else {
-          const readBys = JSON.parse(m.read_by);
+          const readBys = JSON.parse(m.read_by);         
           if (readBys && !readBys.includes(userId)) {
             noRead++;
           }

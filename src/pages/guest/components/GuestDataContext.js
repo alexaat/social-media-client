@@ -184,10 +184,36 @@ const data = {
                 about_me: 'Thank you for using social media'
             },
             content: 'text',
-            date: Date.now()
+            date: Date.now(),
+            is_read: true
         },
+        // {
+        //     id: 2,
+        //     sender: {
+        //         id: 4,
+        //         first_name: 'George',
+        //         last_name: 'Harrison',
+        //         display_name: 'George',
+        //         avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+        //         privacy: 'public',
+        //         email: 'george@thebeatles.uk',
+        //         about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
+        //     },
+        //     recipient: {                
+        //         id: 5,
+        //         first_name: 'Ringo',
+        //         last_name: 'Starr',
+        //         display_name: 'Ringo',
+        //         avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+        //         privacy: 'private',
+        //         email: 'ringo@thebeatles.uk',
+        //         about_me: ''
+        //     },
+        //     content: 'private message',
+        //     date: Date.now()
+        // },
         {
-            id: 2,
+            id: 3,
             sender: {
                 id: 4,
                 first_name: 'George',
@@ -199,17 +225,36 @@ const data = {
                 about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
             },
             recipient: {                
-                id: 5,
-                first_name: 'Ringo',
-                last_name: 'Starr',
-                display_name: 'Ringo',
-                avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                id: 1,
+                title: 'old friends',
+                image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+            },
+            content: 'hello, friends!!!',
+            date: Date.now()-1000*60*60*24*3,
+            read_by: '[4]',
+            chat_group: 1
+        },
+        {
+            id: 4,
+            sender: {
+                id: 3,
+                first_name: 'Paul',
+                last_name: 'McCartney',
+                display_name: 'Paul',
+                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
                 privacy: 'private',
-                email: 'ringo@thebeatles.uk',
+                email: 'paul@thebeatles.uk',
                 about_me: ''
             },
-            content: 'private message',
-            date: Date.now()
+            recipient: {                
+                id: 1,
+                title: 'old friends',
+                image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+            },
+            content: 'hi, buddy',
+            date: Date.now()-1000*60*60*12,
+            read_by: '[3]',
+            chat_group: 1
         }
     ],
     chatRooms: [

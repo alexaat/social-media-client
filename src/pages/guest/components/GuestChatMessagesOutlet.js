@@ -16,12 +16,9 @@ const [user, notifications, setNotifications, posts, setPosts, users, setUser, f
 
 const [filtered, setFiltered] = useState();
 
-
-
-
 useEffect(() => {
 
-
+  console.log('outlet')
 
   if (chatMate && chatMate.type === "user") {
         setFiltered(prev => {
@@ -49,12 +46,33 @@ useEffect(() => {
        return fl;
     });
   }
-
+  
+  setRead();
 
 
 },[chatMessages]);
 
 const sorted = filtered ? filtered.sort((a,b) => a.id < b.id ? 1 : -1) : undefined;
+
+const setRead = () => {
+  if(chatMate.type === 'group'){
+    setChatMessages(prev => {
+      return prev.map(item => {
+        if(item.read_by){
+          const read_by = item.read_by;
+          const arr = JSON.parse(read_by);
+          if(!arr.includes(user.id)){
+            arr.push(user.id);
+            item.read_by = JSON.stringify(arr);
+          }
+        }
+        return item;
+      });
+    })
+  } 
+
+}
+
 
 //   const [chatMessages, reloadChatMessages, error] = ProvideChatMessages();
 //   const session_id = getCookie(SESSION_ID);

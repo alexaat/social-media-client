@@ -23,10 +23,19 @@ import {
   import GuestNotificationsMenu from './GuestNotificationsMenu';
   import GuestChatsMenu from './GuestChatsMenu';
   import GuestNewChatMessageDialog from "./GuestNewChatMessageDialog";
+  import {calculateNonReadPrivateMessages, calculateNonReadChatGroupMessages} from '../../../util';
 
 const GuestToolBar = () => {
 
-    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
+  const [
+    user,
+    notifications, setNotifications,
+    posts, setPosts,
+    users, setUser,
+    followers, setFollowers,
+    chatMessages, setChatMessages,
+    chatRooms, setChatRooms] = ProvideGuestData();
+
     const isFollowingRef = useRef(false);
 
     const userRef = useRef(user);
@@ -71,15 +80,53 @@ const GuestToolBar = () => {
         })       
     }
 
+    const sendChatMessageToGroup = () => {
+       
+      setChatMessages(prev => {
+        const id = prev.length === 0 ? 1 : prev.sort((a,b) => (a.id < b.id ? 1 : -1))[0].id + 1;
+
+        const chatMessage = {
+          id,
+          sender: {
+            id: 4,
+            first_name: 'George',
+            last_name: 'Harrison',
+            display_name: 'George',
+            avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+            privacy: 'public',
+            email: 'george@thebeatles.uk',
+            about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
+          },
+          recipient: {                
+              id: 1,
+              title: 'old friends',
+              image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+          },
+          content: 'Hello, friends',
+          date: Date.now()
+        }
+        return [...prev, chatMessage]
+
+       });
+    }
+
     useEffect(() => { 
       userRef.current = user;      
       const isFollowing = followers.find(f => f.followeeId === 1 && f.followerId === 2)
       if(!isFollowing && !isFollowingRef.current){
-        isFollowingRef.current = true;
+        isFollowingRef.current = true;        
         setTimeout(createFollowRequest, 10000);      
+        setTimeout(sendChatMessageToGroup, 15000);     
       }
+
+      setUnreadPrivateMessages(
+        calculateNonReadPrivateMessages(chatMessages, user.id)
+      );
+      setUnreadChatGroupMessages(
+        calculateNonReadChatGroupMessages(chatMessages, user.id)
+      );
       
-    },[user]);    
+    },[user, chatMessages]);    
 
     const navigate = useNavigate();
 
@@ -116,8 +163,9 @@ const GuestToolBar = () => {
     const [newChatGroupChatMessage, setNewChatGroupChatMessage] = useState();
     const [newChatMessage, setNewChatMessage] = useState();
     const reloadChatMessages = () => console.log('reload...');
-
-
+    const [unreadPrivateMessages, setUnreadPrivateMessages] = useState(0);
+    const [unreadChatGroupMessages, setUnreadChatGroupMessages] = useState(0);
+  
 
     return (
         <>
@@ -143,7 +191,7 @@ const GuestToolBar = () => {
               </IconButton>
   
               <Badge
-              //  badgeContent={unreadPrivateMessages + unreadChatGroupMessages}
+                badgeContent={unreadPrivateMessages + unreadChatGroupMessages}
                 color="secondary"
                 sx={{ mr: 2 }}
               >
@@ -165,11 +213,11 @@ const GuestToolBar = () => {
                   sx={{ background: "#eeeeee" }}
                   aria-label="notifications"
                   onClick={notificationsClickHandler}
-                //   aria-controls={
-                //     notificationsOpen ? "notifications-menu" : undefined
-                //   }
+                  aria-controls={
+                    notificationsOpen ? "notifications-menu" : undefined
+                  }
                   aria-haspopup="true"
-                 // aria-expanded={notificationsOpen ? "true" : undefined}
+                  aria-expanded={notificationsOpen ? "true" : undefined}
                 >
                   <NotificationsRoundedIcon />
                 </IconButton>

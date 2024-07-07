@@ -5,14 +5,31 @@ import { transformMessages } from "../../../util";
 import { ProvideGuestData } from "./GuestDataContext";
 
 const GuestChatItemsOutlet = ({ chats, chatSelectedHandler }) => {
-     const [filtered, setFiltered] = useState();
-     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
+  const [filtered, setFiltered] = useState();
+ 
+  const [
+    user,
+    notifications, setNotifications,
+    posts, setPosts,
+    users, setUser,
+    followers, setFollowers,
+    chatMessages, setChatMessages,
+    chatRooms, setChatRooms] = ProvideGuestData();
+
 
   useEffect(() => {
-    if (user) {
-      setFiltered(transformMessages(chats, user.id));
-    }
-  }, [user]);
+    setFiltered(chats)
+  },[chats])
+
+
+
+
+
+  //    useEffect(() => {
+  //   if (user) {
+  //     setFiltered(transformMessages(chats, user.id));
+  //   }
+  // }, [user]);
 
   return (
     <Stack>
