@@ -233,7 +233,7 @@ const GuestToolBar = () => {
   //const [groups, reloadGroups] = ProvideGroups();
   const menuItemClickHandler = (group) => {
     groupsCloseHandler();
-    navigate("/groups/" + group.id.toString());
+    navigate("/guest/groups/" + group.id.toString());
   };
 
   //New Group
@@ -250,20 +250,50 @@ const GuestToolBar = () => {
   const [newGroupTitleError, setNewGroupTitleError] = useState();
   const [newGroupDescriptionError, setNewGroupDescriptionError] = useState();
   const createNewGroupHandler = (title, description) => {
-    console.log('title ',title);    
-    console.log('description ',description);
-    
-    //Check repeat
-    
 
     setNewGroupTitleError();
     setNewGroupDescriptionError();
+
+    const titleTrimmed = title.trim();
+    const  descriptionTrimmed = description.trim(); 
+    
+    //Check errors
+    if(titleTrimmed.length < 2 || titleTrimmed.length > 20){
+      setNewGroupTitleError('Error: group title must be between 2 and 20 characters long');
+      return;
+    }
+
+    if(groups.find(group => group.title === titleTrimmed)){
+      setNewGroupTitleError('Error: group with this title already exists');
+      return;
+    }
+
+    if(descriptionTrimmed.length < 2 || descriptionTrimmed.length > 500){
+      setNewGroupDescriptionError('Error: group description must be between 2 and 500 characters long');
+      return;
+    }
+
+    let newGroupId = undefined
+
+    setGroups(prev => {
+      const id = prev.length === 0 ? 1 : prev.sort((a,b) => a.id < b.id ? 1 : -1)[0].id + 1;
+      newGroupId = id;
+
+      const group = {
+        id, 
+        title: titleTrimmed,
+        description: descriptionTrimmed
+      }
+
+      return [...prev, group];
+    })
+
     newGroupDialogCloseHandler();
+    if(newGroupId){
+      navigate(`/guest/groups/${newGroupId}`);
+    }   
    
-    //navigate(`groups/${data.payload.group_id}`);
   };
-
-
 
     return (
         <>

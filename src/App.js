@@ -19,6 +19,7 @@ import HomeGuest from "./pages/guest/Home/index.js";
 import GuestToolBar from "./pages/guest/components/GuestToolBar.js";
 import { GuestDataProvider } from "./pages/guest/components/GuestDataContext.js";
 import ProfileGuest from "./pages/guest/Profile/index.js";
+import GroupGuest from "./pages/guest/Group/index.js";
 
 function App() {
 
@@ -41,6 +42,14 @@ function App() {
              <GuestDataProvider>
               <GuestToolBar />
               <ProfileGuest/>
+            </GuestDataProvider>          
+            } />
+
+
+            <Route path="/guest/groups/:group_id" element={
+             <GuestDataProvider>
+              <GuestToolBar />
+              <GroupGuest/>
             </GuestDataProvider>          
             } />
 

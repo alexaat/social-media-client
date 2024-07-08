@@ -157,6 +157,38 @@ const data = {
                 avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
             },
             comments: []
+        },
+        {
+            id: 6,
+            group_id: 1,
+            content: 'Group Post 1',
+            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
+            date: Date.now() - 1000*60*30,
+            privacy: 'public',
+            sender: {
+                id: 4,
+                first_name: 'George',
+                last_name: 'Harrison',
+                display_name: 'George',
+                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+            },
+            comments: []
+        },
+        {
+            id: 7,
+            group_id: 1,
+            content: 'Group Post 2',
+            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
+            date: Date.now() - 1000*60*30,
+            privacy: 'public',
+            sender: {
+                id: 4,
+                first_name: 'George',
+                last_name: 'Harrison',
+                display_name: 'George',
+                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+            },
+            comments: []
         }
     ],
     followers: [],
@@ -268,14 +300,116 @@ const data = {
         {
             id: 1,
             title: 'Group 1',
-            description: 'Group One'
+            description: 'Group One',
+            creator: {
+                id: 2,
+                first_name: 'John',
+                last_name: 'Lennon',
+                display_name: 'John',
+                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                privacy: 'public',
+                email: 'john@thebeatles.uk',
+                about_me: 'Life is what happens while you are busy making other plans.'
+            },
+            members: [
+
+                {
+                    id: 2,
+                    first_name: 'John',
+                    last_name: 'Lennon',
+                    display_name: 'John',
+                    avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                    privacy: 'public',
+                    email: 'john@thebeatles.uk',
+                    about_me: 'Life is what happens while you are busy making other plans.'
+                },
+                {
+                    id: 3,
+                    first_name: 'Paul',
+                    last_name: 'McCartney',
+                    display_name: 'Paul',
+                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                    privacy: 'private',
+                    email: 'paul@thebeatles.uk',
+                    about_me: ''
+                },
+                {
+                    id: 4,
+                    first_name: 'George',
+                    last_name: 'Harrison',
+                    display_name: 'George',
+                    avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+                    privacy: 'public',
+                    email: 'george@thebeatles.uk',
+                    about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
+                },
+
+
+            ]
         },
         {
             id: 2,
             title: 'Group 2',
-            description: 'Group Two'
+            description: 'Group Two',
+            creator: {
+                id: 3,
+                first_name: 'Paul',
+                last_name: 'McCartney',
+                display_name: 'Paul',
+                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                privacy: 'private',
+                email: 'paul@thebeatles.uk',
+                about_me: ''
+            },
+            members: [
+
+                {
+                    id: 2,
+                    first_name: 'John',
+                    last_name: 'Lennon',
+                    display_name: 'John',
+                    avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                    privacy: 'public',
+                    email: 'john@thebeatles.uk',
+                    about_me: 'Life is what happens while you are busy making other plans.'
+                },
+                {
+                    id: 3,
+                    first_name: 'Paul',
+                    last_name: 'McCartney',
+                    display_name: 'Paul',
+                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                    privacy: 'private',
+                    email: 'paul@thebeatles.uk',
+                    about_me: ''
+                },
+                {
+                    id: 4,
+                    first_name: 'George',
+                    last_name: 'Harrison',
+                    display_name: 'George',
+                    avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+                    privacy: 'public',
+                    email: 'george@thebeatles.uk',
+                    about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
+                },
+                {
+                    id: 5,
+                    first_name: 'Ringo',
+                    last_name: 'Starr',
+                    display_name: 'Ringo',
+                    avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                    privacy: 'private',
+                    email: 'ringo@thebeatles.uk',
+                    about_me: ''
+                }
+
+
+            ]
         }
-    ]
+    ],
+    events: [],
+    joinGroupRequests: []
 
 }
 
@@ -300,7 +434,8 @@ export const GuestDataProvider = ( {children} ) => {
     const [chatMessages, setChatMessages] = useState(data.chatMessages);
     const [chatRooms, setChatRooms] = useState(data.chatRooms);
     const [groups, setGroups] = useState(data.groups);
-    
+    const [events, setEvents] = useState(data.events);
+    const [joinGroupRequests, setJoinGroupRequests] = useState(data.joinGroupRequests);
    
     return (
         <GuestDataContext.Provider
@@ -312,7 +447,9 @@ export const GuestDataProvider = ( {children} ) => {
                 followers, setFollowers,
                 chatMessages, setChatMessages,
                 chatRooms, setChatRooms,
-                groups, setGroups]}>
+                groups, setGroups,
+                events, setEvents,
+                joinGroupRequests, setJoinGroupRequests]}>
             {children}
         </GuestDataContext.Provider>
     );

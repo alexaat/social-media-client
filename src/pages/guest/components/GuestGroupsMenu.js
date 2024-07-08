@@ -3,6 +3,10 @@ import GroupAddRoundedIcon from '@mui/icons-material/GroupAddRounded';
 import GuestGroupsMenuItem from './GuestGroupsMenuItem'; 
 
 const GroupsMenu = ({ groupsAncorEl, groupsCloseHandler, createGroupHandler, groups, menuItemClickHandler }) => {
+    
+    
+    const sorted = groups.sort((a,b) => a.id < b.id ? 1 : -1);
+    
     return (
         <Menu
             slotProps={{
@@ -40,8 +44,8 @@ const GroupsMenu = ({ groupsAncorEl, groupsCloseHandler, createGroupHandler, gro
             <Divider /> 
             <Stack spacing={1} sx={{py: 1}}>     
             {
-                groups &&
-                groups.map(group =><GuestGroupsMenuItem key={group.id} group={group} menuItemClickHandler={menuItemClickHandler}/>) 
+                sorted &&
+                sorted.map(group =><GuestGroupsMenuItem key={group.id} group={group} menuItemClickHandler={menuItemClickHandler}/>) 
             }
             {
                 !groups || groups.length === 0 &&
