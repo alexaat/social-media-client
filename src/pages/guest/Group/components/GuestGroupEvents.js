@@ -33,7 +33,7 @@ const GuestGroupEvents = ({group_id}) => {
             }
         }
     
-    }, []);
+    }, [groups, events]);
 
     return (
         <Stack spacing={1}>           

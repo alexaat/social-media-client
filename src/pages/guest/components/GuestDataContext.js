@@ -161,9 +161,9 @@ const data = {
         {
             id: 6,
             group_id: 1,
-            content: 'Group Post 1',
-            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
-            date: Date.now() - 1000*60*30,
+            content: "This Book Will Reveal How The Beatles Came Up With Their Last Original Album 'Let it Be'",
+            image: 'http://alexaat.com/socialmedia/images/post6.jpeg',
+            date: Date.now() - 1000*60*60*16,
             privacy: 'public',
             sender: {
                 id: 4,
@@ -177,16 +177,19 @@ const data = {
         {
             id: 7,
             group_id: 1,
-            content: 'Group Post 2',
-            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
-            date: Date.now() - 1000*60*30,
+            content: "There was The Beatles… and then there was everyone else. And everyone else could be great, but The Beatles were leading the way and that's just irrefutably true.",
+            image: 'http://alexaat.com/socialmedia/images/post7.jpeg',
+            date: Date.now() - 1000*60*60*24*2,
             privacy: 'public',
             sender: {
-                id: 4,
-                first_name: 'George',
-                last_name: 'Harrison',
-                display_name: 'George',
-                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+                id: 2,
+                first_name: 'John',
+                last_name: 'Lennon',
+                display_name: 'John',
+                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                privacy: 'public',
+                email: 'john@thebeatles.uk',
+                about_me: 'Life is what happens while you are busy making other plans.'
             },
             comments: []
         }
@@ -299,8 +302,8 @@ const data = {
     groups: [
         {
             id: 1,
-            title: 'Group 1',
-            description: 'Group One',
+            title: 'The Beatles',
+            description: 'English rock band formed in Liverpool in 1960',
             creator: {
                 id: 2,
                 first_name: 'John',
@@ -313,66 +316,6 @@ const data = {
             },
             members: [
 
-                {
-                    id: 2,
-                    first_name: 'John',
-                    last_name: 'Lennon',
-                    display_name: 'John',
-                    avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-                    privacy: 'public',
-                    email: 'john@thebeatles.uk',
-                    about_me: 'Life is what happens while you are busy making other plans.'
-                },
-                {
-                    id: 3,
-                    first_name: 'Paul',
-                    last_name: 'McCartney',
-                    display_name: 'Paul',
-                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
-                    privacy: 'private',
-                    email: 'paul@thebeatles.uk',
-                    about_me: ''
-                },
-                {
-                    id: 4,
-                    first_name: 'George',
-                    last_name: 'Harrison',
-                    display_name: 'George',
-                    avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
-                    privacy: 'public',
-                    email: 'george@thebeatles.uk',
-                    about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
-                },
-
-
-            ]
-        },
-        {
-            id: 2,
-            title: 'Group 2',
-            description: 'Group Two',
-            creator: {
-                id: 3,
-                first_name: 'Paul',
-                last_name: 'McCartney',
-                display_name: 'Paul',
-                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
-                privacy: 'private',
-                email: 'paul@thebeatles.uk',
-                about_me: ''
-            },
-            members: [
-
-                {
-                    id: 2,
-                    first_name: 'John',
-                    last_name: 'Lennon',
-                    display_name: 'John',
-                    avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-                    privacy: 'public',
-                    email: 'john@thebeatles.uk',
-                    about_me: 'Life is what happens while you are busy making other plans.'
-                },
                 {
                     id: 3,
                     first_name: 'Paul',
@@ -403,12 +346,50 @@ const data = {
                     email: 'ringo@thebeatles.uk',
                     about_me: ''
                 }
-
-
             ]
         }
     ],
-    events: [],
+    events: [
+        {
+            id: 1,
+            creator: {
+                id: 3,
+                first_name: 'Paul',
+                last_name: 'McCartney',
+                display_name: 'Paul',
+                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                privacy: 'private',
+                email: 'paul@thebeatles.uk',
+                about_me: ''
+            },
+            create_date: Date.now() - 1000*60*60*24,
+            title: 'Party',
+            description: 'Birthday Party @ HQ. Start 7pm.',
+            event_date: Date.now() + 1000*60*60*24*7,
+            members: [
+                {
+                    id: 3,
+                    first_name: 'Paul',
+                    last_name: 'McCartney',
+                    display_name: 'Paul',
+                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                    privacy: 'private',
+                    email: 'paul@thebeatles.uk',
+                    about_me: ''
+                },
+                {
+                    id: 5,
+                    first_name: 'Ringo',
+                    last_name: 'Starr',
+                    display_name: 'Ringo',
+                    avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                    privacy: 'private',
+                    email: 'ringo@thebeatles.uk',
+                    about_me: ''
+                }
+            ]
+        }
+    ],
     joinGroupRequests: []
 
 }

@@ -12,13 +12,53 @@ const HomeGuest = () => {
     // const [posts] = ProvidePosts();
     // const [user] = ProvideUser();
 
-    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
+    const [
+        user,
+        notifications, setNotifications,
+        posts, setPosts,
+        users, setUser,
+        followers, setFollowers,
+        chatMessages, setChatMessages,
+        chatRooms, setChatRooms,
+        groups, setGroups,
+        events, setEvents,
+        joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
    
 
+
     const triggered = useRef(false);
 
+    //const [filteredPosts, setFilteredPosts] = useState([]);
+    const [sorted, setSorted] = useState([]);
+
+
     useEffect(() => {
+
+
+        //const filtered = posts.filter(post => !post.group_id);
+        const filtered = [];
+
+        posts.forEach(post => {
+            if(post.group_id){
+                const group = groups.find(g => g.id === post.group_id);
+                if(group){
+                    const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
+                    if(member){
+                        filtered.push(post);
+                    }
+                } 
+              
+            } else {
+                filtered.push(post);
+            }
+        });
+
+        const sorted = filtered.sort((a,b) => a.date < b.date ? 1 : -1);
+
+        setSorted(sorted);
+
+
 
         // if(!triggered.current){
         //     triggered.current = true;
@@ -30,21 +70,14 @@ const HomeGuest = () => {
         //     localStorage.setItem("guest_user_session1", true);
         //     followRequest();
         // }
-    },[]);
+    },[posts]);
 
   
     const [newPostDialogOpen, setNewPostDialogOpen] = useState(false);
     const newPostDialogCloseHandler = () => setNewPostDialogOpen(false);
     const newPostButtonClickHandler = () => setNewPostDialogOpen(true);
 
-    const sorted = posts.sort((a, b) => {
-        if(a.id<b.id){
-            return 1
-        }
-        return -1;
-    })
-    
-    
+   
     return (
         <>
              {user &&

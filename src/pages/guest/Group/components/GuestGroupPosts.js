@@ -1,17 +1,10 @@
 import { CardContent, Card, Stack, Typography } from "@mui/material";
-// import { ProvidePosts } from "../context/PostsContext";
 import GuestPost from "../../components/GuestPost";
 import { useEffect, useState } from "react";
 import { AUTHORIZATION } from "../../../../constants";
 import { ProvideGuestData } from "../../components/GuestDataContext";
 
 const GuestGroupPosts = ({ group_id, submitCommentHandler }) => {
-//    const [posts, reloadPosts, error] = ProvidePosts();
-
-//    useEffect(() => {
-//       reloadPosts()
-//    }, [group_id, reload])
-
 
 const [error, setError] = useState();
 
@@ -27,10 +20,10 @@ const [
     chatRooms, setChatRooms,
     groups, setGroups] = ProvideGuestData();
 
-
     useEffect(() => {
-        const group  = groups.find(g => g.id == group_id);
-        if(group === undefined){
+        setError();
+        const group  = groups.find(g => g.id == group_id);        
+        if(!group){
             setError({type: 'data source', message: 'Error: cannot find group'})
         } else {
             const member = group.members.find(m => m.id === user.id)
@@ -39,7 +32,7 @@ const [
             }
         }
 
-    }, []);
+    }, [groups]);
 
    const filteredPosts = posts.filter(post => post.group_id && post.group_id == group_id);
    
@@ -51,7 +44,6 @@ const [
          <CardContent >
             <Stack >
                <Typography variant="h5">Join group in order to see posts</Typography>
-
             </Stack>
          </CardContent>
       </Card>
@@ -68,8 +60,9 @@ const [
       </Card>
    }
 
-   if(filteredPosts && filteredPosts.length > 0) {
-      component = filteredPosts.map(post => <GuestPost post={post} sx={{ width: '100%' }} key={post.id} submitCommentHandler={submitCommentHandler} />)
+   if(!error && filteredPosts && filteredPosts.length > 0) {
+      const sorted = filteredPosts.sort((a,b) => a.id <  b.id ? 1 : -1);
+      component = sorted.map(post => <GuestPost post={post} sx={{ width: '100%' }} key={post.id} submitCommentHandler={submitCommentHandler} />)
    }
    return (
       <Stack>

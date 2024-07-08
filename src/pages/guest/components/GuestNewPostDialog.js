@@ -47,7 +47,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
         EVENT: 'event'
     };
     const [selection, setSelection] = useState(SELECTION.POST);
-    // const setSelectionHandler = (e) => setSelection(e.target.value);
+    const setSelectionHandler = (e) => setSelection(e.target.value);
     // const [eventTitle, setEventTitle] = useState('');
     // const [eventDescription, setEventDescription] = useState('');
     // const [eventDate, setEventDate] = useState();
@@ -83,7 +83,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
 
         if (selection === SELECTION.POST) {
 
-
             if(content.length<2){
                 setError('post content is too short')
             } else {
@@ -114,6 +113,10 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                     date: Date.now(),
                     sender: user,
                     comments: []
+                }
+
+                if(groupId){
+                    post['group_id'] = groupId;
                 }
 
                 setPosts(prev => ([...prev, post]));
@@ -292,13 +295,13 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                         </Stack>
                                         :
                                         <Stack sx={{ ml: 2 }}>
-                                            <Typography variant='subtitle1'>{user.nick_name} / {groupTitle}</Typography>
+                                            <Typography variant='subtitle1'>{user.display_name} / {groupTitle}</Typography>
                                             {
-                                                // groupTitle &&
-                                                // <TextField select value={selection} onChange={setSelectionHandler} size="small" InputProps={{ sx: { borderRadius: '4px' } }}>
-                                                //     <MenuItem value={SELECTION.POST}>{SELECTION.POST}</MenuItem>
-                                                //     <MenuItem value={SELECTION.EVENT}>{SELECTION.EVENT}</MenuItem>
-                                                // </TextField>
+                                                groupTitle &&
+                                                <TextField select value={selection} onChange={setSelectionHandler} size="small" InputProps={{ sx: { borderRadius: '4px' } }}>
+                                                    <MenuItem value={SELECTION.POST}>{SELECTION.POST}</MenuItem>
+                                                    <MenuItem value={SELECTION.EVENT}>{SELECTION.EVENT}</MenuItem>
+                                                </TextField>
                                             }
                                         </Stack>
                                 }

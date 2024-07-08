@@ -1,28 +1,65 @@
 import { Divider, Stack, Typography, Checkbox, FormControlLabel, CardContent, Card, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { useEffect, useState } from 'react';
-// import Icon from './Icon';
-// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import GuestIcon from '../../components/GuestIcon';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import { ProvideUser } from '../context/UserContext'
 // import { SESSION_ID, getCookie } from '../cookies';
 // import { serverHost } from '../constants';
 // import { handleError } from '../errors';
 // import { useNavigate } from 'react-router-dom';
 // import { ProvideEvents } from '../context/EventsContext';
-// import { dateConverter, formatMilli } from '../util';
+import { dateConverter, formatMilli } from '../../../../util';
+import { ProvideGuestData } from '../../components/GuestDataContext';
 
 const GuestEventItem = ({ event }) => {
 
-    // const navigate = useNavigate();
+    
 
-    // const [events, reloadEvents] = ProvideEvents();
+    const [
+        user,
+        notifications, setNotifications,
+        posts, setPosts,
+        users, setUser,
+        followers, setFollowers,
+        chatMessages, setChatMessages,
+        chatRooms, setChatRooms,
+        groups, setGroups,
+        events, setEvents,
+        joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
-    // const [attend, setAttend] = useState(false);
-    // const checkBoxClickHandler = () => {
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
+
+    const [attend, setAttend] = useState(Boolean(event.members.find(u => u.id === user.id)));
+
+    useEffect(() => {
+        setAttend(Boolean(event.members.find(u => u.id === user.id)))
+    },[events]);
+
+
+    const checkBoxClickHandler = () => {
+        // const session_id = getCookie(SESSION_ID);
+        // if (!session_id) {
+        //     navigate('/signin');
+        //     return;
+
+        
+
+        if(attend){
+            event.members = event.members.filter(m => m.id !== user.id);
+            setEvents(prev => [...prev.filter(e => e.id !== event.id), event]);
+            setAttend(false);
+
+        } else {
+            const member = event.members.find(m => m.id === user.id);
+            if(!member){
+                event.members.push(user);
+                setEvents(prev => [...prev.filter(e => e.id !== event.id), event]);
+                setAttend(true);
+            }
+        }
+
+
+
+    }
 
     //     const url = `${serverHost}/events/${event.id}?` + new URLSearchParams({ attending: !attend, session_id });
 
@@ -59,11 +96,11 @@ const GuestEventItem = ({ event }) => {
 
     return (
         <Card>
-            {/* <CardContent>
+             <CardContent>
                 <Stack>
                     <Stack direction='row' justifyContent='space-between'>
                         <Stack>
-                            <Icon user={event.creator} size="36" />
+                            <GuestIcon user={event.creator} size="36" />
                             <Typography variant='body1' sx={{ fontSize: '14px' }}>{event.creator.display_name}</Typography>
                         </Stack>
                         <Typography variant='body1' sx={{ fontSize: '12px', fontWeight: '600' }}>Created: {dateConverter(event.create_date)}</Typography>
@@ -98,7 +135,7 @@ const GuestEventItem = ({ event }) => {
                             <AccordionDetails sx={{ pb: 0 }} >
 
                                 {
-                                    event.members.map(member => (<Stack key={member.id} direction='row' spacing={2} sx={{mb: 2}} alignItems='center'><Icon user={member} size='36px' /> <Typography variant='body1' sx={{fontWeight: '600', fontSize: '16px'}}>{member.display_name}</Typography></Stack>))
+                                    event.members.map(member => (<Stack key={member.id} direction='row' spacing={2} sx={{mb: 2}} alignItems='center'><GuestIcon user={member} size='36px' /> <Typography variant='body1' sx={{fontWeight: '600', fontSize: '16px'}}>{member.display_name}</Typography></Stack>))
                                 }
 
                             </AccordionDetails>
@@ -107,7 +144,7 @@ const GuestEventItem = ({ event }) => {
 
                 </Stack>
 
-            </CardContent> */}
+            </CardContent>
 
         </Card>
 

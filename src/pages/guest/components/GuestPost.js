@@ -49,8 +49,17 @@ import { v4 as uuidv4 } from 'uuid';
 
     const [commentImage, setCommentImage] = useState();
 
-    const [user, notifications, setNotifications, posts, setPosts] = ProvideGuestData();
-    
+    const [
+      user,
+      notifications, setNotifications,
+      posts, setPosts,
+      users, setUser,
+      followers, setFollowers,
+      chatMessages, setChatMessages,
+      chatRooms, setChatRooms,
+      groups, setGroups,
+      events, setEvents,
+      joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
     //const [src, setSrc] = useState(localStorage.getItem(post.image))
 
@@ -255,14 +264,18 @@ import { v4 as uuidv4 } from 'uuid';
           navigate(`profile/${post.sender.id}`);
        }
     }
- /*
-    let userName = post.user.nick_name ? post.user.nick_name : post.user.first_name + " " + post.user.last_name;
-    if(post.group) {
-       userName += ` /  ${post.group.title}`;
+ 
+    let userName = post.sender.display_name;
+    if(post.group_id) {
+       const group = groups.find(g => g.id === post.group_id);
+       if(group){
+         userName += ` /  ${group.title}`;
+       }
+      
     }
  
-    const toolTip = "Follow"
-    */
+   //  const toolTip = "Follow"
+    
  
     return (
        <>
@@ -279,7 +292,7 @@ import { v4 as uuidv4 } from 'uuid';
                        </IconButton>
  
                       <Stack direction="column">
-                         <Typography variant="subtitle1">{post.sender.display_name}</Typography>
+                         <Typography variant="subtitle1">{userName}</Typography>
                          <Stack direction="row">
                             <Typography variant="subtitle1" sx={{ mr: 1 }}>{dateConverter(post.date)}</Typography>
                             {publicity}

@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import GuestGroupInfo from "./components/GuestGroupInfo";
 import GuestNewPostButton from '../../guest/components/GuestNewPostButton';
-// import NewPostDialog from "../../../dialogs/NewPostDialog";
+import GuestNewPostDialog from "../components/GuestNewPostDialog";
 // import { PostsProvider } from "../../../context/PostsContext";
 import GuestGroupPosts from "./components/GuestGroupPosts";
 // import { SESSION_ID, getCookie } from '../../../cookies';
@@ -53,7 +53,9 @@ const GroupGuest = () => {
     // //Comments
     const submitCommentHandler = (postId, content) => {
         console.log(postId);
-        console.log(content)
+        console.log(content);
+
+
 
         // const session_id = getCookie(SESSION_ID);
         // if (!session_id) {
@@ -94,7 +96,7 @@ const GroupGuest = () => {
     const [buttons, setButtons] = useState({
         groupButtonDeleteText: '',
         groupButtonLeaveGroup : '',
-        groupButtonJoinGroup : 'Join',
+        groupButtonJoinGroup : '',
         groupButtonInvite : '',
         groupButtonAcceptInvite : '',
         groupButtonAwaitingJoinApprovalGroup : ''
@@ -145,72 +147,59 @@ const GroupGuest = () => {
     }
 
      const leaveGroupListener = () => {
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
-    //     const url = `${serverHost}/groups/${group_id}?` + new URLSearchParams({ action: 'leave', session_id });
 
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             console.log('leave group data ', data)
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {
-    //                 reloadEvents();
-    //                 reloadGroups();
-    //                 setReload(Math.random());
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
+        setButtons({
+            groupButtonDeleteText: '',
+            groupButtonLeaveGroup : '',
+            groupButtonJoinGroup : 'Join',
+            groupButtonInvite : '',
+            groupButtonAcceptInvite : '',
+            groupButtonAwaitingJoinApprovalGroup : ''});
 
+        setGroups(prev => {
+            const group = prev.find(g => g.id == group_id);
+            if(group){
+                group.members = group.members.filter(m => m.id !== user.id);
+                return [...prev.filter(g => g.id !== group.id), group];
+            }
+            return prev;
+        });   
      }
 
     const joinGroupListener = () => {
 
-        // groupButtonJoinGroup = '';
-        // groupButtonAwaitingJoinApprovalGroup = 'Pending';
+        setButtons({
+            groupButtonDeleteText: '',
+            groupButtonLeaveGroup : '',
+            groupButtonJoinGroup : '',
+            groupButtonInvite : '',
+            groupButtonAcceptInvite : '',
+            groupButtonAwaitingJoinApprovalGroup : 'Pending'});
 
-        setButtons(prev => {
-            return {
-                ...prev,
-                groupButtonJoinGroup: '',
-                groupButtonAwaitingJoinApprovalGroup: 'Pending'
+            
+        setTimeout(() => {
+            setButtons({
+                groupButtonDeleteText: '',
+                groupButtonLeaveGroup : 'Leave',
+                groupButtonJoinGroup : '',
+                groupButtonInvite : '',
+                groupButtonAcceptInvite : '',
+                groupButtonAwaitingJoinApprovalGroup : ''});
 
-            }
-        })
+            setGroups(prev => {
+                const group = prev.find(g => g.id == group_id);
+                if(group){
+                    const member = group.members.find(m => m.id === user.id);
+                    const isCreator = group.creator.id === user.id;
+                    if(!member && !isCreator){
+                        group.members.push(user);
+                    }                    
+                    return [...prev.filter(g => g.id !== group.id), group];
+                }
+                return prev;
+            });       
 
-
-        // const session_id = getCookie(SESSION_ID);
-        // if (!session_id) {
-        //     navigate('/signin');
-        //     return;
-        // }
-        // const url = `${serverHost}/groups/${group_id}?` + new URLSearchParams({ action: 'join', session_id });
-        // fetch(url, {
-        //     method: "PATCH",
-        //     headers: { 'Accept': 'application/json' }
-        // })
-        //     .then(resp => resp.json())
-        //     .then(data => {
-        //         if (data.error) {
-        //             throw new Error(data.error.message)
-        //         }
-        //         if (data.payload) {
-        //             reloadGroups();
-        //         }
-        //     })
-        //     .catch(err => {
-        //         handleError(err)
-        //     });
+        }, 1500);
     }
 
      const acceptInviteGroupListener = () => {
@@ -323,7 +312,7 @@ const GroupGuest = () => {
     //     setGroupInviteDialogOpen(true);
     // }
 
-    // const groupTitle = groups && !Array.isArray(groups) ? groups.title : undefined;
+    const groupTitle = groups.find(g => g.id == group_id).title || '';
 
     // let groupButtonDeleteText = '';
     // let groupButtonLeaveGroup = '';
@@ -475,6 +464,9 @@ const GroupGuest = () => {
     
 
     useEffect(() => {
+
+        const group = groups.find(g => g.id == group_id);
+
         const image = new Image();       
 
         if(group.image){
@@ -486,17 +478,45 @@ const GroupGuest = () => {
                 setSrc(defaultBackground);
                 setImage(true);
             }
-        }       
-        
+        }
+
+       
+        if(group){
+            const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
+            
+            if(member) {
+                setButtons({
+                    groupButtonDeleteText: '',
+                    groupButtonLeaveGroup : 'Leave',
+                    groupButtonJoinGroup : '',
+                    groupButtonInvite : '',
+                    groupButtonAcceptInvite : '',
+                    groupButtonAwaitingJoinApprovalGroup : ''            
+                })
+            } else {
+
+                //If pending
+
+                // else:
+
+                setButtons({
+                    groupButtonDeleteText: '',
+                    groupButtonLeaveGroup : '',
+                    groupButtonJoinGroup : 'Join',
+                    groupButtonInvite : '',
+                    groupButtonAcceptInvite : '',
+                    groupButtonAwaitingJoinApprovalGroup : ''            
+                })
+            }
 
 
+
+        }
+    
 
 
 
     }, [joinGroupRequests, buttons]);
-
-
-
 
     return (
 
@@ -525,7 +545,7 @@ const GroupGuest = () => {
                     {/* {groupButtonAcceptInvite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>} */}
                     {/* {groupButtonJoinGroup && !groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' onClick={joinGroupListener}>{groupButtonJoinGroup}</Button>} */}
                     {buttons.groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' disabled >{buttons.groupButtonAwaitingJoinApprovalGroup}</Button>}
-                    {/* {groupButtonLeaveGroup && <Button variant='outlined' onClick={leaveGroupListener}>{groupButtonLeaveGroup}</Button>} */}
+                    {buttons.groupButtonLeaveGroup && <Button variant='outlined' onClick={leaveGroupListener}>{buttons.groupButtonLeaveGroup}</Button>}
                     {/* {groupButtonDeleteText && <Button variant='outlined' onClick={deleteGroupListener}>{groupButtonDeleteText}</Button>} */}
                 </Stack>
 
@@ -567,12 +587,12 @@ const GroupGuest = () => {
                     </Grid>
                 </Grid>
             </Grid>
-            {/* <NewPostDialog
+            <GuestNewPostDialog
                 open={openNewPostDialog}
                 closeDialogHandler={newPostDialogCloseHandler}
                 groupTitle={groupTitle}
                 submitHandler={postSubmitHandler}
-                groupId={groups && !Array.isArray(groups) ? groups.id : undefined} /> */}
+                groupId={groups.find(g => g.id == group_id).id || -1} />
             {/* <GroupInviteDialog group={groups} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} /> */}
             {/* <NewMemberRequestsApproveDialog 
                 open={newMemberRequestsApproveDialogOpen}
