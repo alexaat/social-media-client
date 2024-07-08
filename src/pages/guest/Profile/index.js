@@ -41,10 +41,11 @@ const ProfileGuest = () => {
  
 
     const { person_id } = useParams();
+    const personId = person_id === undefined || person_id == 1 ? undefined : person_id; 
 
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
-    const person = person_id === undefined ? user : users.filter(u => u.id == person_id)[0]
+    const person = personId === undefined ? user : users.filter(u => u.id == person_id)[0]
 
     // const [user, reloadUser] = ProvideUser();
 
@@ -140,9 +141,9 @@ const ProfileGuest = () => {
                         </Grid>
                         <Grid item sx={{ mt: 1 }} mr={{ xs: 1, md: 0 }}>
 
-                            {   person_id
+                            {   personId
                                 ?
-                                person_id && user && person_id !== user.id.toString() ? <GuestFollowToggle person_id={person_id} /> : <></>
+                                person_id !== user.id.toString() ? <GuestFollowToggle person_id={person_id} /> : <></>
                                 :
                                 <Stack alignItems='flex-end'>
                                     <Typography variant="body1" sx={{ color: '#444' }}>Profile status: {user && user.privacy}</Typography>

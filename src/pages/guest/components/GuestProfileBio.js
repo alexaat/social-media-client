@@ -10,7 +10,7 @@ const GuestProfileBio = ({person_id}) => {
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
     let person = user;
-    if(person_id) {
+    if(person_id && person_id != 1) {
         const p = JSON.parse(JSON.stringify(users.find(u => u.id == person_id)));      
         if(p.privacy === 'private'){
 

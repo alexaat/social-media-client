@@ -10,14 +10,13 @@ const GuestPosts = ({person_id}) => {
 
   let components = undefined;
 
-  if(person_id){
+  if(person_id && person_id != 1){
     const person = users.find(u => u.id == person_id);
     if(person.privacy === 'private'){
        const areFriends = followers.filter(item => {
           return (item.followerId == person_id && item.followeeId === user.id && item.status === 'approved') ||
                  (item.followeeId == person_id && item.followerId === user.id && item.status === 'approved')
        }).length > 0;
-
        if(!areFriends){
           components = <GuestInfoCard title='Private Account' message='This profile is private. Follow user to get access.' color='#FF0000' />
        }

@@ -226,30 +226,30 @@ const GuestToolBar = () => {
     const [unreadChatGroupMessages, setUnreadChatGroupMessages] = useState(0);
   
     //Groups
-     //Groups
-  const [groupsAncorEl, setGroupsAncorEl] = useState(null);
-  const groupsClickHandler = (e) => setGroupsAncorEl(e.currentTarget);
-  const groupsCloseHandler = () => setGroupsAncorEl(null);
-  //const [groups, reloadGroups] = ProvideGroups();
-  const menuItemClickHandler = (group) => {
-    groupsCloseHandler();
-    navigate("/guest/groups/" + group.id.toString());
-  };
+    const [groupsAncorEl, setGroupsAncorEl] = useState(null);
+    const groupsClickHandler = (e) => setGroupsAncorEl(e.currentTarget);
+    const groupsCloseHandler = () => setGroupsAncorEl(null);
+    //const [groups, reloadGroups] = ProvideGroups();
+    const menuItemClickHandler = (group) => {
+      groupsCloseHandler();
+      navigate("/guest/groups/" + group.id.toString());
+    };
 
-  //New Group
-  const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
-  const newGroupDialogCloseHandler = () => {
-    setNewGroupTitleError();
-    setNewGroupDescriptionError();
-    setNewGroupDialogOpen(false);
-  };
-  const createGroupHandler = () => {
-    groupsCloseHandler();
-    setNewGroupDialogOpen(true);
-  };
-  const [newGroupTitleError, setNewGroupTitleError] = useState();
-  const [newGroupDescriptionError, setNewGroupDescriptionError] = useState();
-  const createNewGroupHandler = (title, description) => {
+    //New Group
+    const [newGroupDialogOpen, setNewGroupDialogOpen] = useState(false);
+    const newGroupDialogCloseHandler = () => {
+      setNewGroupTitleError();
+      setNewGroupDescriptionError();
+      setNewGroupDialogOpen(false);
+    };
+    const createGroupHandler = () => {
+      groupsCloseHandler();
+      setNewGroupDialogOpen(true);
+    };
+    const [newGroupTitleError, setNewGroupTitleError] = useState();
+    const [newGroupDescriptionError, setNewGroupDescriptionError] = useState();
+    
+    const createNewGroupHandler = (title, description) => {
 
     setNewGroupTitleError();
     setNewGroupDescriptionError();
@@ -289,8 +289,11 @@ const GuestToolBar = () => {
     })
 
     newGroupDialogCloseHandler();
+
     if(newGroupId){
-      navigate(`/guest/groups/${newGroupId}`);
+      if(groups.find(g => g.id == newGroupId)){
+        navigate(`/guest/groups/${newGroupId}`);
+      }     
     }   
    
   };

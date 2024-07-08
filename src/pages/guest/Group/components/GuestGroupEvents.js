@@ -36,6 +36,8 @@ const GuestGroupEvents = ({group_id}) => {
     
     }, [groups, events]);
 
+    const sorted = events.sort((a,b) => a.id<b.id ? 1 : -1)
+
     return (
         <Stack spacing={1}>           
             
@@ -52,7 +54,7 @@ const GuestGroupEvents = ({group_id}) => {
                 :
                 events && events.length > 0
                 ?
-                events.map(event => <GuestEventItem key={event.id} event={event} />)
+                sorted.map(event => <GuestEventItem key={event.id} event={event} />)
                 :
                 <Card sx={{ width: '100%', height: '350px', mb: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <CardContent >

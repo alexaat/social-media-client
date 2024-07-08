@@ -10,7 +10,7 @@ import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 // import { ProvidePosts } from '../context/PostsContext';
 // import { SESSION_ID, getCookie } from '../cookies.js';
 // import { useNavigate } from 'react-router-dom';
-// import EventDateTimePicker from '../components/EventDateTimePicker.js';
+import GuestEventDateTimePicker from '../Group/components/GuestEventDateTimePicker';
 // import { ProvideEvents } from '../context/EventsContext'
 import EmojiPicker from "emoji-picker-react";
 import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
@@ -23,9 +23,21 @@ import { v4 as uuidv4 } from 'uuid';
 const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, submitHandler }) => {
 
 
-    const [user, notifications, setNotifications, posts, setPosts] = ProvideGuestData();
+    const [
+        user,
+        notifications, setNotifications,
+        posts, setPosts,
+        users, setUser,
+        followers, setFollowers,
+        chatMessages, setChatMessages,
+        chatRooms, setChatRooms,
+        groups, setGroups,
+        events, setEvents,
+        joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
     const [error, setError] = useState('');
+    const [eventTitleError, setEventTitleError] = useState();
+    const [eventDescriptionError, setEventDescriptionError] = useState();
    
         
     //Emoji
@@ -39,8 +51,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
         input.click();
     }
    
-    // const navigate = useNavigate();
-
     //Event
     const SELECTION = {
         POST: 'post',
@@ -48,15 +58,12 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     };
     const [selection, setSelection] = useState(SELECTION.POST);
     const setSelectionHandler = (e) => setSelection(e.target.value);
-    // const [eventTitle, setEventTitle] = useState('');
-    // const [eventDescription, setEventDescription] = useState('');
-    // const [eventDate, setEventDate] = useState();
-    // const [attend, setAttend] = useState(true);
-    // const [events, reloadEvents] = ProvideEvents();
+    const [eventTitle, setEventTitle] = useState('');
+    const [eventDescription, setEventDescription] = useState('');
+    const [eventDate, setEventDate] = useState();
+    const [attend, setAttend] = useState(true);
 
-    // //User     
-    // const [user] = ProvideUser();
-    // const [posts, reloadPosts] = ProvidePosts();
+
     const [content, setContent] = useState('');
     const [privacy, setPrivacy] = useState(PRIVACY_PUBLIC);
     const [image, setImage] = useState(null);
@@ -80,6 +87,10 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     }
 
     const submitPostHandler = () => {
+
+        setEventTitleError();
+        setEventDescriptionError();
+
 
         if (selection === SELECTION.POST) {
 
@@ -132,9 +143,41 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
             }
         } else if(selection === SELECTION.EVENT){
 
+                const eventTitleTrimmed = eventTitle.trim();
+                const eventDescriptionTrimmed = eventDescription.trim();
 
+                if(eventTitleTrimmed.length < 2 || eventTitleTrimmed.length > 25){
+                    setEventTitleError('Error: event title must be between 2 and 25 characters long');
+                    return;
+                }
 
+                if(eventDescriptionTrimmed.length < 2 || eventDescriptionTrimmed.length > 500){
+                    setEventDescriptionError('Error: event description must be between 2 and 500 characters long');
+                    return;
+                }
 
+                const id = events.length === 0 ? 1 : events.sort((a, b) => a.id<b.id ? 1 : -1)[0].id + 1;
+
+                const members = attend ? [user] : []; 
+
+                const event = {
+                    id,
+                    creator: user,
+                    create_date: Date.now(),
+                    title: eventTitle,
+                    description: eventDescription,
+                    event_date: eventDate,
+                    members
+                }
+
+                setEvents(prev => [...prev, event]);
+
+                //Reset State
+                closeDialogHandler();
+                setEventDate();
+                setEventTitle();
+                setEventDescription();
+                setAttend(true);    
         }
 
 
@@ -232,6 +275,12 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
         setContent('');
         closeDialogHandler();
         setSelection(SELECTION.POST);
+        setEventTitleError();
+        setEventDescriptionError();
+        setEventDate();
+        setEventTitle();
+        setEventDescription();
+        setAttend(true);  
     }
 
     // const clearAllHandler = () => {
@@ -330,7 +379,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                     <IconButton aria-label="post image" disableRipple>
                                         <ImageRoundedIcon sx={{ width: '56px', height: '56px' }} />
                                     </IconButton>
-
                                 }
 
                             </Box>
@@ -364,18 +412,22 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                     : selection === SELECTION.EVENT ?
                                         <Stack>
 
-                                            {/* <FormControlLabel control={<Checkbox checked={attend} onChange={() => setAttend(prev => !prev)} />} label="Attend" /> */}
+                                            <FormControlLabel control={<Checkbox checked={attend} onChange={() => setAttend(prev => !prev)} />} label="Attend" />
 
-                                            {/* <EventDateTimePicker setEventDate={setEventDate} /> */}
+                                            <GuestEventDateTimePicker setEventDate={setEventDate} />
 
-                                            {/* <TextField
+                                            <TextField
                                                 sx={{ width: '100%', mt: 2 }}
+                                                error={Boolean(eventTitleError)}
+                                                helperText={eventTitleError}
                                                 placeholder='Event title'
                                                 onChange={(e) => { setEventTitle(e.target.value) }}
                                                 value={eventTitle}
                                                 InputProps={{ sx: { borderRadius: '4px' } }}
-                                            /> */}
-                                            {/* <TextField
+                                            />
+                                            <TextField
+                                                error={Boolean(eventDescriptionError)}
+                                                helperText={eventDescriptionError}
                                                 sx={{ width: '100%', mt: 2 }}
                                                 placeholder='Event description'
                                                 multiline
@@ -383,12 +435,11 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                                 onChange={(e) => { setEventDescription(e.target.value) }}
                                                 value={eventDescription}
                                                 InputProps={{ sx: { borderRadius: '4px' } }}
-                                            /> */}
+                                            />
                                         </Stack>
                                         :
                                         <></>
                             }
-
 
                             <Button
                                 variant="contained"
