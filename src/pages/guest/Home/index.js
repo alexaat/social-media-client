@@ -24,19 +24,13 @@ const HomeGuest = () => {
         events, setEvents,
         joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
-   
-
-
     const triggered = useRef(false);
 
     //const [filteredPosts, setFilteredPosts] = useState([]);
     const [sorted, setSorted] = useState([]);
 
-
     useEffect(() => {
 
-
-        //const filtered = posts.filter(post => !post.group_id);
         const filtered = [];
 
         posts.forEach(post => {
@@ -44,7 +38,7 @@ const HomeGuest = () => {
                 const group = groups.find(g => g.id === post.group_id);
                 if(group){
                     const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
-                    if(member){
+                    if(Boolean(member)){
                         filtered.push(post);
                     }
                 } 
@@ -55,6 +49,8 @@ const HomeGuest = () => {
         });
 
         const sorted = filtered.sort((a,b) => a.date < b.date ? 1 : -1);
+
+
 
         setSorted(sorted);
 

@@ -109,6 +109,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                 const post = {
                     id,
                     content,
+                    privacy: 'public',
                     image: uuid,
                     date: Date.now(),
                     sender: user,
@@ -128,13 +129,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                 setSpecificFriendIds([]);
                 closeDialogHandler();
                 setError('');
-
             }
-
-
-
-
-
         } else if(selection === SELECTION.EVENT){
 
 

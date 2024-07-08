@@ -23,10 +23,21 @@ import GuestGroupEvents from "./components/GuestGroupEvents";
 import { imageURL } from "../../../constants";
 import defaultBackground from '../../../assets/long_background_image.jpg'
 import { ProvideGuestData } from "../components/GuestDataContext";
+import { Receipt } from "@mui/icons-material";
 
 const GroupGuest = () => {
     
-    const { group_id } = useParams();
+    const ButtonStates = {
+        Join: 'Join',
+        Pending: 'Pending',
+        Leave: 'Leave',      
+      };
+
+    const [buttonsState, setButtonsState] = useState();
+
+
+    const { group_id } = useParams();  
+
    
 
     const [     
@@ -93,18 +104,15 @@ const GroupGuest = () => {
     // }
 
 
-    const [buttons, setButtons] = useState({
-        groupButtonDeleteText: '',
-        groupButtonLeaveGroup : '',
-        groupButtonJoinGroup : '',
-        groupButtonInvite : '',
-        groupButtonAcceptInvite : '',
-        groupButtonAwaitingJoinApprovalGroup : ''
+    // const [buttons, setButtons] = useState({
+    //     groupButtonDeleteText: '',
+    //     groupButtonLeaveGroup : '',
+    //     groupButtonJoinGroup : '',
+    //     groupButtonInvite : '',
+    //     groupButtonAcceptInvite : '',
+    //     groupButtonAwaitingJoinApprovalGroup : ''
 
-    })
-
-
-
+    // });
 
     const [image, setImage] = useState();
     // const [user] = ProvideUser();
@@ -147,15 +155,6 @@ const GroupGuest = () => {
     }
 
      const leaveGroupListener = () => {
-
-        setButtons({
-            groupButtonDeleteText: '',
-            groupButtonLeaveGroup : '',
-            groupButtonJoinGroup : 'Join',
-            groupButtonInvite : '',
-            groupButtonAcceptInvite : '',
-            groupButtonAwaitingJoinApprovalGroup : ''});
-
         setGroups(prev => {
             const group = prev.find(g => g.id == group_id);
             if(group){
@@ -168,23 +167,21 @@ const GroupGuest = () => {
 
     const joinGroupListener = () => {
 
-        setButtons({
-            groupButtonDeleteText: '',
-            groupButtonLeaveGroup : '',
-            groupButtonJoinGroup : '',
-            groupButtonInvite : '',
-            groupButtonAcceptInvite : '',
-            groupButtonAwaitingJoinApprovalGroup : 'Pending'});
+        setJoinGroupRequests(prev => {            
+            const filtered = prev.filter(item => !(item.group.id == group_id && item.sender.id === user.id));
+            const id = filtered.length === 0 ? 1 : filtered.sort((a, b) => a.id<b.id ? 1: -1)[0].id + 1;
+            const request = {
+                id,
+                sender: user,
+                group,
+                receipt: group.creator 
+            }
+            return [...filtered, request];
+        });
 
-            
         setTimeout(() => {
-            setButtons({
-                groupButtonDeleteText: '',
-                groupButtonLeaveGroup : 'Leave',
-                groupButtonJoinGroup : '',
-                groupButtonInvite : '',
-                groupButtonAcceptInvite : '',
-                groupButtonAwaitingJoinApprovalGroup : ''});
+
+            setJoinGroupRequests(prev => prev.filter(item => !(item.group.id == group_id && item.sender.id === user.id)));
 
             setGroups(prev => {
                 const group = prev.find(g => g.id == group_id);
@@ -367,38 +364,6 @@ const GroupGuest = () => {
         setOpenNewPostDialog(true);
     }
 
-     const postSubmitHandler = (content, image) => {
-    //     const formData = new FormData();
-    //     if (image) {
-    //         formData.append('image', image);
-    //     }
-    //     formData.append('content', content);
-    //     formData.append('group_id', group_id);
-    //     const session_id = getCookie(SESSION_ID);
-    //     const postUrl = `${serverHost}/posts?` + new URLSearchParams({ session_id });
-    //     let headers = new Headers();
-    //     headers.append('Accept', 'application/json');
-
-    //     fetch(postUrl,
-    //         {
-    //             method: 'POST',
-    //             body: formData,
-    //             headers: headers
-    //         })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             console.log('Post Submit Response: ', data)
-    //             if (data.error) {
-    //                 throw new Error(data.error)
-    //             }
-    //             if (data.payload) {
-    //                 setReload(Math.random());
-    //             }
-    //         })
-    //         .catch(err => handleError(err));
-    //     newPostDialogCloseHandler();
-     }
-
     // const [newMemberRequestsApproveDialogOpen, setNewMemberRequestsApproveDialogOpen] = useState(false);
      const approveMember = (user_id, group_id) => {
     //     newMemberRequestsApproveDialogCloseHandler()
@@ -483,40 +448,28 @@ const GroupGuest = () => {
        
         if(group){
             const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
-            
+
             if(member) {
-                setButtons({
-                    groupButtonDeleteText: '',
-                    groupButtonLeaveGroup : 'Leave',
-                    groupButtonJoinGroup : '',
-                    groupButtonInvite : '',
-                    groupButtonAcceptInvite : '',
-                    groupButtonAwaitingJoinApprovalGroup : ''            
-                })
+                setButtonsState(ButtonStates.Leave);
             } else {
 
                 //If pending
+                if(joinGroupRequests.find(item => item.group.id == group_id && item.sender.id === user.id)){
+                    setButtonsState(ButtonStates.Pending);
+                } else {
+                    setButtonsState(ButtonStates.Join);
+                }
 
-                // else:
+             
 
-                setButtons({
-                    groupButtonDeleteText: '',
-                    groupButtonLeaveGroup : '',
-                    groupButtonJoinGroup : 'Join',
-                    groupButtonInvite : '',
-                    groupButtonAcceptInvite : '',
-                    groupButtonAwaitingJoinApprovalGroup : ''            
-                })
+               
             }
-
-
-
         }
     
 
 
 
-    }, [joinGroupRequests, buttons]);
+    }, [joinGroupRequests, buttonsState, groups]);
 
     return (
 
@@ -537,15 +490,15 @@ const GroupGuest = () => {
                         <Skeleton variant="rectangular" height="140px" width='100%' />
                 }
                 <Stack spacing={2} direction='row' alignItems='center' sx={{ mb: 1, px: { xs: 1, md: 0 } }} justifyContent='end'>
-                    {buttons.groupButtonJoinGroup && <Button variant='contained' onClick={joinGroupListener}>{buttons.groupButtonJoinGroup}</Button>}
+                    {buttonsState === ButtonStates.Join && <Button variant='contained' onClick={joinGroupListener}>{ButtonStates.Join}</Button>}
 
                     {/* {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>} */}
                     {/* {groupButtonInvite && <Button variant='contained' onClick={inviteToGroupListener}>{groupButtonInvite}</Button>} */}
                     {/* {groupButtonAcceptInvite && <Button variant='contained' onClick={acceptInviteGroupListener}>{groupButtonAcceptInvite}</Button>} */}
                     {/* {groupButtonAcceptInvite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>} */}
                     {/* {groupButtonJoinGroup && !groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' onClick={joinGroupListener}>{groupButtonJoinGroup}</Button>} */}
-                    {buttons.groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' disabled >{buttons.groupButtonAwaitingJoinApprovalGroup}</Button>}
-                    {buttons.groupButtonLeaveGroup && <Button variant='outlined' onClick={leaveGroupListener}>{buttons.groupButtonLeaveGroup}</Button>}
+                    {buttonsState === ButtonStates.Pending && <Button variant='contained' disabled >{ButtonStates.Pending}</Button>}
+                    {buttonsState === ButtonStates.Leave && <Button variant='outlined' onClick={leaveGroupListener}>{ButtonStates.Leave}</Button>}
                     {/* {groupButtonDeleteText && <Button variant='outlined' onClick={deleteGroupListener}>{groupButtonDeleteText}</Button>} */}
                 </Stack>
 
@@ -590,8 +543,7 @@ const GroupGuest = () => {
             <GuestNewPostDialog
                 open={openNewPostDialog}
                 closeDialogHandler={newPostDialogCloseHandler}
-                groupTitle={groupTitle}
-                submitHandler={postSubmitHandler}
+                groupTitle={groupTitle}              
                 groupId={groups.find(g => g.id == group_id).id || -1} />
             {/* <GroupInviteDialog group={groups} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} /> */}
             {/* <NewMemberRequestsApproveDialog 

@@ -1,9 +1,10 @@
 import { ProvideGuestData } from "./GuestDataContext";
 import GuestInfoCard from "./GuestInfoCard";
-import GuestPost from '../components/GuestPost';
+import GuestPost from './GuestPost';
 
 const GuestPosts = ({person_id}) => {
-  // const [posts, reloadPosts, error] = ProvidePosts();
+
+
 
   const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
@@ -36,7 +37,7 @@ const GuestPosts = ({person_id}) => {
       components = sorted.map(post => {
 
         if(post.privacy === 'public') {
-          return <GuestPost key={post.id} post={post}/>
+          return <GuestPost sx={{ width: '100%' }} key={post.id} post={post}/>
         } else if (post.privacy === 'friends'){
           //Check that friends
           const areFriends = followers.filter(item => {
@@ -45,7 +46,7 @@ const GuestPosts = ({person_id}) => {
           }).length > 0;
 
           if(areFriends){
-            return <GuestPost key={post.id} post={post}/>
+            return <GuestPost sx={{ width: '100%' }} key={post.id} post={post}/>
           }
         }
     })

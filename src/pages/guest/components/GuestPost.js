@@ -42,7 +42,7 @@ import { v4 as uuidv4 } from 'uuid';
  
  const GuestPost = ({ post, sx }) => {
 
-       //Navigation
+   //Navigation
    const navigate = useNavigate();
  
     const [postImage, setPostImage] = useState();
@@ -145,56 +145,8 @@ import { v4 as uuidv4 } from 'uuid';
          })
       }
  
-
-
-
-
-
-
-
-      //  const session_id = getCookie(SESSION_ID);
-      //  if (!session_id) {
-      //     navigate('/signin');
-      //     return;
-      //  }
- 
-      //  const formData = new FormData();
-      //  if (image) {
-      //     formData.append('image', image);
-      //  }
-      //  formData.append('post_id', postId)
-      //  formData.append('content', content)
- 
-      //  const url = `${serverHost}/comments?` + new URLSearchParams({ session_id });
-      //  fetch(url, {
-      //     method: "POST",
-      //     body: formData,
-      //     headers: { 'Accept': 'application/json' }
-      //  })
-      //     .then(resp => resp.json())
-      //     .then(data => {
-      //        //console.log('comment data ', data)
-      //        if (data.error) {
-      //           if (data.error.type === INVALID_COMMENT_FORMAT) {
-      //              setSubmitCommentError({ postId, message: data.error.message })
-      //           } else {
-      //              throw new Error(data.error)
-      //           }
-      //        }
-      //        if (data.payload) {
-      //           if (reloadPosts) {
-      //              reloadPosts();
-      //           }
- 
-      //        }
-      //     })
-      //     .catch(err => {
-      //        handleError(err)
-      //     });
- 
     }
-    /*
- */
+
     //Emoji
     const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
     const selectEmojiHandler = (event) => {
@@ -274,9 +226,9 @@ import { v4 as uuidv4 } from 'uuid';
       
     }
  
-   //  const toolTip = "Follow"
+   //  const toolTip = "Follow" 
+
     
- 
     return (
        <>
           <Card sx={{ width: '500px', minHeight: '200px', mb: 2, ...sx }}>

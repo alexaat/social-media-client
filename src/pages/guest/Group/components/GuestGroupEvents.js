@@ -23,6 +23,7 @@ const GuestGroupEvents = ({group_id}) => {
         events, setEvents] = ProvideGuestData();
 
     useEffect(() => {
+        setEventsError();
         const group  = groups.find(g => g.id == group_id);
         if(group === undefined){
             setEventsError({type: 'data source', message: 'Error: cannot find group'})

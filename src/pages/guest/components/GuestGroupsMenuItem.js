@@ -16,8 +16,8 @@ const GuestGroupsMenuItem = ({group, menuItemClickHandler}) => {
 
             onClick={() => menuItemClickHandler(group)}
         >
-            <Typography>{group.title}</Typography>
-            <Typography>{group.description}</Typography>
+            <Typography variant='h6'>{group.title}</Typography>
+            <Typography >{group.description}</Typography>
         </Stack>
       
      );
