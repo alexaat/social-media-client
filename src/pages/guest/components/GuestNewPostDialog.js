@@ -162,6 +162,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
 
                 const event = {
                     id,
+                    group_id: groupId,
                     creator: user,
                     create_date: Date.now(),
                     title: eventTitle,
@@ -174,9 +175,9 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
 
                 //Reset State
                 closeDialogHandler();
-                setEventDate();
-                setEventTitle();
-                setEventDescription();
+                setEventDate('');
+                setEventTitle('');
+                setEventDescription('');
                 setAttend(true);    
         }
 
@@ -350,38 +351,41 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                                         </Stack>
                                 }
                             </Box>
-                            <Box sx={{
-                                width: '100%',
-                                minHeight: '170px',
-                                background: '#eeeeee',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                mt: 2,
-                                border: 1,
-                                borderRadius: '4px',
-                                borderColor: '#dddddd',
-                                '&:hover': {
-                                    cursor: 'pointer',
-                                    borderColor: '#555555',
-                                }
-                            }}
-                                onClick={() => {
-                                    let input = document.getElementById('new-post-input-image')
-                                    input.value = '';
-                                    input.click();
-                                }}
-                            >
-                                 <input type="file" id='new-post-input-image' onChange={selelectedImageHandler} accept="image/*"/> 
 
-                                {
+
+                             {selection ===  SELECTION.POST &&
+                                <Box sx={{
+                                    width: '100%',
+                                    minHeight: '170px',
+                                    background: '#eeeeee',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    mt: 2,
+                                    border: 1,
+                                    borderRadius: '4px',
+                                    borderColor: '#dddddd',
+                                    '&:hover': {
+                                        cursor: 'pointer',
+                                        borderColor: '#555555',
+                                    }
+                                }}
+                                
+                                    onClick={() => {
+                                        let input = document.getElementById('new-post-input-image')
+                                        input.value = '';
+                                        input.click();
+                                    }}
+                                >                           
+                                <input type="file" id='new-post-input-image' onChange={selelectedImageHandler} accept="image/*"/>                               
+                                {                               
                                     (image && <Box component='img' sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} src={URL.createObjectURL(image)}></Box>) ||
                                     <IconButton aria-label="post image" disableRipple>
                                         <ImageRoundedIcon sx={{ width: '56px', height: '56px' }} />
                                     </IconButton>
                                 }
-
-                            </Box>
+                                </Box>
+                            }
 
                             {
                                 selection === SELECTION.POST ?

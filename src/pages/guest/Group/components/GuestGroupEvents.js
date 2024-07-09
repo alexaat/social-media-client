@@ -22,21 +22,23 @@ const GuestGroupEvents = ({group_id}) => {
         groups, setGroups,
         events, setEvents] = ProvideGuestData();
 
-    useEffect(() => {
+    useEffect(() => {       
         setEventsError();
         const group  = groups.find(g => g.id == group_id);
         if(group === undefined){
             setEventsError({type: 'data source', message: 'Error: cannot find group'})
         } else {
-            const member = group.members.find(m => m.id === user.id)
+            const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
             if(!member){
                 setEventsError({type: AUTHORIZATION, message: 'Error: not group member'})
             }
         }
     
-    }, [groups, events]);
+    }, [groups, events, group_id]);
 
-    const sorted = events.sort((a,b) => a.id<b.id ? 1 : -1)
+    const filtered = events.filter(e => e.group_id == group_id)
+
+    const sorted = filtered.sort((a,b) => a.id<b.id ? 1 : -1)
 
     return (
         <Stack spacing={1}>           
@@ -52,7 +54,7 @@ const GuestGroupEvents = ({group_id}) => {
                     </CardContent>
                 </Card>
                 :
-                events && events.length > 0
+                filtered && filtered.length > 0
                 ?
                 sorted.map(event => <GuestEventItem key={event.id} event={event} />)
                 :

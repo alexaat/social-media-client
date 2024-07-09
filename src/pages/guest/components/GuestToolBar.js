@@ -30,6 +30,8 @@ import {
 
 const GuestToolBar = () => {
 
+  const [navigateToGroupTrigger, setNavigateToGroupTrigger] = useState();
+
   const [
     user,
     notifications, setNotifications,
@@ -159,6 +161,12 @@ const GuestToolBar = () => {
     }
 
     useEffect(() => { 
+
+      if(navigateToGroupTrigger){
+        navigate(`/guest/groups/${navigateToGroupTrigger}`);
+        setNavigateToGroupTrigger();
+      }
+
       userRef.current = user;      
       const isFollowing = followers.find(f => f.followeeId === 1 && f.followerId === 2)
       if(!isFollowing && !isFollowingRef.current){
@@ -182,10 +190,8 @@ const GuestToolBar = () => {
         }
          
       }
- 
-
       
-    },[user, chatMessages, followers]);    
+    },[user, chatMessages, followers, groups]);    
 
     const navigate = useNavigate();
 
@@ -217,7 +223,7 @@ const GuestToolBar = () => {
       chatsCloseHandler();
       setNewChatDialogOpen(true);
     };
-    //Refresh chat messages in components
+
     const [newPrivateChatMessage, setNewPrivateChatMessage] = useState();
     const [newChatGroupChatMessage, setNewChatGroupChatMessage] = useState();
     const [newChatMessage, setNewChatMessage] = useState();
@@ -251,52 +257,68 @@ const GuestToolBar = () => {
     
     const createNewGroupHandler = (title, description) => {
 
-    setNewGroupTitleError();
-    setNewGroupDescriptionError();
+      setNewGroupTitleError();
+      setNewGroupDescriptionError();
 
-    const titleTrimmed = title.trim();
-    const  descriptionTrimmed = description.trim(); 
+      const titleTrimmed = title.trim();
+      const  descriptionTrimmed = description.trim(); 
     
-    //Check errors
-    if(titleTrimmed.length < 2 || titleTrimmed.length > 20){
-      setNewGroupTitleError('Error: group title must be between 2 and 20 characters long');
-      return;
-    }
-
-    if(groups.find(group => group.title === titleTrimmed)){
-      setNewGroupTitleError('Error: group with this title already exists');
-      return;
-    }
-
-    if(descriptionTrimmed.length < 2 || descriptionTrimmed.length > 500){
-      setNewGroupDescriptionError('Error: group description must be between 2 and 500 characters long');
-      return;
-    }
-
-    let newGroupId = undefined
-
-    setGroups(prev => {
-      const id = prev.length === 0 ? 1 : prev.sort((a,b) => a.id < b.id ? 1 : -1)[0].id + 1;
-      newGroupId = id;
-
-      const group = {
-        id, 
-        title: titleTrimmed,
-        description: descriptionTrimmed
+      //Check errors
+      if(titleTrimmed.length < 2 || titleTrimmed.length > 20){
+        setNewGroupTitleError('Error: group title must be between 2 and 20 characters long');
+        return;
       }
 
-      return [...prev, group];
-    })
+      if(groups.find(group => group.title === titleTrimmed)){
+        setNewGroupTitleError('Error: group with this title already exists');
+        return;
+      }
 
-    newGroupDialogCloseHandler();
+      if(descriptionTrimmed.length < 2 || descriptionTrimmed.length > 500){
+        setNewGroupDescriptionError('Error: group description must be between 2 and 500 characters long');
+        return;
+      }
 
-    if(newGroupId){
-      if(groups.find(g => g.id == newGroupId)){
-        navigate(`/guest/groups/${newGroupId}`);
-      }     
-    }   
-   
-  };
+      let newGroupId = undefined
+
+      setGroups(prev => {
+        const id = prev.length === 0 ? 1 : prev.sort((a,b) => a.id < b.id ? 1 : -1)[0].id + 1;
+        newGroupId = id;
+
+        const group = {
+          id, 
+          title: titleTrimmed,
+          description: descriptionTrimmed,
+          creator: user,
+          members: []
+        }
+        return [...prev, group];
+      })
+
+      newGroupDialogCloseHandler();
+
+      if(newGroupId){
+        setNavigateToGroupTrigger(newGroupId); 
+      }
+
+      setNotifications(prev => {
+        const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+        const sender = {
+            id: newGroupId,
+            display_name: titleTrimmed
+        };
+        const content = 'Group is created: ' + titleTrimmed;  
+        const notification = {
+            id,
+            content,
+            date:  Date.now(),
+            sender,
+            is_read: false
+        }
+            return [...prev, notification];
+      });  
+      
+    };
 
     return (
         <>

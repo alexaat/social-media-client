@@ -352,6 +352,7 @@ const data = {
     events: [
         {
             id: 1,
+            group_id: 1,
             creator: {
                 id: 3,
                 first_name: 'Paul',

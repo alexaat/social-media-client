@@ -1,6 +1,5 @@
 import { Stack, Box, Skeleton, Grid, Tab, Tabs, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
-// import { ProvideGroups } from "../../../context/GroupsContext";
 import { useEffect, useState } from "react";
 import GuestGroupInfo from "./components/GuestGroupInfo";
 import GuestNewPostButton from '../../guest/components/GuestNewPostButton';
@@ -15,7 +14,6 @@ import GuestGroupPosts from "./components/GuestGroupPosts";
 // import GroupInviteDialog from "../../../dialogs/GroupInviteDialog";
 // import NewMemberRequestsApproveDialog from "../../../dialogs/NewMemberRequestsApproveDialog";
 // import { ProvideGroupInvites } from "../../../context/GroupInvitesContext";
-// import { ProvideWebSocket } from "../../../context/WebSocketContext";
 // import { ProvideJoinRequests } from "../../../context/JoinRequestsProvider";
 import GuestGroupEvents from "./components/GuestGroupEvents";
 // import { ProvideNotifications } from "../../../context/NotificationsContext";
@@ -23,22 +21,22 @@ import GuestGroupEvents from "./components/GuestGroupEvents";
 import { imageURL } from "../../../constants";
 import defaultBackground from '../../../assets/long_background_image.jpg'
 import { ProvideGuestData } from "../components/GuestDataContext";
-import { Receipt } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
 
 const GroupGuest = () => {
     
+    const navigate = useNavigate();
+
     const ButtonStates = {
         Join: 'Join',
         Pending: 'Pending',
-        Leave: 'Leave',      
+        Leave: 'Leave',
+        Delete: 'Delete'      
       };
 
     const [buttonsState, setButtonsState] = useState();
 
-
-    const { group_id } = useParams();  
-
-   
+    const { group_id } = useParams(); 
 
     const [     
         user,
@@ -52,13 +50,9 @@ const GroupGuest = () => {
         events, setEvents,
         joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
-
-    const group = groups.find(g => g.id == group_id);
+    const [group, setGroup] = useState();
 
     const [tab, setTab] = useState(0);
-    // const [notifications, reloadNotifications] = ProvideNotifications();
-    // const [events, reloadEvents] = ProvideEvents();
-
     const [src, setSrc] = useState(imageURL);
 
     // //Comments
@@ -94,64 +88,44 @@ const GroupGuest = () => {
 
     }
 
-    // const [reload, setReload] = useState(1);
-    // const [groups, reloadGroups] = ProvideGroups();
-    // const [groupInvites, reloadInvites] = ProvideGroupInvites();
-    // const [joinRequests, reloadJoinRequests, joinRequestError] = ProvideJoinRequests();
-
-    // if (joinRequestError) {
-    //     handleError(joinRequestError);
-    // }
-
-
-    // const [buttons, setButtons] = useState({
-    //     groupButtonDeleteText: '',
-    //     groupButtonLeaveGroup : '',
-    //     groupButtonJoinGroup : '',
-    //     groupButtonInvite : '',
-    //     groupButtonAcceptInvite : '',
-    //     groupButtonAwaitingJoinApprovalGroup : ''
-
-    // });
-
     const [image, setImage] = useState();
-    // const [user] = ProvideUser();
-
-
+    
     const [openNewPostDialog, setOpenNewPostDialog] = useState(false);
     const newPostDialogCloseHandler = () => {
         setOpenNewPostDialog(false);
     }
 
     const deleteGroupListener = () => {
-        // const session_id = getCookie(SESSION_ID);
-        // if (!session_id) {
-        //     navigate('/signin');
-        //     return;
-        // }
-        // const url = serverHost + `/groups/${group_id}?` + new URLSearchParams({ session_id })
-        // fetch(
-        //     url,
-        //     {
-        //         method: "DELETE",
-        //         headers: { 'Accept': 'application/json' }
-        //     })
-        //     .then(resp => resp.json())
-        //     .then(data => {
-        //         console.log(data)
-        //         if (data.error) {
-        //             if (data.error.type === AUTHORIZATION) {
-        //                 handleError(data.error.message)
-        //             } else {
-        //                 throw new Error(data.error)
-        //             }
-        //         }
-        //         if (data.payload) {
-        //             navigate('/');
-        //         }
 
-        //     })
-        //     .catch(err => handleError(err));
+        //1. Remove group
+        setGroups(prev => prev.filter(group => group.id != group_id));
+
+        //2. Remove posts
+        setPosts(prev => prev.filter(post => post.group_id != group_id));
+
+        //3. Remove Events
+        setEvents(prev => prev.filter(event => event.group_id != group_id));
+
+
+        setNotifications(prev => {
+            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+            const sender = {
+                id: group.id,
+                display_name: group.title
+            };
+            const content = 'Group is deleted: ' + group.title;  
+            const notification = {
+                id,
+                content,
+                date:  Date.now(),
+                sender,
+                is_read: false
+            }
+                return [...prev, notification];
+          });
+
+
+        navigate('/guest');     
     }
 
      const leaveGroupListener = () => {
@@ -162,7 +136,24 @@ const GroupGuest = () => {
                 return [...prev.filter(g => g.id !== group.id), group];
             }
             return prev;
-        });   
+        });
+        
+        setNotifications(prev => {
+            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;             
+            const content = 'Leaving group: ' + group.title;  
+            const sender ={
+                id: group.id,
+                display_name: group.title
+            };
+            const notification = {
+                id,
+                content,
+                date:  Date.now(),
+                sender,
+                is_read: false
+            }
+                return [...prev, notification];
+          });
      }
 
     const joinGroupListener = () => {
@@ -174,14 +165,49 @@ const GroupGuest = () => {
                 id,
                 sender: user,
                 group,
-                receipt: group.creator 
+                recipient: group.creator 
             }
             return [...filtered, request];
         });
 
+        setNotifications(prev => {
+            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+            const sender = {
+                id: group.id,
+                display_name: group.title
+            };
+            const content = 'Join request was sent to ' + group.title;  
+            const notification = {
+                id,
+                content,
+                date:  Date.now(),
+                sender,
+                is_read: false
+            }
+                return [...prev, notification];
+          });
+
+
         setTimeout(() => {
 
             setJoinGroupRequests(prev => prev.filter(item => !(item.group.id == group_id && item.sender.id === user.id)));
+
+            setNotifications(prev => {
+                const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;             
+                const content = 'Join the group is approved: ' + group.title;  
+                const sender ={
+                    id: group.id,
+                    display_name: group.title
+                };
+                const notification = {
+                    id,
+                    content,
+                    date:  Date.now(),
+                    sender,
+                    is_read: false
+                }
+                    return [...prev, notification];
+              });
 
             setGroups(prev => {
                 const group = prev.find(g => g.id == group_id);
@@ -309,7 +335,8 @@ const GroupGuest = () => {
     //     setGroupInviteDialogOpen(true);
     // }
 
-    const groupTitle = groups.find(g => g.id == group_id).title || '';
+    //  const groupTitle = 'title'
+    //const groupTitle = groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).title : '';
 
     // let groupButtonDeleteText = '';
     // let groupButtonLeaveGroup = '';
@@ -317,10 +344,6 @@ const GroupGuest = () => {
     // let groupButtonInvite = '';
     // let groupButtonAcceptInvite = '';
     // let groupButtonAwaitingJoinApprovalGroup = '';
-
-
-
-
 
     // if (groups && !Array.isArray(groups) && user) {
     //     if (groups.creator.id === user.id) {         
@@ -424,17 +447,18 @@ const GroupGuest = () => {
     // }
     // const newMemberRequestsApproveDialogCloseHandler = () => {
     //     setNewMemberRequestsApproveDialogOpen(false)
-    // }
+    // }    
 
-    
-
-    useEffect(() => {
-
+    useEffect(() => {      
         const group = groups.find(g => g.id == group_id);
+        if(group === undefined) {           
+            navigate('/signin');      
+        }
+        setGroup(group);
 
         const image = new Image();       
 
-        if(group.image){
+        if(group && group.image){
             image.src = group.image
         } else {
             image.src = imageURL;
@@ -444,32 +468,27 @@ const GroupGuest = () => {
                 setImage(true);
             }
         }
-
        
         if(group){
             const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
 
             if(member) {
-                setButtonsState(ButtonStates.Leave);
+                if(group.creator.id === user.id){
+                    setButtonsState(ButtonStates.Delete);
+                }else{
+                    setButtonsState(ButtonStates.Leave);
+                }             
             } else {
-
                 //If pending
                 if(joinGroupRequests.find(item => item.group.id == group_id && item.sender.id === user.id)){
                     setButtonsState(ButtonStates.Pending);
                 } else {
                     setButtonsState(ButtonStates.Join);
-                }
-
-             
-
-               
+                }               
             }
         }
-    
 
-
-
-    }, [joinGroupRequests, buttonsState, groups]);
+    }, [joinGroupRequests, buttonsState, groups, group_id]);
 
     return (
 
@@ -499,7 +518,7 @@ const GroupGuest = () => {
                     {/* {groupButtonJoinGroup && !groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' onClick={joinGroupListener}>{groupButtonJoinGroup}</Button>} */}
                     {buttonsState === ButtonStates.Pending && <Button variant='contained' disabled >{ButtonStates.Pending}</Button>}
                     {buttonsState === ButtonStates.Leave && <Button variant='outlined' onClick={leaveGroupListener}>{ButtonStates.Leave}</Button>}
-                    {/* {groupButtonDeleteText && <Button variant='outlined' onClick={deleteGroupListener}>{groupButtonDeleteText}</Button>} */}
+                    {buttonsState === ButtonStates.Delete && <Button variant='outlined' onClick={deleteGroupListener}>{ButtonStates.Delete}</Button>}
                 </Stack>
 
                 <Grid container sx={{ py: 0, px: { xs: 1, md: 0 } }} >
@@ -509,42 +528,28 @@ const GroupGuest = () => {
                     </Grid>
 
                     <Grid item xs={12} md={8} sx={{ pl: { xs: 0, md: 1 }, pt: { xs: 1, md: 0 } }}>
-                        {/* { user &&
-                            groups &&
-                            !Array.isArray(groups) &&
-                            (groups.creator.id === user.id || (groups.members && Array.isArray(groups.members) && groups.members.filter(m => m.id === user.id).length > 0)) &&
-                            <Stack sx={{ pb: 1 }}>
-                                <NewPostButton sx={{ width: '100%' }} clickHandler={newPostClickHandler} />
-                            </Stack>
-                        } */}
-
                         {
-                            (group.members.find(m => m.id === user.id) ||  group.creator.id === user.id) &&  <GuestNewPostButton sx={{ width: '100%' }} clickHandler={newPostClickHandler} />
+                           group && (group.members.find(m => m.id === user.id) ||  group.creator.id === user.id) &&  <GuestNewPostButton sx={{ width: '100%' }} clickHandler={newPostClickHandler} />
                         }
-
 
                         <Tabs aria-label="post events tabs" value={tab} onChange={(event, newValue) => setTab(newValue)}>
                             <Tab label="Posts" />
                             <Tab label="Events" />
                         </Tabs>
-
-                         {
-                            tab === 0 && <GuestGroupPosts group_id={group_id} submitCommentHandler={submitCommentHandler} />                      
-
-                         }
-
+                        {
+                            tab === 0 && <GuestGroupPosts group_id={group_id} submitCommentHandler={submitCommentHandler} />
+                        }
                         {
                             tab === 1 && <GuestGroupEvents group_id={group_id}/>
                         }
-
                     </Grid>
                 </Grid>
             </Grid>
             <GuestNewPostDialog
                 open={openNewPostDialog}
                 closeDialogHandler={newPostDialogCloseHandler}
-                groupTitle={groupTitle}              
-                groupId={groups.find(g => g.id == group_id).id || -1} />
+                groupTitle={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).title : ''}              
+                groupId={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).id : -1} />
             {/* <GroupInviteDialog group={groups} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} /> */}
             {/* <NewMemberRequestsApproveDialog 
                 open={newMemberRequestsApproveDialogOpen}

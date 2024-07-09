@@ -8,8 +8,6 @@ const GuestGroupPosts = ({ group_id, submitCommentHandler }) => {
 
 const [error, setError] = useState();
 
-
-
 const [
     user,
     notifications, setNotifications,
@@ -26,13 +24,13 @@ const [
         if(!group){
             setError({type: 'data source', message: 'Error: cannot find group'})
         } else {
-            const member = group.members.find(m => m.id === user.id)
+            const member = group.members.find(m => m.id === user.id) || group.creator.id === user.id
             if(!member){
               setError({type: AUTHORIZATION, message: 'Error: not group member'})
             }
         }
 
-    }, [groups]);
+    }, [groups, group_id]);
 
    const filteredPosts = posts.filter(post => post.group_id && post.group_id == group_id);
    
