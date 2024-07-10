@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, Button, Box, Stack, Typography, IconButton, Divider, TextField, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
 import { PRIVACY_PUBLIC, PRIVACY_SPECIFIC_FRIENDS, PRIVACY_PRIVATE } from "../../../constants";
 import { useState, useEffect } from 'react';
-// import SpecificFriendsDialog from './SpecificFriendsDialog';
+import GuestSpecificFriendsDialog from './GuestSpecificFriendsDialog';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
 // import Icon from '../components/Icon';
@@ -76,7 +76,7 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
         const privacy = e.target.value
         setPrivacy(privacy);
         if (privacy === PRIVACY_SPECIFIC_FRIENDS) {
-            //setShowSpecificFriendsDialog(true);
+            setShowSpecificFriendsDialog(true);
         }
     }
 
@@ -284,19 +284,18 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
         setAttend(true);  
     }
 
-    // const clearAllHandler = () => {
-    //     setSpecificFriendIds([]);
-    // }
+    const clearAllHandler = () => {
+        setSpecificFriendIds([]);
+    }
 
-    // const goBackHandler = () => {
-    //     setShowSpecificFriendsDialog(false);
-    //     if (specificFriendIds.length === 0) {
-    //         setPrivacy(PRIVACY_PUBLIC);
-    //     } else {
-    //         setPrivacy(PRIVACY_SPECIFIC_FRIENDS);
-    //     }
-
-    // }
+    const goBackHandler = () => {
+        setShowSpecificFriendsDialog(false);
+        if (specificFriendIds.length === 0) {
+            setPrivacy(PRIVACY_PUBLIC);
+        } else {
+            setPrivacy(PRIVACY_SPECIFIC_FRIENDS);
+        }
+    }
 
     return (
         <>
@@ -458,13 +457,13 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                 </DialogContent>
             </Dialog>
 
-            {/* <SpecificFriendsDialog
+            <GuestSpecificFriendsDialog
                 open={showSpecificFriendsDialog}
                 clearAllHandler={clearAllHandler}
                 goBackHandler={goBackHandler}
                 specificFriendIds={specificFriendIds}
                 setSpecificFriendIds={setSpecificFriendIds}
-            /> */}
+            />
         </>
     );
 }
