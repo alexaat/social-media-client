@@ -40,7 +40,9 @@ const GuestToolBar = () => {
     followers, setFollowers,
     chatMessages, setChatMessages,
     chatRooms, setChatRooms,
-    groups, setGroups] = ProvideGuestData();
+    groups, setGroups,
+    events, setEvents,
+    joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
     const isFollowingRef = useRef(false);
 
@@ -279,13 +281,11 @@ const GuestToolBar = () => {
         return;
       }
 
-      let newGroupId = undefined
+      let group = undefined
 
       setGroups(prev => {
         const id = prev.length === 0 ? 1 : prev.sort((a,b) => a.id < b.id ? 1 : -1)[0].id + 1;
-        newGroupId = id;
-
-        const group = {
+        group = {
           id, 
           title: titleTrimmed,
           description: descriptionTrimmed,
@@ -297,14 +297,14 @@ const GuestToolBar = () => {
 
       newGroupDialogCloseHandler();
 
-      if(newGroupId){
-        setNavigateToGroupTrigger(newGroupId); 
+      if(group){
+        setNavigateToGroupTrigger(group.id); 
       }
 
       setNotifications(prev => {
         const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
         const sender = {
-            id: newGroupId,
+            id: group.id,
             display_name: titleTrimmed
         };
         const content = 'Group is created: ' + titleTrimmed;  
@@ -317,6 +317,43 @@ const GuestToolBar = () => {
         }
             return [...prev, notification];
       });  
+
+      //Request to join new group from George
+      setTimeout(() => {
+        setJoinGroupRequests(prev => {
+            //Check if request exists
+            const req = prev.find(item => item.sender.id === 4 && item.group.id === group.id);
+            if(!req){
+              const id = prev.length === 0 ? 1 : prev.sort((a, b) => a.id<b.id ? 1: -1)[0].id + 1;
+              //const group = groups.find(g => g.id === group.id);
+              const request = {
+                id,
+                sender: user,
+                group,
+                recipient: group.creator 
+              }
+              return [...prev, request];
+            }
+            return prev;
+        });
+
+        //Notification
+        setNotifications(prev => {
+          const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+          const sender = users.find(u=> u.id === 4);
+          const content = sender.display_name + ' wants to join group: ' + titleTrimmed;
+          
+          const notification = {
+              id,
+              content,
+              date:  Date.now(),
+              sender,
+              is_read: false
+          }
+              return [...prev, notification];
+        });
+
+      },3000);
       
     };
 
