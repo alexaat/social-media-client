@@ -1,7 +1,6 @@
 import {
     Stack,
     Typography,
-    Button,
     Card,
     Tooltip,
     CardContent,
@@ -13,43 +12,33 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    Paper
  } from "@mui/material";
- import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
- import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
- import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
- import { buildImageUrl, dateConverter } from '../../../util.js';
- import { useNavigate } from 'react-router-dom';
- //import Icon from './Icon.js';
-//  import { ProvideUser } from "../context/UserContext.js";
-//  import { UserProvider } from "../context/UserContext.js";
- import SendRoundedIcon from '@mui/icons-material/SendRounded';
- import { useEffect, useState } from "react";
-//  import CommentItem from "./CommentItem.js";
- import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
- import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
- import EmojiPicker from "emoji-picker-react";
- import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
-
-//  import { handleError } from "../errors.js";
-//  import { ProvidePosts } from "../context/PostsContext.js";
- import { useRef } from "react";
- import GuestIcon from './GuestIcon.js';
- import {isValidUrl} from '../../../util.js';
- import GuestCommentItem from "./GuestCommentItem.js";
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import { dateConverter } from '../../../util.js';
+import { useNavigate } from 'react-router-dom';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { useEffect, useState } from "react";
+import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EmojiPicker from "emoji-picker-react";
+import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
+import GuestIcon from './GuestIcon.js';
+import {isValidUrl} from '../../../util.js';
+import GuestCommentItem from "./GuestCommentItem.js";
 import { ProvideGuestData } from "./GuestDataContext.js";
 import { v4 as uuidv4 } from 'uuid';
  
- const GuestPost = ({ post, sx }) => {
+const GuestPost = ({ post, sx }) => {
 
    //Navigation
    const navigate = useNavigate();
  
-    const [postImage, setPostImage] = useState();
+   const [postImage, setPostImage] = useState();
 
-    const [commentImage, setCommentImage] = useState();
+   const [commentImage, setCommentImage] = useState();
 
-    const [
+   const [
       user,
       notifications, setNotifications,
       posts, setPosts,
@@ -61,25 +50,12 @@ import { v4 as uuidv4 } from 'uuid';
       events, setEvents,
       joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
-    //const [src, setSrc] = useState(localStorage.getItem(post.image))
-
-    //console.log('post ', post)
-
-    useEffect(() => {
+   useEffect(() => {
          if(post.image){
             if(isValidUrl(post.image)){
                setPostImage(post.image)
             } else {
-               //console.log('isValidUrl: false')
-               //const im = new Image();
                const src = localStorage.getItem(post.image);
-               //console.log('src ',src)
-               //im.src = src;
-               //im.onload = function(){
-               //   console.log('image loaded: ',src)
-                  //setImage(src);
-                  //setSrc(src);
-               //}
                if(src){
                   setPostImage(src)
                } else {
@@ -89,22 +65,14 @@ import { v4 as uuidv4 } from 'uuid';
                }             
             }
          }
-    }, []);    
+   }, []);    
 
+   const imageInputId = `new-comment-image-${post.id}`
 
-    /*
-    const [posts, reloadPosts] = ProvidePosts()
-   */
-    const imageInputId = `new-comment-image-${post.id}`
-    /*
- 
-    //const postRef = useRef(post.id)
- */
-    //Submit comment handler
-    const [submitCommentError, setSubmitCommentError] = useState(null);
+   //Submit comment handler
+   const [submitCommentError, setSubmitCommentError] = useState(null);
     
-    const submitCommentHandler = (postId, content, commentImage) => {
-
+   const submitCommentHandler = (postId, content, commentImage) => {
 
       setSubmitCommentError(null);   
 
@@ -145,91 +113,69 @@ import { v4 as uuidv4 } from 'uuid';
          })
       }
  
-    }
+   }
 
-    //Emoji
-    const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
-    const selectEmojiHandler = (event) => {
-       setComment(prev => prev + event.emoji)
-    }
- /*
-    const [image, setImage] = useState(null);
- */
-    const imageClickListener = () => {
-       let input = document.getElementById(imageInputId)
-       input.value = '';
-       input.click();
-    }
+   //Emoji
+   const [emojiDialogOpen, setEmojiDialogOpen] = useState(false);
+   const selectEmojiHandler = (event) => {
+      setComment(prev => prev + event.emoji)
+   }
+   const imageClickListener = () => {
+      let input = document.getElementById(imageInputId)
+      input.value = '';
+      input.click();
+   }
     
- 
-    //const error = submitCommentError && post.id === submitCommentError.postId
-    //const helperText = submitCommentError && submitCommentError.postId === post.id ? submitCommentError.message : ''
-    const error = submitCommentError && post.id === submitCommentError.postId
-    const helperText = submitCommentError && submitCommentError.postId === post.id ? submitCommentError.message : ''
+   const error = submitCommentError && post.id === submitCommentError.postId
+   const helperText = submitCommentError && submitCommentError.postId === post.id ? submitCommentError.message : ''
 
    
-    const selelectedImageHandler = (e) => {
-       let file = e.target.files[0];
-       let fileType = file.type;
-       if (fileType.startsWith('image/')) {
-          setCommentImage(file);
-       } else {
-          alert('error: Wrong image format')
-       }
-    }
+   const selelectedImageHandler = (e) => {
+      let file = e.target.files[0];
+      let fileType = file.type;
+      if (fileType.startsWith('image/')) {
+         setCommentImage(file);
+      } else {
+         alert('error: Wrong image format')
+      }
+   }
 
     
- 
-    const submit = (id, val) => {
-       submitCommentHandler(id, val, commentImage)
-       setCommentImage(null)
-       setComment('');
-       setEmojiDialogOpen(false);
-    }
-
+   const submit = (id, val) => {
+      submitCommentHandler(id, val, commentImage)
+      setCommentImage(null)
+      setComment('');
+      setEmojiDialogOpen(false);
+   }
     
-    const [comment, setComment] = useState('');
-    /*
+   const [comment, setComment] = useState('');
+
+   let publicity
  
-    //User
-    const [user] = ProvideUser();
- 
-*/
- 
-    let publicity
- 
-    if (post.privacy) {
-       publicity = <Tooltip title="Pubic"><PublicRoundedIcon /></Tooltip>
- 
+   if (post.privacy) {
+      publicity = <Tooltip title="Pubic"><PublicRoundedIcon /></Tooltip> 
       if (post.privacy === "friends") {
           publicity = <Tooltip title="Friends"><PeopleRoundedIcon /></Tooltip>
       }
-      //  if (post.specific_friends !== "") {
-      //     publicity = <Tooltip title="Specific Friends"><PeopleOutlineRoundedIcon /></Tooltip>
-      //  }
-    }
+   }
  
-    const clickHandler = () => {
-       if (post.sender.id === user.id) {
-          navigate('/guest/profile');
-       } else {
-          navigate(`profile/${post.sender.id}`);
-       }
-    }
+   const clickHandler = () => {
+      if (post.sender.id === user.id) {
+         navigate('/guest/profile');
+      } else {
+         navigate(`/guest/profile/${post.sender.id}`);
+      }
+   }
  
-    let userName = post.sender.display_name;
-    if(post.group_id) {
-       const group = groups.find(g => g.id === post.group_id);
-       if(group){
-         userName += ` /  ${group.title}`;
-       }
-      
-    }
- 
-   //  const toolTip = "Follow" 
-
+   let userName = post.sender.display_name;
+   if(post.group_id) {
+      const group = groups.find(g => g.id === post.group_id);
+      if(group){
+        userName += ` /  ${group.title}`;
+      }      
+   }
     
-    return (
+   return (
        <>
           <Card sx={{ width: '500px', minHeight: '200px', mb: 2, ...sx }}>
              <CardContent>
@@ -255,17 +201,13 @@ import { v4 as uuidv4 } from 'uuid';
                    <Divider sx={{ mt: 2, mb: 1 }} />
                    <Typography variant="body1" gutterBottom> {post.content}</Typography>
 
-
                      {
                         postImage && <Box component='img' src={postImage} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
                      }
-
-                   {/* {post.image && <Box component='img' src={post.image && buildImageUrl(post.image)} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>}  */}
-                   <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
-                   
-                   
-                   
-                   {
+               
+                     <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
+                                      
+                    {
                       post.comments.length > 0 && 
                       <Accordion
                          elevation={0}

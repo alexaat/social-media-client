@@ -14,6 +14,5 @@ const GuestRecipientContact = ({chatMate, setChatMate}) => {
 
         </Stack> 
      );
-}
- 
+} 
 export default GuestRecipientContact;

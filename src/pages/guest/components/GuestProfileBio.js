@@ -6,7 +6,6 @@ import GuestEditBioDialog from "./GuestEditBioDialog";
 
 const GuestProfileBio = ({person_id}) => {
 
-
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
     let person = user;

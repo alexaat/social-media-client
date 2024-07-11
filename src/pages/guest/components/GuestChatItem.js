@@ -25,7 +25,6 @@ const GuestChatItem = ({ chat, handleClick }) => {
     >
       <Badge
         color="secondary"
-        //badgeContent={chat.total_no_reads}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",

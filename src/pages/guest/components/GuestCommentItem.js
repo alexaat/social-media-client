@@ -1,6 +1,6 @@
 import { Stack, Typography, Box } from '@mui/material';
 import GuestIcon from './GuestIcon';
-import { dateConverter, buildImageUrl, isValidUrl } from '../../../util';
+import { dateConverter,  isValidUrl } from '../../../util';
 import { useState, useEffect } from 'react';
 
 const GuestCommentItem = ({ comment }) => {
@@ -39,8 +39,7 @@ const GuestCommentItem = ({ comment }) => {
                 <Typography variant='body2' sx={{ fontSize: '12px' }}>{dateConverter(comment.date)}</Typography>
             </Stack>
             {
-                 src && <Box component='img' sx={{ height: 'auto', width: '150px' }}  src={src}></Box>
-                // comment.image && <Box component='img' sx={{ height: 'auto', width: '150px' }}  src={comment.image && buildImageUrl(comment.image)}></Box>
+                 src && <Box component='img' sx={{ height: 'auto', width: '150px' }}  src={src}></Box>               
             }       
 
             <Typography variant='body2' sx={{ fontSize: '14px' }}>{comment.content}</Typography>

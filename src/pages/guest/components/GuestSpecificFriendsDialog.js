@@ -32,13 +32,13 @@ const GuestSpecificFriendsDialog = ({
             if(item.followerId === user.id){
                const friend = users.find(u => u.id === item.followeeId);
                if(friend){
-                friendsMap.set(item.followeeId, friend); 
+                   friendsMap.set(item.followeeId, {...friend, date: item.date}); 
                }               
             }
             if(item.followeeId === user.id){
                 const friend = users.find(u => u.id === item.followerId);
                 if(friend){
-                    friendsMap.set(item.follower, friend) 
+                    friendsMap.set(item.follower, {...friend, date: item.date}) 
                 }
             }
         });
@@ -91,6 +91,7 @@ const GuestSpecificFriendsDialog = ({
                         follower={friend}
                         isSelected={specificFriendIds.includes(friend.id)}
                         selectHandler={selectHandler}
+                        date={friend.date}
                     />)
                 }
 

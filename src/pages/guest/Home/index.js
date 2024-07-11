@@ -1,16 +1,13 @@
-import { useNavigate } from 'react-router-dom';
 import { ProvideGuestData } from '../components/GuestDataContext';
-import { Stack, Card, CardContent, Typography, imageListClasses } from '@mui/material';
+import { Stack, Card, CardContent, Typography } from '@mui/material';
 import GuestNewPostButton from '../components/GuestNewPostButton';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import GuestPost from '../components/GuestPost';
 import GuestNewPostDialog from '../components/GuestNewPostDialog';
 
 
-const HomeGuest = () => {
-    
-    // const [posts] = ProvidePosts();
-    // const [user] = ProvideUser();
+const HomeGuest = () => {   
+
 
     const [
         user,
@@ -24,9 +21,6 @@ const HomeGuest = () => {
         events, setEvents,
         joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
 
-    const triggered = useRef(false);
-
-    //const [filteredPosts, setFilteredPosts] = useState([]);
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -49,23 +43,7 @@ const HomeGuest = () => {
         });
 
         const sorted = filtered.sort((a,b) => a.date < b.date ? 1 : -1);
-
-
-
         setSorted(sorted);
-
-
-
-        // if(!triggered.current){
-        //     triggered.current = true;
-        //     followRequest();
-
-        // }
-
-        // if(localStorage.getItem("guest_user_session1") === null){
-        //     localStorage.setItem("guest_user_session1", true);
-        //     followRequest();
-        // }
     },[posts]);
 
   
@@ -78,8 +56,7 @@ const HomeGuest = () => {
         <>
              {user &&
                 <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
-                    <GuestNewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />
-                    {/* <NewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> */}
+                    <GuestNewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />                  
                     <GuestNewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> 
                     {
                         sorted && sorted.map(post => {

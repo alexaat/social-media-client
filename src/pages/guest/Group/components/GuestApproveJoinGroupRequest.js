@@ -11,8 +11,7 @@ const ApproveJoinGroupRequest = ({sx, user, group, approveHandler, declineHandle
     const declineClickListener = () => {
         if (declineHandler) {
             declineHandler(user.id, group.id);
-        }
-       
+        }       
     }
     
     return (  

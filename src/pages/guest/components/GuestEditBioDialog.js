@@ -1,16 +1,6 @@
 import { Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography, Button, IconButton, TextField } from "@mui/material";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-// import { ProvideUser }  from '../context/UserContext';
 import {  useState } from "react";
-// import { getCookie, SESSION_ID } from '../cookies';
-import { useNavigate } from "react-router-dom";
-// import {
-//      serverHost,
-//      INVALID_NICK_NAME_FORMAT,
-//      INVALID_FIRST_NAME_FORMAT,
-//      INVALID_LAST_NAME_FORMAT,
-//      INVALID_EMAIL,
-//      INVALID_ABOUT_ME } from '../constants';
 import { ProvideGuestData } from "./GuestDataContext";
 import { validateEmail } from "../../../util";
 
@@ -18,11 +8,6 @@ import { validateEmail } from "../../../util";
 const GuestEditBioDialog = ({open, onClose}) => {
 
     const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
-    
-    // const navigate = useNavigate();
-
-    // const [user] = ProvideUser();
-
     const [userDetails, setUserDetails] = useState();
 
     const [nickNameError, setNickNameError] = useState('');
@@ -79,72 +64,7 @@ const GuestEditBioDialog = ({open, onClose}) => {
             setUser(u);
             onClose();
         }
-
-
-
-
-    //     if(userDetails) {
-    //         const session_id = getCookie(SESSION_ID);
-    //         if(!session_id){
-    //             navigate('/signin')
-    //         }
-                        
-    //         fetch(serverHost + '/user?' + new URLSearchParams({ session_id }),
-    //         {
-    //             method: 'PATCH',
-    //             headers: {
-    //                 'Accept': 'application/json'
-    //             },
-    //             body: new URLSearchParams({
-    //               ...userDetails
-    //             })
-
-    //         })
-    //         .then(resp => resp.json())
-    //         .then(data => {             
-    //             if (data.error) {
-    //                 switch (data.error.type){
-    //                     case INVALID_NICK_NAME_FORMAT:
-    //                         setNickNameError(data.error.message);
-    //                     break;
-
-    //                     case INVALID_FIRST_NAME_FORMAT:
-    //                         setFirstNameError(data.error.message);
-    //                     break;
-
-    //                     case INVALID_LAST_NAME_FORMAT:
-    //                         setLastNameError(data.error.message);
-    //                     break;
-
-    //                     case INVALID_EMAIL:
-    //                         setEmailError(data.error.message);
-    //                     break;
-
-    //                     case INVALID_ABOUT_ME:
-    //                         setAboutMeError(data.error.message);
-    //                     break;
-
-    //                     default:
-    //                         throw new Error(data.error.message);
-    //                 }                   
-    //             }
-
-    //             setUserDetails(undefined);
-                
-    //             if(data.payload){
-    //                 onClose(); 
-    //                 reloadUser();                                   
-    //             }               
-
-    //         })
-    //         .catch(err => {
-    //             alert(err);
-    //             setUserDetails(undefined);
-    //         });
-    //     }
-      
-    }
-    
+    }    
 
     return ( 
         <Dialog

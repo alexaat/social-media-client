@@ -1,7 +1,4 @@
 import { Typography, Menu, MenuItem, Stack, Divider } from "@mui/material";
-// import NotificationItem from "../components/NotificationItem";
-// import { ProvideNotifications } from "../context/NotificationsContext";
-// import { handleError } from "../errors";
 import {ProvideGuestData} from '../components/GuestDataContext';
 import GuestNotificationItem from '../components/GuestNotificationItem';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +7,7 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
 
 
     const [user, notifications, setNotifications] = ProvideGuestData();
-    const navigate = useNavigate();
-   
-   // const [notifications, reloadNotifications] = ProvideNotifications();
+    const navigate = useNavigate(); 
 
     const notificationsSorted = notifications.sort((a, b) => (a.id < b.id ? 1 : -1))
 
@@ -32,17 +27,6 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
         navigate(`/guest/profile/${id}`);
         onClose();
     }  
-    
-    // const handleNotificationsItemClick = (id) => {
-    //     //Get selected notification
-    //     const notification = notifications.filter((n) => n.id === id)
-    //       ? notifications.filter((n) => n.id === id)[0]
-    //       : null;
-    //     if (!notification) return;
-    //     setRead(notification);
-    //     setClickedNotification(notification);
-    //     onClose();
-    //   };
 
     return ( 
         <Menu
@@ -75,8 +59,7 @@ const GuestNotificationsMenu = ({ancor, onClose, setClickedNotification}) => {
               >
                 <GuestNotificationItem
                   notification={notification}
-                  iconClickHandler={iconClickHandler}
-                  //itemClickHandler={(id) => handleNotificationsItemClick(id)}
+                  iconClickHandler={iconClickHandler}                 
                   readClickHandler={setRead}
                 />
               </MenuItem>

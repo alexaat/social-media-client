@@ -101,11 +101,8 @@ import {
       setChatRooms(prev => [...prev, chatRoom]);
 
       cancelChatRoomClickHandler();
-    };
-  
-    // useEffect(() => {
-    //   //setOpenNewChatDialog(Boolean(error));
-    // }, []);
+    }; 
+
   
     return (
       <>

@@ -49,39 +49,6 @@ const GroupGuest = () => {
 
     const [joinRequests, setJoinRequests] = useState([]);
 
-    // //Comments
-    const submitCommentHandler = (postId, content) => {
-        console.log(postId);
-        console.log(content);
-
-
-
-        // const session_id = getCookie(SESSION_ID);
-        // if (!session_id) {
-        //     navigate('/signin');
-        //     return;
-        // }
-        // const url = `${serverHost}/comments?` + new URLSearchParams({ post_id: postId, content, session_id });
-        // fetch(url, {
-        //     method: "POST",
-        //     headers: { 'Accept': 'application/json' }
-        // })
-        //     .then(resp => resp.json())
-        //     .then(data => {
-        //         console.log('comment data ', data)
-        //         if (data.error) {
-        //             throw new Error(data.error)
-        //         }
-        //         if (data.payload) {
-        //             setReload(Math.random());
-        //         }
-        //     })
-        //     .catch(err => {
-        //         handleError(err)
-        //     });
-
-    }
-
     const [image, setImage] = useState();
     
     const [openNewPostDialog, setOpenNewPostDialog] = useState(false);
@@ -170,7 +137,7 @@ const GroupGuest = () => {
                 id: group.id,
                 display_name: group.title
             };
-            const content = 'Join request was sent to ' + group.title;  
+            const content = 'Join request has been sent to' + group.title;  
             const notification = {
                 id,
                 content,
@@ -486,7 +453,6 @@ const GroupGuest = () => {
                 }
                 <Stack spacing={2} direction='row' alignItems='center' sx={{ mb: 1, px: { xs: 1, md: 0 } }} justifyContent='end'>
                     {buttonsState === ButtonStates.Join && <Button variant='contained' onClick={joinGroupListener}>{ButtonStates.Join}</Button>}
-
                     {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>}
                     {(buttonsState === ButtonStates.Leave || buttonsState === ButtonStates.Delete) && <Button variant='contained' onClick={inviteToGroupListener}>Invite</Button>}
                     {buttonsState === ButtonStates.Invite && <Button variant='contained' onClick={acceptInviteGroupListener}>Accept Invite</Button>}
@@ -512,7 +478,7 @@ const GroupGuest = () => {
                             <Tab label="Events" />
                         </Tabs>
                         {
-                            tab === 0 && <GuestGroupPosts group_id={group_id} submitCommentHandler={submitCommentHandler} />
+                            tab === 0 && <GuestGroupPosts group_id={group_id}/>
                         }
                         {
                             tab === 1 && <GuestGroupEvents group_id={group_id}/>

@@ -44,6 +44,5 @@ const GuestChatGroupsOutlet = ({chatGroups, chatGroupClickHandler, newChatGroupC
           ))}
       </Stack>
      );
-}
- 
+} 
 export default GuestChatGroupsOutlet;

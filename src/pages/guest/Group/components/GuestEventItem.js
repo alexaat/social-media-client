@@ -2,19 +2,11 @@ import { Divider, Stack, Typography, Checkbox, FormControlLabel, CardContent, Ca
 import { useEffect, useState } from 'react';
 import GuestIcon from '../../components/GuestIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import { ProvideUser } from '../context/UserContext'
-// import { SESSION_ID, getCookie } from '../cookies';
-// import { serverHost } from '../constants';
-// import { handleError } from '../errors';
-// import { useNavigate } from 'react-router-dom';
-// import { ProvideEvents } from '../context/EventsContext';
 import { dateConverter, formatMilli } from '../../../../util';
 import { ProvideGuestData } from '../../components/GuestDataContext';
 
 const GuestEventItem = ({ event }) => {
-
     
-
     const [
         user,
         notifications, setNotifications,
@@ -35,13 +27,7 @@ const GuestEventItem = ({ event }) => {
     },[events]);
 
 
-    const checkBoxClickHandler = () => {
-        // const session_id = getCookie(SESSION_ID);
-        // if (!session_id) {
-        //     navigate('/signin');
-        //     return;
-
-        
+    const checkBoxClickHandler = () => {        
 
         if(attend){
             event.members = event.members.filter(m => m.id !== user.id);
@@ -56,43 +42,7 @@ const GuestEventItem = ({ event }) => {
                 setAttend(true);
             }
         }
-
-
-
     }
-
-    //     const url = `${serverHost}/events/${event.id}?` + new URLSearchParams({ attending: !attend, session_id });
-
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {
-    //                 //reloadGroups();
-    //                 //setReload(Math.random());
-    //                 reloadEvents();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
-
-    //     setAttend(prev => !prev)
-    // }
-
-    // const [user] = ProvideUser();
-
-    // useEffect(() => {
-    //     if (event.members.filter(m => m.id === user.id).length > 0) {
-    //         setAttend(true)
-    //     }
-    // }, []);
-
 
     return (
         <Card>

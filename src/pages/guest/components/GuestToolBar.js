@@ -4,13 +4,8 @@ import {
     Toolbar,
     Typography,
     IconButton,
-    Menu,
-    MenuItem,
     Badge,
-    Stack,
-    Divider,
-    Snackbar,
-    Alert,
+    Link
   } from "@mui/material";
   import { useNavigate } from 'react-router-dom';
   import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -511,61 +506,7 @@ const GuestToolBar = () => {
   
         {/* Chats Menu */}
         <GuestChatsMenu ancor={chatsAncorEl} onClose={chatsCloseHandler} newChatMessageClickHandler={newChatMessageClickHandler} chatSelectedHandler={chatSelectedHandler}/>
-  
-
-
-        {/*clickedNotification &&
-          clickedNotification.type === NOTIFICATION_FOLLOW_ACTION_REQUEST && (
-            <ApproveFollowerDialog
-              approveFollowerDialogOpen={
-                clickedNotification &&
-                clickedNotification.type === NOTIFICATION_FOLLOW_ACTION_REQUEST
-              }
-              approveFollowerDialogCloseHandler={
-                approveFollowerDialogCloseHandler
-              }
-              approveFollowerHandler={approveFollowerHandler}
-              user={clickedNotification.sender}
-            />
-            )*/}
-  
-        {/* {clickedNotification &&
-          clickedNotification.type === NOTIFICATION_FOLLOW_INFO && (
-            <InfoDialog
-              dialogOpen={
-                clickedNotification &&
-                clickedNotification.type === NOTIFICATION_FOLLOW_INFO
-              }
-              dialogCloseHandler={infoDialogCloseHandler}
-              user={clickedNotification.sender}
-              message={clickedNotification.content}
-              title={
-                clickedNotification.type.substring(0, 1).toUpperCase() +
-                clickedNotification.type.substring(1)
-              }
-            />
-          )} */}
-  
-        {/* <Snackbar
-          open={
-            snackBarMessage !== null &&
-            snackBarMessage !== undefined &&
-            snackBarMessage !== ""
-          }
-          autoHideDuration={3000}
-          onClose={() => setSnackBarMessage(null)}
-          message={snackBarMessage}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setSnackBarMessage(null)}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            {snackBarMessage}
-          </Alert>
-        </Snackbar> */}
-  
+    
         <GuestNewChatMessageDialog
           newPrivateChatMessage={newPrivateChatMessage}
           newChatGroupChatMessage={newChatGroupChatMessage}
@@ -590,11 +531,7 @@ const GuestToolBar = () => {
           groups={groups}
           menuItemClickHandler={menuItemClickHandler}
         />
-      </>   
-      
-
-        
-        
+      </>        
     );
 }
  

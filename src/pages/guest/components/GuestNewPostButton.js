@@ -7,8 +7,6 @@ const GuestNewPostButton = ({ clickHandler, sx }) => {
 
     const [user] = ProvideGuestData();
 
-   // const [user, notifications, setNotifications, posts] = ProvideGuestData();
-
     const name = user ? (user.nick_name ? user.nick_name : user.first_name) : '';
 
     return (

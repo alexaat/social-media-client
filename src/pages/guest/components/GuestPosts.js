@@ -4,8 +4,6 @@ import GuestPost from './GuestPost';
 
 const GuestPosts = ({person_id}) => {
 
-
-
   const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers] = ProvideGuestData();
 
   let components = undefined;

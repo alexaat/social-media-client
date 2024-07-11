@@ -4,14 +4,7 @@ import { useState, useEffect } from 'react';
 import GuestSpecificFriendsDialog from './GuestSpecificFriendsDialog';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ImageRoundedIcon from '@mui/icons-material/ImageRounded';
-// import Icon from '../components/Icon';
-// import { ProvideUser } from '../context/UserContext';
-// import { handleError } from '../errors';
-// import { ProvidePosts } from '../context/PostsContext';
-// import { SESSION_ID, getCookie } from '../cookies.js';
-// import { useNavigate } from 'react-router-dom';
 import GuestEventDateTimePicker from '../Group/components/GuestEventDateTimePicker';
-// import { ProvideEvents } from '../context/EventsContext'
 import EmojiPicker from "emoji-picker-react";
 import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
 import InsertPhotoRoundedIcon from '@mui/icons-material/InsertPhotoRounded';
@@ -21,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, submitHandler }) => {
-
 
     const [
         user,
@@ -69,8 +61,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     const [image, setImage] = useState(null);
     const [showSpecificFriendsDialog, setShowSpecificFriendsDialog] = useState(false);
     const [specificFriendIds, setSpecificFriendIds] = useState([]);
-
-    // const nick = user ? (user.nick_name ? user.nick_name : `${user.first_name} ${user.last_name}`) : '';
 
     const setPrivacyHandler = (e) => {
         const privacy = e.target.value
@@ -180,83 +170,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
                 setEventDescription('');
                 setAttend(true);    
         }
-
-
-    //     let headers = new Headers();
-    //     headers.append('Accept', 'application/json');
-
-    //     const formData = new FormData();
-    //     if (image) {
-    //         formData.append('image', image);
-    //     }
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return
-    //     }
-
-    //     if (selection === SELECTION.POST) {
-    //         formData.append('content', content);
-    //         if (privacy === PRIVACY_SPECIFIC_FRIENDS) {
-    //             formData.append('privacy', JSON.stringify(specificFriendIds));
-    //         } else if (privacy === PRIVACY_PRIVATE || privacy === PRIVACY_PUBLIC) {
-    //             formData.append('privacy', privacy);
-    //         }
-    //         formData.append('user_id', user.id);
-    //         if (submitHandler) {
-    //             submitHandler(content, image);
-    //         } else {
-    //             const url = `${serverHost}/posts?` + new URLSearchParams({ session_id });
-    //             fetch(url,
-    //                 {
-    //                     method: 'POST',
-    //                     body: formData,
-    //                     headers: headers
-    //                 })
-    //                 .then(resp => resp.json())
-    //                 .then(data => {
-    //                     if (data.error) {
-    //                         throw new Error(data.error)
-    //                     } else {
-    //                         reloadPosts();
-    //                     }
-    //                 })
-    //                 .catch(err => handleError(err));
-    //         }
-    //     } else if (selection === SELECTION.EVENT) {
-    //         formData.append('event_date', eventDate);
-    //         formData.append('title', eventTitle);
-    //         formData.append('description', eventDescription);
-
-    //         if (attend) {
-    //             formData.append('members', `[${user.id}]`);
-    //         }
-            
-    //         if (groupId) {
-    //             formData.append('group_id', groupId);
-    //         }
-    //         const url = `${serverHost}/events?` + new URLSearchParams({ session_id });
-
-    //         fetch(url,
-    //             {
-    //                 method: 'POST',
-    //                 body: formData,
-    //                 headers: headers
-    //             })
-    //             .then(resp => resp.json())
-    //             .then(data => {
-    //                 console.log('event data: ', data)
-    //                 if (data.error) {
-    //                     throw new Error(data.error)
-    //                 } else {
-    //                     //reloadPosts();
-    //                     reloadEvents();
-    //                 }
-    //             })
-    //             .catch(err => handleError(err));
-    //     }
-
-
      }
 
     const selelectedImageHandler = (e) => {
@@ -270,8 +183,6 @@ const GuestNewPostDialog = ({ open, closeDialogHandler, groupTitle, groupId, sub
     }
 
     const closeDialogHandlerLocal = () => {
-        // setEventTitle('');
-        // setEventDescription('');
         setPrivacy(PRIVACY_PUBLIC);
         setContent('');
         closeDialogHandler();

@@ -18,7 +18,6 @@ const GuestPrivacyToggle = ({ privacy, user, privacyChangeHandler }) => {
                 </ToggleButton>
             </ToggleButtonGroup>
         </Stack>
-
     );
 }
 

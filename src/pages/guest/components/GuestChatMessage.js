@@ -4,8 +4,6 @@ import { ProvideGuestData } from "./GuestDataContext";
 
 const GuestChatMessage = ({sender_id, title, text, date}) => {
 
-   //const [user] = ProvideUser();
-
    const [user, notifications, setNotifications, posts, setPosts, users, setUser, followers, setFollowers, chatMessages, setChatMessages] = ProvideGuestData();
 
    let position = 'left';

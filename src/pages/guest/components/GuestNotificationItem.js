@@ -1,6 +1,5 @@
 import { Typography, Stack, IconButton } from "@mui/material";
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
-// import Icon from "./Icon";
 import { dateConverter } from "../../../util";
 import GuestIcon from '../components/GuestIcon';
 
@@ -14,13 +13,7 @@ const GuestNotificationItem = ({ notification, itemClickHandler, readClickHandle
 
             <Stack sx={{ width: '100%' }}>
                 <Typography variant='subtitle1'>{notification.content}</Typography>
-                <Typography variant='subtitle2' sx={{ fontSize: '0.8rem' }}>{dateConverter(notification.date)}</Typography>
-                {
-                    // notification.event && <Typography>{notification.event.title}</Typography>
-                }
-                {
-                    // notification.group && !notification.event && <Typography>{notification.group.title}</Typography>
-                }            
+                <Typography variant='subtitle2' sx={{ fontSize: '0.8rem' }}>{dateConverter(notification.date)}</Typography>          
             </Stack>
 
             {!notification.is_read &&

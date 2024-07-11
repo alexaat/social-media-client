@@ -1,6 +1,4 @@
 import { Typography, IconButton, Menu, Stack,  Divider } from "@mui/material";
-//import ChatItemsOutlet from "../components/ChatItemsOutlet";
-// import { ProvideChatMessages } from "../context/ChatMessagesContext";
 import EditNoteRoundedIcon from "@mui/icons-material/EditNoteRounded";
 import GuestChatItemsOutlet from "./GuestChatItemsOutlet";
 import { ProvideGuestData } from "./GuestDataContext";

@@ -54,12 +54,8 @@ const GroupsMenu = ({ groupsAncorEl, groupsCloseHandler, createGroupHandler, gro
                     </Stack>
 
             }
-            </Stack>  
-            
+            </Stack>              
         </Menu>
-
-
-
     );
 }
 

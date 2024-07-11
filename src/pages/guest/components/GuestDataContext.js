@@ -451,9 +451,4 @@ export const GuestDataProvider = ( {children} ) => {
             {children}
         </GuestDataContext.Provider>
     );
-
-
 }
-
-
-
