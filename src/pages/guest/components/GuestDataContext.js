@@ -391,7 +391,9 @@ const data = {
             ]
         }
     ],
-    joinGroupRequests: []
+    joinGroupRequests: [],
+    joinGroupInvites: [],
+    logs: []
 
 }
 
@@ -418,6 +420,8 @@ export const GuestDataProvider = ( {children} ) => {
     const [groups, setGroups] = useState(data.groups);
     const [events, setEvents] = useState(data.events);
     const [joinGroupRequests, setJoinGroupRequests] = useState(data.joinGroupRequests);
+    const [joinGroupInvites, setJoinGroupInvites] = useState(data.joinGroupInvites);
+    const [logs, setLogs] = useState(data.joinGroupInvites);
    
     return (
         <GuestDataContext.Provider
@@ -431,7 +435,9 @@ export const GuestDataProvider = ( {children} ) => {
                 chatRooms, setChatRooms,
                 groups, setGroups,
                 events, setEvents,
-                joinGroupRequests, setJoinGroupRequests]}>
+                joinGroupRequests, setJoinGroupRequests,
+                joinGroupInvites, setJoinGroupInvites,
+                logs, setLogs]}>
             {children}
         </GuestDataContext.Provider>
     );

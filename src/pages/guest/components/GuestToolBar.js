@@ -30,6 +30,10 @@ import {
 
 const GuestToolBar = () => {
 
+  const joinGroupRequestsRef = useRef();
+  const joinGroupInvitesRef = useRef();
+  const logsRef = useRef();
+
   const [navigateToGroupTrigger, setNavigateToGroupTrigger] = useState();
 
   const [
@@ -42,7 +46,9 @@ const GuestToolBar = () => {
     chatRooms, setChatRooms,
     groups, setGroups,
     events, setEvents,
-    joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
+    joinGroupRequests, setJoinGroupRequests,
+    joinGroupInvites, setJoinGroupInvites,
+    logs, setLogs] = ProvideGuestData();
 
     const isFollowingRef = useRef(false);
 
@@ -162,7 +168,81 @@ const GuestToolBar = () => {
        });
     }
 
-    useEffect(() => { 
+    const createGroupInviteByJohn = () => {
+      const group = groups.find(g => g.id === 1);
+
+      //Check if invite was sent before
+      const inviteInLogs = (logsRef.current.filter(log => log.type === 'inviteToJoinGroup')).find(log => log.value.sender.id === 2 && log.value.group.id === group.id)
+
+      //Check that invite exists
+      const invite = joinGroupInvitesRef.current.find(invite => invite.group.id === group.id && invite.recipient.id === user.id);  
+      
+      //Check that request exists
+      const request = joinGroupRequestsRef.current.find(r => r.group.id === group.id && r.sender.id === user.id);
+
+      //Check that already in group
+      const isMember = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
+
+      if(!invite && !isMember && !request && !inviteInLogs){
+        setTimeout(() => {
+          //Check that invite exists
+          const inviteInLogs = (logsRef.current.filter(log => log.type === 'inviteToJoinGroup')).find(log => log.value.sender.id === 2 && log.value.group.id === group.id)
+          
+          //Check that request exists
+          const request = joinGroupRequestsRef.current.find(r => r.group.id === group.id && r.sender.id === user.id);
+          //Check that already in group
+          const isMember = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
+          if(request || isMember || inviteInLogs){
+            return;
+          }
+
+          setJoinGroupInvites(prev => {            
+            const existingInvite = prev.find(invite => invite.group.id === group.id && invite.recipient.id === user.id); 
+            if(existingInvite){
+              return prev;
+            } 
+            
+            //Send Notification
+            setNotifications(prev => {
+              const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+              const sender = users.find(u=> u.id === 2);
+              const content = 'Ivite to join group: ' + group.title;    
+              const notification = {
+                  id,
+                  content,
+                  date:  Date.now(),
+                  sender,
+                  is_read: false
+              }
+                  return [...prev, notification];
+            });
+
+          
+
+            const id = prev.length === 0 ? 1 : prev.sort((a,b)=>a.id<b.id ? 1 : -1)[0].id + 1;
+            const invite = {
+              id, 
+              sender: users.find(u => u.id === 2),
+              group,
+              recipient: user
+            }
+
+            setLogs(prev => [...prev, {type: 'inviteToJoinGroup', value: invite}])
+            
+            return [...prev, invite];
+
+          });
+
+        }, 25000);
+      }    
+
+    }
+
+    useEffect(() => {    
+
+      joinGroupRequestsRef.current = joinGroupRequests;
+      joinGroupInvitesRef.current = joinGroupInvites;
+      logsRef.current = logs;   
 
       if(navigateToGroupTrigger){
         navigate(`/guest/groups/${navigateToGroupTrigger}`);
@@ -189,11 +269,11 @@ const GuestToolBar = () => {
         const alreadySent = chatMessages.find(m => m.sender.id === 2 && m.recipient.display_name && m.recipient.id === 1 && m.content === 'Greetings, Guest!!!') 
         if(!alreadySent){
           setTimeout(sendChatMessageByJohn,5000);    
-        }
-         
+        }         
       }
+      createGroupInviteByJohn();
       
-    },[user, chatMessages, followers, groups]);    
+    },[user, joinGroupRequests, chatMessages, followers, groups, logs]);    
 
     const navigate = useNavigate();
 

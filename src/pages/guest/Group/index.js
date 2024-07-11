@@ -1,6 +1,6 @@
 import { Stack, Box, Skeleton, Grid, Tab, Tabs, Button } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import GuestGroupInfo from "./components/GuestGroupInfo";
 import GuestNewPostButton from '../../guest/components/GuestNewPostButton';
 import GuestNewPostDialog from "../components/GuestNewPostDialog";
@@ -27,11 +27,14 @@ const GroupGuest = () => {
     
     const navigate = useNavigate();
 
+    //const joinGroupInvitesRef = useRef();
+
     const ButtonStates = {
         Join: 'Join',
         Pending: 'Pending',
         Leave: 'Leave',
-        Delete: 'Delete'      
+        Delete: 'Delete',
+        Invite: 'Invite'      
       };
 
     const [buttonsState, setButtonsState] = useState();
@@ -48,7 +51,8 @@ const GroupGuest = () => {
         chatRooms, setChatRooms,
         groups, setGroups,
         events, setEvents,
-        joinGroupRequests, setJoinGroupRequests] = ProvideGuestData();
+        joinGroupRequests, setJoinGroupRequests,
+        joinGroupInvites, setJoinGroupInvites] = ProvideGuestData();
 
     const [group, setGroup] = useState();
 
@@ -130,7 +134,7 @@ const GroupGuest = () => {
         navigate('/guest');     
     }
 
-     const leaveGroupListener = () => {
+    const leaveGroupListener = () => {
         setGroups(prev => {
             const group = prev.find(g => g.id == group_id);
             if(group){
@@ -156,7 +160,7 @@ const GroupGuest = () => {
             }
                 return [...prev, notification];
           });
-     }
+    }
 
     const joinGroupListener = () => {
 
@@ -209,7 +213,7 @@ const GroupGuest = () => {
                     is_read: false
                 }
                     return [...prev, notification];
-              });
+            });
 
             setGroups(prev => {
                 const group = prev.find(g => g.id == group_id);
@@ -227,77 +231,65 @@ const GroupGuest = () => {
         }, 1500);
     }
 
-     const acceptInviteGroupListener = () => {
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
-    //     let group_id = undefined
-    //     if (groups && !Array.isArray(groups)) {
-    //         group_id = groups.id
-    //     }
-    //     if (!group_id) {
-    //         return
-    //    }
+    const acceptInviteGroupListener = () => {
+        const group = groups.find(g => g.id == group_id);
+        if(group){
+            //Clear invites
+            setJoinGroupInvites(prev => prev.filter(invite => !(invite.group.id === group.id && invite.recipient.id === user.id)));
 
-    //     const url = `${serverHost}/groups/invites?` + new URLSearchParams({ action: 'accept', group_id, session_id });
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             console.log('accept invite data ', data)
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {               
-    //                 reloadGroups();
-    //                 setReload(Math.random());
-    //                 reloadInvites();
-    //                 reloadEvents();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
-     }
+            //Add Member
+            const isMember = group.members.find(m => m.id === user.id) || group.creator.id === user.id;
+            if(!isMember){
+                group.members.push(user);
+                setGroups(prev => [...prev.filter(g => g.id !== group.id), group]);
+            }
 
-     const declineInviteGroupListener = () => {
+            //Send notification
+            setNotifications(prev => {
+                const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+                const sender = {
+                    id: group.id,
+                    display_name: group.title
+                };
+                const content = 'Welcome to group: ' + group.title;  
+                const notification = {
+                    id,
+                    content,
+                    date:  Date.now(),
+                    sender,
+                    is_read: false
+                }
+                    return [...prev, notification];
+              });
+        }
+    }
 
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
-    //     let group_id = undefined
-    //     if (groups && !Array.isArray(groups)) {
-    //         group_id = groups.id
-    //     }
-    //     if (!group_id) {
-    //         return
-    //     }
+    const declineInviteGroupListener = () => {
+        
+        const group = groups.find(g => g.id == group_id);
+        if(group){
+            //Clear invites
+            setJoinGroupInvites(prev => prev.filter(invite => !(invite.group.id === group.id && invite.recipient.id === user.id)));
 
-    //     const url = `${serverHost}/groups/invites?` + new URLSearchParams({ action: 'decline', group_id, session_id });
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             console.log('decline data ', data)
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {
-    //                 reloadInvites();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
-     }
+            //Send notification
+            setNotifications(prev => {
+                const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+                const sender = {
+                    id: group.id,
+                    display_name: group.title
+                    };
+                const content = 'You have declined to join group: ' + group.title;  
+                const notification = {
+                    id,
+                    content,
+                    date:  Date.now(),
+                    sender,
+                    is_read: false
+                    }
+                return [...prev, notification];
+            });
+        }
+    }
 
     // const [groupInviteDialogOpen, setGroupInviteDialogOpen] = useState(false);
     // const closeGroupInviteDialogHandler = () => setGroupInviteDialogOpen(false);
@@ -456,32 +448,6 @@ const GroupGuest = () => {
 
             return [...prev, notification];
         });
-        
-        
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
-    //     const url = `${serverHost}/groups/requests/${group_id}?` + new URLSearchParams({ action: 'decline', member_id: user_id, session_id });
-
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             console.log('approve group data ', data)
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {
-    //                 reloadJoinRequests();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
     }
     
     const newMemberRequestsButtonClickHandler = () => {
@@ -491,7 +457,12 @@ const GroupGuest = () => {
         setNewMemberRequestsApproveDialogOpen(false)
     }    
 
-    useEffect(() => {      
+    useEffect(() => {
+
+        //joinGroupInvitesRef.current = joinGroupInvites;
+
+        setButtonsState();
+        
         const group = groups.find(g => g.id == group_id);
         if(group === undefined) {           
             navigate('/signin');      
@@ -528,16 +499,19 @@ const GroupGuest = () => {
                     setButtonsState(ButtonStates.Join);
                 }                   
             }
+
+            const invite = joinGroupInvites.find(invite => invite.group.id === group.id && invite.recipient.id === user.id);
+            if(invite){
+                setButtonsState(ButtonStates.Invite);
+            }
         }
 
         setJoinRequests(joinGroupRequests.filter(item => item.group.id == group_id && item.recipient.id === user.id));
 
-    }, [joinGroupRequests, buttonsState, groups, group_id]);
 
 
-
-
-    //const joinRequests = joinGroupRequests.filter(item => item.group.id == group_id && item.recipient.id === user.id);
+    }, [joinGroupRequests, joinGroupInvites, buttonsState, groups, group_id]);
+   
 
     return (
 
@@ -562,8 +536,8 @@ const GroupGuest = () => {
 
                     {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>}
                     {/* {groupButtonInvite && <Button variant='contained' onClick={inviteToGroupListener}>{groupButtonInvite}</Button>} */}
-                    {/* {groupButtonAcceptInvite && <Button variant='contained' onClick={acceptInviteGroupListener}>{groupButtonAcceptInvite}</Button>} */}
-                    {/* {groupButtonAcceptInvite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>} */}
+                    {buttonsState === ButtonStates.Invite && <Button variant='contained' onClick={acceptInviteGroupListener}>Accept Invite</Button>}
+                    {buttonsState === ButtonStates.Invite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>}
                     {/* {groupButtonJoinGroup && !groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' onClick={joinGroupListener}>{groupButtonJoinGroup}</Button>} */}
                     {buttonsState === ButtonStates.Pending && <Button variant='contained' disabled >{ButtonStates.Pending}</Button>}
                     {buttonsState === ButtonStates.Leave && <Button variant='outlined' onClick={leaveGroupListener}>{ButtonStates.Leave}</Button>}
