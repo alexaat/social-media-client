@@ -12,7 +12,7 @@ import GuestGroupPosts from "./components/GuestGroupPosts";
 // import { ProvideUser } from "../../../context/UserContext";
 // import { useNavigate } from "react-router-dom";
 // import GroupInviteDialog from "../../../dialogs/GroupInviteDialog";
-// import NewMemberRequestsApproveDialog from "../../../dialogs/NewMemberRequestsApproveDialog";
+import GuestNewMemberRequestsApproveDialog from "./components/GuestNewMemberRequestsApproveDialog";
 // import { ProvideGroupInvites } from "../../../context/GroupInvitesContext";
 // import { ProvideJoinRequests } from "../../../context/JoinRequestsProvider";
 import GuestGroupEvents from "./components/GuestGroupEvents";
@@ -54,6 +54,8 @@ const GroupGuest = () => {
 
     const [tab, setTab] = useState(0);
     const [src, setSrc] = useState(imageURL);
+
+    const [joinRequests, setJoinRequests] = useState([]);
 
     // //Comments
     const submitCommentHandler = (postId, content) => {
@@ -387,36 +389,75 @@ const GroupGuest = () => {
         setOpenNewPostDialog(true);
     }
 
-    // const [newMemberRequestsApproveDialogOpen, setNewMemberRequestsApproveDialogOpen] = useState(false);
-     const approveMember = (user_id, group_id) => {
-    //     newMemberRequestsApproveDialogCloseHandler()
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
-    //     const url = `${serverHost}/groups/requests/${group_id}?` + new URLSearchParams({ action: 'approve', member_id: user_id, session_id });
+    const [newMemberRequestsApproveDialogOpen, setNewMemberRequestsApproveDialogOpen] = useState(false);
 
-    //     fetch(url, {
-    //         method: "PATCH",
-    //         headers: { 'Accept': 'application/json' }
-    //     })
-    //         .then(resp => resp.json())
-    //         .then(data => {
-    //             if (data.error) {
-    //                 throw new Error(data.error.message)
-    //             }
-    //             if (data.payload) {
-    //                 reloadGroups();
-    //                 reloadJoinRequests();
-    //             }
-    //         })
-    //         .catch(err => {
-    //             handleError(err)
-    //         });
-     }
-     const declineMember = (user_id, group_id) => {
-    //     newMemberRequestsApproveDialogCloseHandler()
+    const approveMember = (user_id, group_id) => {
+        newMemberRequestsApproveDialogCloseHandler()
+     
+        //Add member
+        const member = users.find(u => u.id === user_id)
+        if(member){
+            setGroups(prev => {
+                const group = prev.find(g => g.id === group_id);
+                if(group) {
+                    const existingMember = group.members.find(m => m.id === member.id) || group.creator.id === member.id;
+                    if(!existingMember){
+                        group.members.push(member);
+                        return [...prev.filter(g => g.id !== group.id), group]
+                    }
+                    return prev;
+                }
+                return prev;
+
+            })
+        }
+
+        //Filter join requests
+        setJoinGroupRequests(prev => prev.filter(item => !(item.group.id === group_id && item.sender.id === user_id)))
+       
+        //Send Notification
+        setNotifications(prev => {
+            const group = groups.find(g => g.id === group_id)
+            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+            const sender = users.find(u => u.id === user_id);
+            const content = sender.display_name + ' joined group: ' + group.title;
+            
+            const notification = {
+                id,
+                content,
+                date:  Date.now(),
+                sender,
+                is_read: false
+            }
+                return [...prev, notification];
+          });
+    }
+    const declineMember = (user_id, group_id) => {    
+   
+        newMemberRequestsApproveDialogCloseHandler();
+        
+        //Filter join requests
+        setJoinGroupRequests(prev => prev.filter(item => !(item.group.id === group_id && item.sender.id === user_id)))
+       
+        //Send Notification
+        setNotifications(prev => {
+            const group = groups.find(g => g.id === group_id)
+            const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+            const sender = users.find(u => u.id === user_id);
+            const content = sender.display_name + ' join request for group: ' + group.title + ' has been declined';
+                    
+            const notification = {
+                    id,
+                    content,
+                    date:  Date.now(),
+                    sender,
+                    is_read: false
+                }
+
+            return [...prev, notification];
+        });
+        
+        
     //     const session_id = getCookie(SESSION_ID);
     //     if (!session_id) {
     //         navigate('/signin');
@@ -441,13 +482,14 @@ const GroupGuest = () => {
     //         .catch(err => {
     //             handleError(err)
     //         });
-     }
-    // const newMemberRequestsButtonClickHandler = () => {
-    //     setNewMemberRequestsApproveDialogOpen(true);
-    // }
-    // const newMemberRequestsApproveDialogCloseHandler = () => {
-    //     setNewMemberRequestsApproveDialogOpen(false)
-    // }    
+    }
+    
+    const newMemberRequestsButtonClickHandler = () => {
+        setNewMemberRequestsApproveDialogOpen(true);
+    }
+    const newMemberRequestsApproveDialogCloseHandler = () => {
+        setNewMemberRequestsApproveDialogOpen(false)
+    }    
 
     useEffect(() => {      
         const group = groups.find(g => g.id == group_id);
@@ -484,11 +526,18 @@ const GroupGuest = () => {
                     setButtonsState(ButtonStates.Pending);
                 } else {
                     setButtonsState(ButtonStates.Join);
-                }               
+                }                   
             }
         }
 
+        setJoinRequests(joinGroupRequests.filter(item => item.group.id == group_id && item.recipient.id === user.id));
+
     }, [joinGroupRequests, buttonsState, groups, group_id]);
+
+
+
+
+    //const joinRequests = joinGroupRequests.filter(item => item.group.id == group_id && item.recipient.id === user.id);
 
     return (
 
@@ -511,7 +560,7 @@ const GroupGuest = () => {
                 <Stack spacing={2} direction='row' alignItems='center' sx={{ mb: 1, px: { xs: 1, md: 0 } }} justifyContent='end'>
                     {buttonsState === ButtonStates.Join && <Button variant='contained' onClick={joinGroupListener}>{ButtonStates.Join}</Button>}
 
-                    {/* {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>} */}
+                    {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>}
                     {/* {groupButtonInvite && <Button variant='contained' onClick={inviteToGroupListener}>{groupButtonInvite}</Button>} */}
                     {/* {groupButtonAcceptInvite && <Button variant='contained' onClick={acceptInviteGroupListener}>{groupButtonAcceptInvite}</Button>} */}
                     {/* {groupButtonAcceptInvite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>} */}
@@ -551,13 +600,13 @@ const GroupGuest = () => {
                 groupTitle={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).title : ''}              
                 groupId={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).id : -1} />
             {/* <GroupInviteDialog group={groups} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} /> */}
-            {/* <NewMemberRequestsApproveDialog 
+            <GuestNewMemberRequestsApproveDialog 
                 open={newMemberRequestsApproveDialogOpen}
                 onClose={newMemberRequestsApproveDialogCloseHandler}
                 requests={joinRequests}
                 approveMember={approveMember}
                 declineMember={declineMember}
-            /> */}
+            /> 
         </Grid>
 
     );

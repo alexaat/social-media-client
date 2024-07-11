@@ -328,7 +328,7 @@ const GuestToolBar = () => {
               //const group = groups.find(g => g.id === group.id);
               const request = {
                 id,
-                sender: user,
+                sender: users.find(u => u.id === 4),
                 group,
                 recipient: group.creator 
               }
