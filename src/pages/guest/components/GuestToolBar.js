@@ -215,9 +215,7 @@ const GuestToolBar = () => {
                   is_read: false
               }
                   return [...prev, notification];
-            });
-
-          
+            });          
 
             const id = prev.length === 0 ? 1 : prev.sort((a,b)=>a.id<b.id ? 1 : -1)[0].id + 1;
             const invite = {

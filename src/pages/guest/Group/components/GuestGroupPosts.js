@@ -18,6 +18,9 @@ const [
     chatRooms, setChatRooms,
     groups, setGroups] = ProvideGuestData();
 
+    const [filteredPosts, setFilteredPosts] = useState([]);
+
+
     useEffect(() => {
         setError();
         const group  = groups.find(g => g.id == group_id);        
@@ -30,9 +33,9 @@ const [
             }
         }
 
-    }, [groups, group_id]);
+        setFilteredPosts(posts.filter(post => post.group_id && post.group_id == group_id));
 
-   const filteredPosts = posts.filter(post => post.group_id && post.group_id == group_id);
+    }, [groups, group_id]);
    
    let component = <></>;
 

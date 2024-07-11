@@ -4,20 +4,10 @@ import { useEffect, useState, useRef } from "react";
 import GuestGroupInfo from "./components/GuestGroupInfo";
 import GuestNewPostButton from '../../guest/components/GuestNewPostButton';
 import GuestNewPostDialog from "../components/GuestNewPostDialog";
-// import { PostsProvider } from "../../../context/PostsContext";
 import GuestGroupPosts from "./components/GuestGroupPosts";
-// import { SESSION_ID, getCookie } from '../../../cookies';
-// import { ACCEPT_JOIN_GROUP_INVITE, AUTHORIZATION, DECLINE_JOIN_GROUP_INVITE, INVITATION_TO_JOIN_GROUP, LEAVE_GROUP, NEW_EVENT_NOTIFICATION, REQUEST_TO_JOIN_GROUP, REQUEST_TO_JOIN_GROUP_APPROVED, REQUEST_TO_JOIN_GROUP_DECLINED, serverHost } from "../../../constants";
-// import { handleError } from "../../../errors";
-// import { ProvideUser } from "../../../context/UserContext";
-// import { useNavigate } from "react-router-dom";
-// import GroupInviteDialog from "../../../dialogs/GroupInviteDialog";
+import GuestGroupInviteDialog from "./components/GuestGroupInviteDialog";
 import GuestNewMemberRequestsApproveDialog from "./components/GuestNewMemberRequestsApproveDialog";
-// import { ProvideGroupInvites } from "../../../context/GroupInvitesContext";
-// import { ProvideJoinRequests } from "../../../context/JoinRequestsProvider";
 import GuestGroupEvents from "./components/GuestGroupEvents";
-// import { ProvideNotifications } from "../../../context/NotificationsContext";
-// import { ProvideEvents } from "../../../context/EventsContext";
 import { imageURL } from "../../../constants";
 import defaultBackground from '../../../assets/long_background_image.jpg'
 import { ProvideGuestData } from "../components/GuestDataContext";
@@ -26,8 +16,6 @@ import { useNavigate } from 'react-router-dom';
 const GroupGuest = () => {
     
     const navigate = useNavigate();
-
-    //const joinGroupInvitesRef = useRef();
 
     const ButtonStates = {
         Join: 'Join',
@@ -291,92 +279,57 @@ const GroupGuest = () => {
         }
     }
 
-    // const [groupInviteDialogOpen, setGroupInviteDialogOpen] = useState(false);
-    // const closeGroupInviteDialogHandler = () => setGroupInviteDialogOpen(false);
+    const [groupInviteDialogOpen, setGroupInviteDialogOpen] = useState(false);
+    const closeGroupInviteDialogHandler = () => setGroupInviteDialogOpen(false);
     
-     const submitGroupIviteDialogHandler = selectedUsers => {
-    //     closeGroupInviteDialogHandler();
+    const submitGroupIviteDialogHandler = selectedUsers => {
+        closeGroupInviteDialogHandler();
 
-    //     const session_id = getCookie(SESSION_ID);
-    //     if (!session_id) {
-    //         navigate('/signin');
-    //         return;
-    //     }
+        if(group){
+            selectedUsers.forEach(user_id => {
+                const recipient = users.find(u => u.id === user_id);               
+                
+                setJoinGroupInvites(prev => {            
+                    const existingInvite = prev.find(invite => invite.group.id === group.id && invite.recipient.id === recipient.id); 
+                    if(existingInvite){
+                      return prev;
+                    } 
+                    
+                    //Send Notification
+                    setNotifications(prev => {
+                      const id =  prev.length === 0 ? 1 :  prev.sort((a,b) => (a.id < b.id ? 1 : -1 ))[0].id + 1;                      
+                      const sender = {
+                        id: group_id,
+                        display_name: group.title
+                      };
+                      const content = 'Invite to join group ' + group.title + ' has been sent to ' + recipient.display_name;    
+                      const notification = {
+                          id,
+                          content,
+                          date:  Date.now(),
+                          sender,
+                          is_read: false
+                      }
+                          return [...prev, notification];
+                    });          
+        
+                    const id = prev.length === 0 ? 1 : prev.sort((a,b)=>a.id<b.id ? 1 : -1)[0].id + 1;
+                    const invite = {
+                      id, 
+                      sender: user,
+                      group,
+                      recipient
+                    }                    
+                    return [...prev, invite];        
+                  });
+    
+            });
+        }
+    }
 
-    //     selectedUsers.forEach(member => {
-    //         const url = `${serverHost}/groups/${group_id}?` + new URLSearchParams({ action: 'invite', member, session_id });
-    //         fetch(url, {
-    //             method: "PATCH",
-    //             headers: { 'Accept': 'application/json' }
-    //         })
-    //             .then(resp => resp.json())
-    //             .then(data => {
-    //                 //console.log('data ', data)
-    //                 if (data.error) {
-    //                     throw new Error(data.error.message)
-    //                 }
-    //                 if (data.payload) {
-    //                     reloadGroups();
-    //                 }
-    //             })
-    //             .catch(err => {
-    //                 handleError(err)
-    //             });
-    //     })
-
-     }
-    // const inviteToGroupListener = () => {
-    //     setGroupInviteDialogOpen(true);
-    // }
-
-    //  const groupTitle = 'title'
-    //const groupTitle = groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).title : '';
-
-    // let groupButtonDeleteText = '';
-    // let groupButtonLeaveGroup = '';
-    // let groupButtonJoinGroup = 'Join';
-    // let groupButtonInvite = '';
-    // let groupButtonAcceptInvite = '';
-    // let groupButtonAwaitingJoinApprovalGroup = '';
-
-    // if (groups && !Array.isArray(groups) && user) {
-    //     if (groups.creator.id === user.id) {         
-    //         groupButtonDeleteText = 'Delete Group';
-    //         groupButtonInvite = 'Invite';
-    //     } else {
-    //         if (groups.awaiting_join_approval) {
-    //             groupButtonAwaitingJoinApprovalGroup = 'Pending Approval'
-    //         }
-    //         if(groupInvites) {
-    //             groupInvites.forEach(invite => {
-    //                 if (invite.group.id === groups.id) {
-    //                     groupButtonAcceptInvite = 'Accept invitation'
-    //                 }
-    //             })
-    //         }
-    //         if (groups.members.length > 0 && !groupButtonAcceptInvite) {
-    //             const member = groups.members.filter(m => m.id === user.id);
-    //             if (member && member.length > 0) {
-    //                 groupButtonLeaveGroup = 'Leave Group';
-    //                 groupButtonInvite = 'Invite';
-    //             } else {
-    //                 groupButtonJoinGroup = 'Join';
-    //             }
-    //         } else {              
-    //             if (groupInvites) {                   
-    //                 groupInvites.forEach(invite => {
-    //                     if (invite.group.id === groups.id) {
-    //                         groupButtonAcceptInvite = 'Accept invitation'
-    //                     }
-    //                 })
-    //             }
-    //             if (!groupButtonAcceptInvite) {
-    //                 groupButtonJoinGroup = 'Join';
-    //             }
-    //         }
-    //     }
-    // }
-
+    const inviteToGroupListener = () => {
+        setGroupInviteDialogOpen(true);
+    }
     const newPostClickHandler = () => {
         setOpenNewPostDialog(true);
     }
@@ -535,10 +488,9 @@ const GroupGuest = () => {
                     {buttonsState === ButtonStates.Join && <Button variant='contained' onClick={joinGroupListener}>{ButtonStates.Join}</Button>}
 
                     {joinRequests && joinRequests.length > 0 && <Button variant='contained' onClick={newMemberRequestsButtonClickHandler}>New Member Requests: {joinRequests.length}</Button>}
-                    {/* {groupButtonInvite && <Button variant='contained' onClick={inviteToGroupListener}>{groupButtonInvite}</Button>} */}
+                    {(buttonsState === ButtonStates.Leave || buttonsState === ButtonStates.Delete) && <Button variant='contained' onClick={inviteToGroupListener}>Invite</Button>}
                     {buttonsState === ButtonStates.Invite && <Button variant='contained' onClick={acceptInviteGroupListener}>Accept Invite</Button>}
-                    {buttonsState === ButtonStates.Invite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>}
-                    {/* {groupButtonJoinGroup && !groupButtonAwaitingJoinApprovalGroup && <Button variant='contained' onClick={joinGroupListener}>{groupButtonJoinGroup}</Button>} */}
+                    {buttonsState === ButtonStates.Invite && <Button variant='outlined' onClick={declineInviteGroupListener}>Decline Invitation</Button>}                   
                     {buttonsState === ButtonStates.Pending && <Button variant='contained' disabled >{ButtonStates.Pending}</Button>}
                     {buttonsState === ButtonStates.Leave && <Button variant='outlined' onClick={leaveGroupListener}>{ButtonStates.Leave}</Button>}
                     {buttonsState === ButtonStates.Delete && <Button variant='outlined' onClick={deleteGroupListener}>{ButtonStates.Delete}</Button>}
@@ -573,7 +525,7 @@ const GroupGuest = () => {
                 closeDialogHandler={newPostDialogCloseHandler}
                 groupTitle={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).title : ''}              
                 groupId={groups.find(g => g.id == group_id) ? groups.find(g => g.id == group_id).id : -1} />
-            {/* <GroupInviteDialog group={groups} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} /> */}
+            <GuestGroupInviteDialog group={groups.find(g => g.id == group_id)} open={groupInviteDialogOpen} onClose={closeGroupInviteDialogHandler} onSubmit={submitGroupIviteDialogHandler} />
             <GuestNewMemberRequestsApproveDialog 
                 open={newMemberRequestsApproveDialogOpen}
                 onClose={newMemberRequestsApproveDialogCloseHandler}

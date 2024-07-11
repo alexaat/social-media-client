@@ -51,6 +51,16 @@ const data = {
             privacy: 'private',
             email: 'ringo@thebeatles.uk',
             about_me: ''
+        },
+        {
+            id: 6,
+            first_name: 'Stuart',
+            last_name: 'Sutcliffe',
+            display_name: 'Stuart',
+            avatar: 'http://alexaat.com/socialmedia/images/Stuart.jpg',
+            privacy: 'private',
+            email: 'stuartSutcliffe@gmail.com',
+            about_me: ''
         }
     ],
     notifications:[
