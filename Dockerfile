@@ -8,4 +8,4 @@ COPY public/ /social-media/public
 COPY src/ /social-media/src
 COPY package.json /social-media/
 RUN npm install
-CMD ["npm", "start"]
+CMD ["npm", "run start"]
