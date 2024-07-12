@@ -38,6 +38,8 @@ const GuestPost = ({ post, sx }) => {
 
    const [commentImage, setCommentImage] = useState();
 
+   const [comments, setComments] = useState([]);
+
    const [
       user,
       notifications, setNotifications,
@@ -65,7 +67,9 @@ const GuestPost = ({ post, sx }) => {
                }             
             }
          }
-   }, []);    
+         setComments(post.comments.sort((a,b) => a.date<b.date ? 1 : -1))
+
+   }, [posts]);    
 
    const imageInputId = `new-comment-image-${post.id}`
 
@@ -79,7 +83,7 @@ const GuestPost = ({ post, sx }) => {
       if(content.length<2){
          setSubmitCommentError({postId, message: 'Comment is too short'})
 
-      } else {
+      } else {        
          setPosts(posts => {
             const post = posts.filter(p => p.id === postId)[0];
                        
@@ -208,7 +212,7 @@ const GuestPost = ({ post, sx }) => {
                      <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 
                                       
                     {
-                      post.comments.length > 0 && 
+                      comments.length > 0 && 
                       <Accordion
                          elevation={0}
                          square
@@ -222,13 +226,13 @@ const GuestPost = ({ post, sx }) => {
  
                       >
                          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography>Comments: {post.comments.length} </Typography>
+                            <Typography>Comments: {comments.length} </Typography>
                          </AccordionSummary>
                          <AccordionDetails>
                             {
-                               post.comments &&
+                               comments &&
                                <Stack sx={{ pt: 4, pb: 1 }} spacing={1}>
-                                  {post.comments.map(comment => <GuestCommentItem key={comment.id} comment={comment} />)}
+                                  {comments.map(comment => <GuestCommentItem key={comment.id} comment={comment} />)}
                                </Stack>
                             }
  

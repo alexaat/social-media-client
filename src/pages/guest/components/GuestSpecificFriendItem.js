@@ -1,7 +1,6 @@
 import { Stack, Typography, Checkbox, Paper } from "@mui/material";
 import GuestIcon from "./GuestIcon";
 import { dateConverter } from "../../../util";
-import { ProvideGuestData } from "./GuestDataContext";
 
 const GuestSpecificFriendItem = ({ follower, isSelected, selectHandler, date }) => {
 

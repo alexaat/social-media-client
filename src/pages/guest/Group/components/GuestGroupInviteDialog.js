@@ -94,7 +94,7 @@ const GroupInviteDialog = ({ group, open, onClose, onSubmit }) => {
                         })
                     }
                     {
-                        filtered.length === 0 && <GuestInfoCard title='Users' message='No users' color='#0000FF'/>
+                        filtered.length === 0 && <GuestInfoCard title='Users' message='No users' color="primary.main" />
                     }
                 </Stack>
             </DialogContent>
