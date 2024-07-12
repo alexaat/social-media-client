@@ -1,7 +1,8 @@
 import { Stack, Typography, Box } from '@mui/material';
 import GuestIcon from './GuestIcon';
-import { dateConverter,  isValidUrl } from '../../../util';
+import { dateConverter } from '../../../util';
 import { useState, useEffect } from 'react';
+import { imagesLocation } from '../components/GuestDataContext.js';
 
 const GuestCommentItem = ({ comment }) => {
 
@@ -10,17 +11,29 @@ const GuestCommentItem = ({ comment }) => {
     useEffect(() => {
 
        if(comment.image){
-          if(isValidUrl(comment.image)){
-             setSrc(comment.image)
-          } else {
-             const src = localStorage.getItem(comment.image);
-             if(src){
-                setSrc(src)
-             } else {
-                setTimeout(() => {
-                   setSrc(localStorage.getItem(comment.image))
-                }, 1000);  
-             }             
+         //  if(isValidUrl(comment.image)){
+         //     setSrc(comment.image)
+         //  } else {
+         //     const src = localStorage.getItem(comment.image);
+         //     if(src){
+         //        setSrc(src)
+         //     } else {
+         //        setTimeout(() => {
+         //           setSrc(localStorage.getItem(comment.image))
+         //        }, 1000);  
+         //     }             
+         //  }
+            if(comment.image.includes(imagesLocation)){
+              setSrc(comment.image)
+            } else {
+               const src = localStorage.getItem(comment.image);
+               if(src){
+                  setSrc(src)
+               } else {
+                  setTimeout(() => {
+                     setSrc(localStorage.getItem(comment.image))
+                  }, 1000);  
+               }             
           }
        }
   }, []); 

@@ -24,10 +24,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EmojiPicker from "emoji-picker-react";
 import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
 import GuestIcon from './GuestIcon.js';
-import {isValidUrl} from '../../../util.js';
 import GuestCommentItem from "./GuestCommentItem.js";
 import { ProvideGuestData } from "./GuestDataContext.js";
 import { v4 as uuidv4 } from 'uuid';
+import { imagesLocation } from '../components/GuestDataContext.js';
  
 const GuestPost = ({ post, sx }) => {
 
@@ -54,6 +54,7 @@ const GuestPost = ({ post, sx }) => {
 
    useEffect(() => {
          if(post.image){
+            /*
             if(isValidUrl(post.image)){
                setPostImage(post.image)
             } else {
@@ -66,10 +67,23 @@ const GuestPost = ({ post, sx }) => {
                   }, 1000);  
                }             
             }
+            */
+            if(post.image.includes(imagesLocation)){
+               setPostImage(post.image)
+            }else{
+               const src = localStorage.getItem(post.image);
+               if(src){
+                  setPostImage(src)
+               } else {
+                  setTimeout(() => {
+                     setPostImage(localStorage.getItem(post.image))
+                  }, 1000);  
+               }               
+            }
          }
          setComments(post.comments.sort((a,b) => a.date<b.date ? 1 : -1))
 
-   }, [posts]);    
+   }, [posts, postImage]);    
 
    const imageInputId = `new-comment-image-${post.id}`
 
@@ -115,8 +129,7 @@ const GuestPost = ({ post, sx }) => {
             
             return newPosts
          })
-      }
- 
+      } 
    }
 
    //Emoji
@@ -206,7 +219,7 @@ const GuestPost = ({ post, sx }) => {
                    <Typography variant="body1" gutterBottom> {post.content}</Typography>
 
                      {
-                        postImage && <Box component='img' src={postImage} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>
+                        postImage && <Box component='img' src={postImage} sx={{ width: '100%', height: '100%', backgroundSize: 'cover' }} ></Box>                       
                      }
                
                      <input type="file" id={imageInputId} onChange={selelectedImageHandler} accept="image/*" style={{ display: 'none' }} /> 

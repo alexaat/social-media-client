@@ -21,9 +21,12 @@ const Icon = (props) => {
         <Avatar
              alt="avatar"
              sx={{ width: _size, height: _size, ...props.sx }}
+             //src={require('../../../assets/John.jpg')}
+            // src={u.avatar ?  u.avatar.includes('http') ? u.avatar : require(u.avatar) : ''}
              src={
-                  u.avatar ? u.avatar : ''
-             }>
+                 u.avatar ? u.avatar : ''
+             }
+             >
              {initials}
         </Avatar>
         :

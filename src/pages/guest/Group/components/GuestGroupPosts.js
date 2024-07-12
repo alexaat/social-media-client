@@ -35,7 +35,7 @@ const [
 
         setFilteredPosts(posts.filter(post => post.group_id && post.group_id == group_id));
 
-    }, [groups, group_id]);
+    }, [groups, group_id, posts]);
    
    let component = <></>;
 

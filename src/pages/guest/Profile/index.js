@@ -12,8 +12,7 @@ import GuestPosts from "../components/GuestPosts";
 import GuestFollowersSummary from '../components/GuestFollowersSummary';
 import GuestFollowRequestDialog from "../components/GuestFollowRequestDialog";
 
-const ProfileGuest = () => {
- 
+const ProfileGuest = () => { 
 
     const { person_id } = useParams();
     const personId = person_id === undefined || person_id == 1 ? undefined : person_id; 
@@ -35,7 +34,6 @@ const ProfileGuest = () => {
             })
         }
     }
-
 
     const [image, setImage] = useState();
 

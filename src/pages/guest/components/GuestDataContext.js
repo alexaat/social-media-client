@@ -1,4 +1,7 @@
-import { useContext, useState, createContext, useEffect } from "react";
+import { useContext, useState, createContext } from "react";
+
+// const imagesLocation = 'http://alexaat.com/socialmedia/images/';
+export const imagesLocation = '/images/';
 
 const data = {
     user: {
@@ -17,8 +20,8 @@ const data = {
             first_name: 'John',
             last_name: 'Lennon',
             display_name: 'John',
-            avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-            privacy: 'public',
+            avatar: imagesLocation + 'John.jpg',
+            privacy: 'public',  
             email: 'john@thebeatles.uk',
             about_me: 'Life is what happens while you are busy making other plans.'
         },
@@ -27,7 +30,7 @@ const data = {
             first_name: 'Paul',
             last_name: 'McCartney',
             display_name: 'Paul',
-            avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+            avatar: imagesLocation + 'Paul.jpg',
             privacy: 'private',
             email: 'paul@thebeatles.uk',
             about_me: ''
@@ -37,7 +40,7 @@ const data = {
             first_name: 'George',
             last_name: 'Harrison',
             display_name: 'George',
-            avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+            avatar: imagesLocation + 'George.jpg',
             privacy: 'public',
             email: 'george@thebeatles.uk',
             about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
@@ -47,7 +50,7 @@ const data = {
             first_name: 'Ringo',
             last_name: 'Starr',
             display_name: 'Ringo',
-            avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+            avatar: imagesLocation + 'Ringo.jpg',
             privacy: 'private',
             email: 'ringo@thebeatles.uk',
             about_me: ''
@@ -57,7 +60,7 @@ const data = {
             first_name: 'Stuart',
             last_name: 'Sutcliffe',
             display_name: 'Stuart',
-            avatar: 'http://alexaat.com/socialmedia/images/Stuart.jpg',
+            avatar: imagesLocation + 'Stuart.jpg',
             privacy: 'private',
             email: 'stuartSutcliffe@gmail.com',
             about_me: ''
@@ -73,7 +76,7 @@ const data = {
                 first_name: 'Guest',
                 last_name: 'Special',
                 display_name: 'Guest',
-                avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
+                avatar: imagesLocation + 'Guest.jpg',
             },
             is_read: false
         }
@@ -83,14 +86,14 @@ const data = {
             id: 1,
             content: 'Performing on The Ed Sullivan Show, February 1964',
             date: Date.now()-1000*60*60*24*4,
-            image: 'http://alexaat.com/socialmedia/images/post1.jpg',
+            image: imagesLocation + 'post1.jpg',
             privacy: 'public',
             sender: {
                 id: 2,
                 first_name: 'John',
                 last_name: 'Lennon',
                 display_name: 'John',
-                avatar: 'http://alexaat.com/socialmedia/images/John.jpg'          
+                avatar: imagesLocation + 'John.jpg'          
             },
             comments: [
                 {
@@ -100,9 +103,9 @@ const data = {
                         first_name: 'Paul',
                         last_name: 'McCartney',
                         display_name: 'Paul',
-                        avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
+                        avatar: imagesLocation +'Paul.jpg'
                     },
-                    image: 'http://alexaat.com/socialmedia/images/comment1.jpg',
+                    image: imagesLocation + 'comment1.jpg',
                     date: Date.now() - 1000*60*60*24,
                     content: 'Another image from this event'
                 }
@@ -112,14 +115,14 @@ const data = {
             id: 2,
             content: 'McCartney, Harrison and Lennon performing on Dutch TV in 1964',
             date: Date.now()-1000*60*60*24*2,
-            image: 'http://alexaat.com/socialmedia/images/post2.png',
+            image: imagesLocation + 'post2.png',
             privacy: 'public',
             sender: {
                 id: 5,
                 first_name: 'Ringo',
                 last_name: 'Starr',
                 display_name: 'Ringo',
-                avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg'  
+                avatar: imagesLocation + 'Ringo.jpg'  
             },
             comments: []
         },
@@ -127,21 +130,21 @@ const data = {
             id: 3,
             content: 'Press conference in Minnesota in August 1965, shortly after playing at Shea Stadium in New York',
             date: Date.now() - 1000*60*60*10,
-            image: 'http://alexaat.com/socialmedia/images/post3.jpg',
+            image: imagesLocation + 'post3.jpg',
             privacy: 'public',
             sender: {
                 id: 3,
                 first_name: 'Paul',
                 last_name: 'McCartney',
                 display_name: 'Paul',
-                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg'
+                avatar: imagesLocation + 'Paul.jpg'
             },
             comments: [],
         },
         {
             id: 4,
             content: 'Abbey Road crossing in London',
-            image: 'http://alexaat.com/socialmedia/images/post4.jpg',
+            image: imagesLocation + 'post4.jpg',
             date: Date.now() - 1000*60*60,
             privacy: 'public',
             sender: {
@@ -149,14 +152,14 @@ const data = {
                 first_name: 'George',
                 last_name: 'Harrison',
                 display_name: 'George',
-                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+                avatar: imagesLocation + 'George.jpg'
             },
             comments: []
         },
         {
             id: 5,
             content: 'Ths post is only available for my friends',
-            image: 'http://alexaat.com/socialmedia/images/post5.jpg',
+            image: imagesLocation + 'post5.jpg',
             date: Date.now() - 1000*60*30,
             privacy: 'friends',
             sender: {
@@ -164,7 +167,7 @@ const data = {
                 first_name: 'George',
                 last_name: 'Harrison',
                 display_name: 'George',
-                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+                avatar: imagesLocation + 'George.jpg'
             },
             comments: []
         },
@@ -172,7 +175,7 @@ const data = {
             id: 6,
             group_id: 1,
             content: "This Book Will Reveal How The Beatles Came Up With Their Last Original Album 'Let it Be'",
-            image: 'http://alexaat.com/socialmedia/images/post6.jpeg',
+            image: imagesLocation + 'post6.jpeg',
             date: Date.now() - 1000*60*60*16,
             privacy: 'public',
             sender: {
@@ -180,7 +183,7 @@ const data = {
                 first_name: 'George',
                 last_name: 'Harrison',
                 display_name: 'George',
-                avatar: 'http://alexaat.com/socialmedia/images/George.jpg'
+                avatar: imagesLocation + 'George.jpg'
             },
             comments: []
         },
@@ -188,7 +191,7 @@ const data = {
             id: 7,
             group_id: 1,
             content: "There was The Beatles… and then there was everyone else. And everyone else could be great, but The Beatles were leading the way and that's just irrefutably true.",
-            image: 'http://alexaat.com/socialmedia/images/post7.jpeg',
+            image: imagesLocation + 'post7.jpeg',
             date: Date.now() - 1000*60*60*24*2,
             privacy: 'public',
             sender: {
@@ -196,7 +199,7 @@ const data = {
                 first_name: 'John',
                 last_name: 'Lennon',
                 display_name: 'John',
-                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                avatar: imagesLocation + 'John.jpg',
                 privacy: 'public',
                 email: 'john@thebeatles.uk',
                 about_me: 'Life is what happens while you are busy making other plans.'
@@ -206,57 +209,6 @@ const data = {
     ],
     followers: [],
     chatMessages: [
-        // {
-        //     id: 1,
-        //     sender: {
-        //         id: 2,
-        //         first_name: 'John',
-        //         last_name: 'Lennon',
-        //         display_name: 'John',
-        //         avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-        //         privacy: 'public',
-        //         email: 'john@thebeatles.uk',
-        //         about_me: 'Life is what happens while you are busy making other plans.'
-        //     },
-        //     recipient: {                
-        //         id: 1,
-        //         first_name: 'Guest',
-        //         last_name: 'Special',
-        //         display_name: 'Guest',
-        //         avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
-        //         privacy: 'public',
-        //         email: 'guest@special.com',
-        //         about_me: 'Thank you for using social media'
-        //     },
-        //     content: 'text',
-        //     date: Date.now(),
-        //     is_read: false
-        // },
-        // {
-        //     id: 2,
-        //     sender: {
-        //         id: 4,
-        //         first_name: 'George',
-        //         last_name: 'Harrison',
-        //         display_name: 'George',
-        //         avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
-        //         privacy: 'public',
-        //         email: 'george@thebeatles.uk',
-        //         about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
-        //     },
-        //     recipient: {                
-        //         id: 5,
-        //         first_name: 'Ringo',
-        //         last_name: 'Starr',
-        //         display_name: 'Ringo',
-        //         avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
-        //         privacy: 'private',
-        //         email: 'ringo@thebeatles.uk',
-        //         about_me: ''
-        //     },
-        //     content: 'private message',
-        //     date: Date.now()
-        // },
         {
             id: 3,
             sender: {
@@ -264,7 +216,7 @@ const data = {
                 first_name: 'George',
                 last_name: 'Harrison',
                 display_name: 'George',
-                avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+                avatar: imagesLocation + 'George.jpg',
                 privacy: 'public',
                 email: 'george@thebeatles.uk',
                 about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
@@ -272,7 +224,7 @@ const data = {
             recipient: {                
                 id: 1,
                 title: 'old friends',
-                image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+                image: imagesLocation + 'room1.jpeg'
             },
             content: 'hello, friends!!!',
             date: Date.now()-1000*60*60*24*3,
@@ -286,7 +238,7 @@ const data = {
                 first_name: 'Paul',
                 last_name: 'McCartney',
                 display_name: 'Paul',
-                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                avatar: imagesLocation + 'Paul.jpg',
                 privacy: 'private',
                 email: 'paul@thebeatles.uk',
                 about_me: ''
@@ -294,7 +246,7 @@ const data = {
             recipient: {                
                 id: 1,
                 title: 'old friends',
-                image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+                image: imagesLocation + 'room1.jpeg'
             },
             content: 'hi, buddy',
             date: Date.now()-1000*60*60*12,
@@ -306,7 +258,7 @@ const data = {
         {
             id: 1,
             title: 'old friends',
-            image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
+            image: imagesLocation + 'room1.jpeg'
         }
     ],
     groups: [
@@ -319,7 +271,7 @@ const data = {
                 first_name: 'John',
                 last_name: 'Lennon',
                 display_name: 'John',
-                avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
+                avatar: imagesLocation + 'John.jpg',
                 privacy: 'public',
                 email: 'john@thebeatles.uk',
                 about_me: 'Life is what happens while you are busy making other plans.'
@@ -331,7 +283,7 @@ const data = {
                     first_name: 'Paul',
                     last_name: 'McCartney',
                     display_name: 'Paul',
-                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                    avatar: imagesLocation + 'Paul.jpg',
                     privacy: 'private',
                     email: 'paul@thebeatles.uk',
                     about_me: ''
@@ -341,7 +293,7 @@ const data = {
                     first_name: 'George',
                     last_name: 'Harrison',
                     display_name: 'George',
-                    avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
+                    avatar: imagesLocation + 'George.jpg',
                     privacy: 'public',
                     email: 'george@thebeatles.uk',
                     about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
@@ -351,7 +303,7 @@ const data = {
                     first_name: 'Ringo',
                     last_name: 'Starr',
                     display_name: 'Ringo',
-                    avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                    avatar: imagesLocation + 'Ringo.jpg',
                     privacy: 'private',
                     email: 'ringo@thebeatles.uk',
                     about_me: ''
@@ -368,7 +320,7 @@ const data = {
                 first_name: 'Paul',
                 last_name: 'McCartney',
                 display_name: 'Paul',
-                avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                avatar: imagesLocation + 'Paul.jpg',
                 privacy: 'private',
                 email: 'paul@thebeatles.uk',
                 about_me: ''
@@ -383,7 +335,7 @@ const data = {
                     first_name: 'Paul',
                     last_name: 'McCartney',
                     display_name: 'Paul',
-                    avatar: 'http://alexaat.com/socialmedia/images/Paul.jpg',
+                    avatar: imagesLocation + 'Paul.jpg',
                     privacy: 'private',
                     email: 'paul@thebeatles.uk',
                     about_me: ''
@@ -393,7 +345,7 @@ const data = {
                     first_name: 'Ringo',
                     last_name: 'Starr',
                     display_name: 'Ringo',
-                    avatar: 'http://alexaat.com/socialmedia/images/Ringo.jpg',
+                    avatar: imagesLocation + 'Ringo.jpg',
                     privacy: 'private',
                     email: 'ringo@thebeatles.uk',
                     about_me: ''
@@ -404,7 +356,6 @@ const data = {
     joinGroupRequests: [],
     joinGroupInvites: [],
     logs: []
-
 }
 
 const GuestDataContext = createContext();

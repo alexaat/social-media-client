@@ -1,17 +1,17 @@
 import { IconButton, Stack, Typography, Badge } from "@mui/material";
 import GuestIcon from "./GuestIcon";
-import { isValidUrl } from "../../../util";
 import { useEffect, useState } from "react";
+import { imagesLocation } from './GuestDataContext';
 
 const GuestChatRoomItem = ({ room, clickHandler, unread }) => {
 
   const [src, setSrc] = useState(room.image);
 
   useEffect(() => {
-    if(!isValidUrl(room.image)){
+    if(!room.image.includes(imagesLocation)){
       setTimeout(() => {
         setSrc(localStorage.getItem(room.image));
-      },500);     
+      },500);  
     }
   },[src]);
 
