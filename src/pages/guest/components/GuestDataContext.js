@@ -9,7 +9,7 @@ const data = {
         first_name: 'Guest',
         last_name: 'Special',
         display_name: 'Guest',
-        avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
+        avatar: imagesLocation + 'Guest.jpg',
         privacy: 'public',
         email: 'guest@special.com',
         about_me: 'Thank you for using social media'

@@ -97,21 +97,8 @@ const GuestToolBar = () => {
 
         const chatMessage = {
           id,
-          sender: {
-            id: 4,
-            first_name: 'George',
-            last_name: 'Harrison',
-            display_name: 'George',
-            avatar: 'http://alexaat.com/socialmedia/images/George.jpg',
-            privacy: 'public',
-            email: 'george@thebeatles.uk',
-            about_me: "Basically, I feel fortunate to have realized what the goal is in life. There's no point in dying having gone through your life without knowing who you are, what you are, or what the purpose of life is. And that's all it is."
-          },
-          recipient: {                
-              id: 1,
-              title: 'old friends',
-              image: 'http://alexaat.com/socialmedia/images/room1.jpeg'
-          },
+          sender: users.find(u => u.id === 4),
+          recipient: chatRooms.find(r => r.id === 1),
           content: 'Hello, friends',
           date: Date.now(),
           read_by: '[4]',
@@ -134,26 +121,8 @@ const GuestToolBar = () => {
         const id = prev.length === 0 ? 1 : prev.sort((a,b) => (a.id < b.id ? 1 : -1))[0].id + 1;
         const chatMessage = {
           id,
-          sender: {
-            id: 2,
-            first_name: 'John',
-            last_name: 'Lennon',
-            display_name: 'John',
-            avatar: 'http://alexaat.com/socialmedia/images/John.jpg',
-            privacy: 'public',
-            email: 'john@thebeatles.uk',
-            about_me: 'Life is what happens while you are busy making other plans.'
-          },
-          recipient: {                
-            id: 1,
-            first_name: 'Guest',
-            last_name: 'Special',
-            display_name: 'Guest',
-            avatar: 'http://alexaat.com/socialmedia/images/Guest.jpg',
-            privacy: 'public',
-            email: 'guest@special.com',
-            about_me: 'Thank you for using social media'
-          },
+          sender: users.find(u => u.id === 2), 
+          recipient: user,
           content: 'Greetings, Guest!!!',
           date: Date.now(),
           is_read: false          
