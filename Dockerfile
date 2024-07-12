@@ -1,11 +1,16 @@
 FROM node:18-alpine
-WORKDIR /social-media/
+WORKDIR /app
 LABEL vesion="1.0"
 LABEL maintaner="Aliaksei Vidaseu"
 LABEL description="Social Media Frontend"
 LABEL port="3000"
-COPY public/ /social-media/public
-COPY src/ /social-media/src
-COPY package.json /social-media/
+COPY package.json .
 RUN npm install
-CMD ["npm", "run start"]
+COPY . .
+EXPOSE 3000
+CMD ["npm", "start"]
+
+#docker build .
+#docker images
+#docker run -p 3000:3000 [image-id]
+
