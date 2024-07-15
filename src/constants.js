@@ -15,9 +15,12 @@ export const MISSING_PARAM = "missing parameter";
 
 // export const serverHost = "http://localhost:8080";
 // export const wsEndPoint = "ws://localhost:8080/ws";
+//export const serverHost = "https://social-media-api-esrtkhnztq-nw.a.run.app";
+//export const wsEndPoint = "ws://social-media-api-esrtkhnztq-nw.a.run.app/ws";
 
-export const serverHost = "https://social-media-api-esrtkhnztq-nw.a.run.app";
-export const wsEndPoint = "https://social-media-api-esrtkhnztq-nw.a.run.app/ws";
+const origin = 'social-media-api-esrtkhnztq-nw.a.run.app';
+export const serverHost = "https://" + origin;
+export const wsEndPoint = "ws://" + origin + "/ws";
 
 export const PRIVACY_PUBLIC = "public";
 export const PRIVACY_PRIVATE = "private";
