@@ -13,8 +13,11 @@ export const IMAGE_UPLOAD_ERROR = "image upload error";
 export const DATABASE_ERROR = "database error";
 export const MISSING_PARAM = "missing parameter";
 
-export const serverHost = "http://localhost:8080";
-export const wsEndPoint = "ws://localhost:8080/ws";
+// export const serverHost = "http://localhost:8080";
+// export const wsEndPoint = "ws://localhost:8080/ws";
+
+export const serverHost = "https://social-media-api-esrtkhnztq-nw.a.run.app";
+export const wsEndPoint = "https://social-media-api-esrtkhnztq-nw.a.run.app/ws";
 
 export const PRIVACY_PUBLIC = "public";
 export const PRIVACY_PRIVATE = "private";
