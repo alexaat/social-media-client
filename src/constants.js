@@ -20,7 +20,7 @@ export const MISSING_PARAM = "missing parameter";
 
 const origin = 'social-media-api-esrtkhnztq-nw.a.run.app';
 export const serverHost = "https://" + origin;
-export const wsEndPoint = "ws://" + origin + "/ws";
+export const wsEndPoint = "wss://" + origin + "/ws";
 
 export const PRIVACY_PUBLIC = "public";
 export const PRIVACY_PRIVATE = "private";
