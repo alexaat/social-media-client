@@ -55,7 +55,7 @@ const HomeGuest = () => {
     return (
         <>
              {user &&
-                <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 12, mb: 2 }}>
                     <GuestNewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />                  
                     <GuestNewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} /> 
                     {

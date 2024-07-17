@@ -286,7 +286,7 @@ const ToolBar = () => {
   return (
     <>
       {user && (
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <Typography variant="h6" sx={{ width: "100%" }}>
               Social Media

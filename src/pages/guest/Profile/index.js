@@ -48,7 +48,7 @@ const ProfileGuest = () => {
     }, [posts]);
 
     return (
-        <Grid container justifyContent='center' sx={{ pb: 1 }}>
+        <Grid container justifyContent='center' sx={{ pb: 1, mt: 8 }}>
             <Grid item xs={12} md={10}>
                 <Grid container direction='column' >
                     {/* Top Image */}

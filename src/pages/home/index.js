@@ -17,7 +17,7 @@ const Home = () => {
     return (
         <>
             {user &&
-                <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
+                <Stack spacing={3} sx={{ width: '100%', display: 'flex', alignItems: 'center', mt: 12, mb: 2 }}>
                     <NewPostButton clickHandler={newPostButtonClickHandler} tooltip="New Post" />
                     <NewPostDialog open={newPostDialogOpen} closeDialogHandler={newPostDialogCloseHandler} />
                     {

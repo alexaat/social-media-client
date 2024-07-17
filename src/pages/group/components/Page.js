@@ -476,7 +476,7 @@ const Page = ({ group_id }) => {
 
     return (
 
-        <Grid container justifyContent='center'>
+        <Grid container justifyContent='center' sx={{mt: 8, mb: 1}}>
             <Grid item xs={12} md={10}>
                 {/* Top Image */}
                 {
